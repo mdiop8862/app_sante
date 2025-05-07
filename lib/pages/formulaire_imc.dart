@@ -1,28 +1,25 @@
+import 'package:appli_ap_sante/pages/home_page.dart';
 import 'package:flutter/material.dart';
-imp
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
+import 'global_test_result_page.dart';
+
 
 enum Sexe { femme, homme }
 
-class Profil extends StatelessWidget {
-  const Profil({super.key});
+class FormulaireImc extends StatefulWidget {
+  const FormulaireImc({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const HomePage(); // Pas besoin de MaterialApp ici
-  }
+  State<FormulaireImc> createState() => _FormulaireImcState();
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
+class _FormulaireImcState extends State<FormulaireImc> {
   final Color customRed = const Color(0xFFb01f00);
-  Sexe _selectedSexe = Sexe.femme; // Femme par défaut
 
+  Sexe _selectedSexe = Sexe.femme;
+ // Femme par défaut
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -185,10 +182,7 @@ class _HomePageState extends State<HomePage> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => TestPage()),
-                    );
+                    Get.to(() => const HomePage());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: customRed,
