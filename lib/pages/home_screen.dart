@@ -13,7 +13,6 @@ import 'test_result_page.dart';
 import 'project_presentation.dart';
 
 
-
 class HomeScreen extends StatefulWidget {
   final String nom;
   final String prenom;

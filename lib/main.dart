@@ -1,3 +1,5 @@
+import 'package:appli_ap_sante/pages/home_screen.dart';
+import 'package:appli_ap_sante/pages/questionnaire_screen.dart';
 import 'package:appli_ap_sante/pages/splash_screen.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      title: 'Mon App',
+      initialRoute: '/',
+      routes: {
+        '/questionnaire': (context) => QuestionnaireScreen(),
+        '/testpage': (context) => HomeScreen(nom: "nom", prenom: "prenom", poids: "60", taille: "33", age: "12", sexe: "femme")
+      },
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(milliseconds: 300),
