@@ -20,6 +20,7 @@ dependencies:
   get: ^4.7.2
   flutter_svg: ^2.1.0
   fl_chart: ^0.71.0
+  animated_expandable_fab: any
 
 dev_dependencies:
   flutter_test:

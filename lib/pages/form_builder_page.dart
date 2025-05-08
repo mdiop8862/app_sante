@@ -26,7 +26,7 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
         children: [
           Text(
             widget.subtitle ?? "",
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
           ),
           const SizedBox(height: 16),
           Expanded(

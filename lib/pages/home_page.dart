@@ -1,6 +1,10 @@
 import 'package:appli_ap_sante/pages/custom_value_selector_page.dart';
+import 'package:appli_ap_sante/pages/profile_page.dart';
+import 'package:appli_ap_sante/pages/project_presentation.dart';
+import 'package:appli_ap_sante/pages/test_result_page.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:appli_ap_sante/pages/form_builder_page.dart';
+import 'package:appli_ap_sante/widgets/add_button.dart';
 import 'package:appli_ap_sante/widgets/questionnaire_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +126,8 @@ class _HomePageState extends State<HomePage> {
             () => Get.to(
                   () => CustomFormBuilderPage(
                     title: 'Test d’équilibre',
-                    subtitle: 'Placer les mains sur les hanches',
+                    //subtitle:
+                    //    'PROCEDURE : Placer les mains sur les hanches et mettre un pied à plat sur le genou opposé. Fermer les yeux et démarrer le chronomètre. On a le droit à 2 essais par jambe et le meilleur des deux sera pris en compte. Le test peut se dérouler pieds nus.',
                     formFields: [
                       CustomFormField(
                         title: 'Test du flamand - pied droite',
@@ -442,6 +447,23 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: AddButton(
+        onActionSelected: (String action) {
+          if (action == 'Profils') {
+            Get.to(
+              () => const ProfilePage(),
+            );
+          } else if (action == 'Résultats') {
+            Get.to(
+              () => const TestResultPage(),
+            );
+          } else if (action == 'Présentation du projet') {
+            Get.to(
+              () => const PresentationPage(),
+            );
+          }
+        },
       ),
     );
   }
