@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
     List<Category> categories = [
       Category(
         title: 'Endurance',
+        image: 'assets/images/endurance.jpeg',
         actions: [
           (
             'Test de marche - 6mn',
@@ -56,6 +57,7 @@ class _HomePageState extends State<HomePage> {
       ),
       Category(
         title: 'Force',
+        image: 'assets/images/force2.jpg',
         actions: [
           (
             'Test de handgrip',
@@ -110,6 +112,7 @@ class _HomePageState extends State<HomePage> {
       ),
       Category(
         title: 'Équilibre',
+        image: 'assets/images/equilibre.jpg',
         actions: [
           (
             'Test du flamand',
@@ -136,6 +139,7 @@ class _HomePageState extends State<HomePage> {
       ),
       Category(
         title: 'Souplesse',
+        image: 'assets/images/akram-huseyn-ZJzCO-un8dI-unsplash.jpg',
         actions: [
           (
             'Test de sit and reach ',
@@ -366,7 +370,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius:
                               const BorderRadius.all(Radius.circular(16)),
                           child: Image.asset(
-                            'assets/images/category_image.jpg',
+                            categories[index - 1].image,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -440,7 +444,13 @@ class _HomePageState extends State<HomePage> {
 
 class Category {
   final String title;
+  final String image;
+  final String subtitle;
   final List<(String, VoidCallback?)> actions;
-  Category({required this.title, List<(String, VoidCallback?)>? actions})
+  Category(
+      {required this.title,
+      required this.image,
+      required this.subtitle,
+      List<(String, VoidCallback?)>? actions})
       : actions = actions ?? [];
 }
