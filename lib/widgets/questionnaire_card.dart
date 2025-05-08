@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class QuestionnaireCard extends StatelessWidget {
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
 
-  const QuestionnaireCard({super.key, this.onTap});
+  const QuestionnaireCard({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

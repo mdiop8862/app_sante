@@ -1,4 +1,4 @@
-import 'package:appli_ap_sante/pages/home_page.dart';
+import 'home_screen.dart' ;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -238,7 +238,7 @@ class _FormulaireImcState extends State<FormulaireImc> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.to(() => const HomePage());
+                    Get.to(() => const HomeScreen());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: customRed,
