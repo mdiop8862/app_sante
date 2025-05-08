@@ -1,5 +1,4 @@
 import 'package:appli_ap_sante/pages/formulaire_imc.dart';
-//import 'package:appli_ap_sante/pages/home_page.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

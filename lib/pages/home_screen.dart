@@ -1,3 +1,4 @@
+import 'package:appli_ap_sante/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/expandable_test_card.dart' ;
 import "../widgets/imc_card.dart" ;
@@ -13,9 +14,29 @@ import 'project_presentation.dart';
 
 
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  final String nom;
+  final String prenom;
+  final String poids;
+  final String taille;
+  final String age;
+  final String sexe;
 
+  const HomeScreen({
+    Key? key,
+    required this.nom,
+    required this.prenom,
+    required this.poids,
+    required this.taille,
+    required this.age,
+    required this.sexe,
+  }) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final DateTime today = DateTime.now();
@@ -25,17 +46,18 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: AddButton(
         onActionSelected: (String action) {
           if (action == 'Profils') {
-            Get.to(
-                  () => const ProfilePage(),
-            );
+            Get.to(() => ProfilePage(
+              nom: widget.nom,
+              prenom: widget.prenom,
+              poids: widget.poids,
+              taille: widget.taille,
+              age: widget.age,
+              sexe: widget.sexe,
+            ));
           } else if (action == 'Résultats') {
-            Get.to(
-                  () => const TestResultPage(),
-            );
+            Get.to(() => const TestResultPage());
           } else if (action == 'Présentation du projet') {
-            Get.to(
-                  () => const PresentationPage(),
-            );
+            Get.to(() => const PresentationPage());
           }
         },
       ),
@@ -45,19 +67,14 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //  Date
               TopBar(selectedDate: today),
               const SizedBox(height: 24),
-
-              //  IMC
               const IMCWidget(
                 imcValue: 22.8,
                 statut: 'Élevé',
                 categorie: 'Surpoids',
               ),
               const SizedBox(height: 16),
-
-              // Liste scrollable des catégories de tests
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.zero,
