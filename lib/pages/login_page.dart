@@ -1,5 +1,5 @@
 import 'package:appli_ap_sante/pages/formulaire_imc.dart';
-import 'package:appli_ap_sante/pages/home_page.dart';
+//import 'package:appli_ap_sante/pages/home_page.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,7 +14,8 @@ class _LoginPageState extends State<LoginPage> {
   bool showPassword = true, isChecked = false;
   @override
   Widget build(BuildContext context) {
-    const defaultBorder = UnderlineInputBorder(borderSide: BorderSide(color: Colors.white));
+    const defaultBorder =
+        UnderlineInputBorder(borderSide: BorderSide(color: Colors.white));
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -34,7 +35,8 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Image.asset('assets/images/person_icon.png', height: 40, width: 40, fit: BoxFit.cover),
+                    Image.asset('assets/images/person_icon.png',
+                        height: 40, width: 40, fit: BoxFit.cover),
                     const SizedBox(width: 15),
                     const Expanded(
                       child: TextField(
@@ -45,8 +47,10 @@ class _LoginPageState extends State<LoginPage> {
                           enabledBorder: defaultBorder,
                           focusedBorder: defaultBorder,
                           focusColor: AppColor.appWhite,
-                          labelStyle:
-                              TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                          labelStyle: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
                         ),
                       ),
                     )
@@ -57,7 +61,8 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Image.asset('assets/images/password_icon.png', height: 40, width: 40, fit: BoxFit.cover),
+                    Image.asset('assets/images/password_icon.png',
+                        height: 40, width: 40, fit: BoxFit.cover),
                     const SizedBox(width: 15),
                     Expanded(
                       child: TextField(
@@ -69,12 +74,17 @@ class _LoginPageState extends State<LoginPage> {
                           enabledBorder: defaultBorder,
                           focusedBorder: defaultBorder,
                           focusColor: AppColor.appWhite,
-                          labelStyle:
-                              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                          labelStyle: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
                           suffixIcon: IconButton(
-                            onPressed: () => setState(() => showPassword = !showPassword),
+                            onPressed: () =>
+                                setState(() => showPassword = !showPassword),
                             icon: Icon(
-                              showPassword ? Icons.visibility : Icons.visibility_off,
+                              showPassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                               color: Colors.white,
                             ),
                           ),
@@ -93,7 +103,8 @@ class _LoginPageState extends State<LoginPage> {
                       child: Checkbox(
                         value: isChecked,
                         activeColor: AppColor.primaryColor,
-                        onChanged: (value) => setState(() => isChecked = value ?? false),
+                        onChanged: (value) =>
+                            setState(() => isChecked = value ?? false),
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -110,18 +121,23 @@ class _LoginPageState extends State<LoginPage> {
                           focusedBorder: defaultBorder,
                           disabledBorder: defaultBorder,
                           focusColor: AppColor.appWhite,
-                          hintStyle:
-                              TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                          hintStyle: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
                         ),
                       ),
                     )
                   ],
                 )
-              ].map((e) => Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: e)),
+              ].map((e) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: e)),
               const SizedBox(height: 50),
               ElevatedButton(
                 onPressed: () => Get.offAll(() => const FormulaireImc()),
-                style: ElevatedButton.styleFrom(fixedSize: Size(MediaQuery.sizeOf(context).width * .7, 40)),
+                style: ElevatedButton.styleFrom(
+                    fixedSize: Size(MediaQuery.sizeOf(context).width * .7, 40)),
                 child: const Text('Se connecter'),
               ),
               const SizedBox(height: 25),

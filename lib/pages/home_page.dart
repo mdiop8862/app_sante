@@ -1,6 +1,7 @@
 import 'package:appli_ap_sante/pages/custom_value_selector_page.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:appli_ap_sante/pages/form_builder_page.dart';
+import 'package:appli_ap_sante/widgets/questionnaire_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -115,6 +116,7 @@ class _HomePageState extends State<HomePage> {
             () => Get.to(
                   () => CustomFormBuilderPage(
                     title: 'Test d’équilibre',
+                    subtitle: 'Placer les mains sur les hanches',
                     formFields: [
                       CustomFormField(
                         title: 'Test du flamand - pied droite',
@@ -194,7 +196,10 @@ class _HomePageState extends State<HomePage> {
             children: [
               const SizedBox(height: 10),
               Text(
-                DateFormat('EEEE, dd MMMM yyyy', 'fr').format(now).capitalizeFirst ?? '',
+                DateFormat('EEEE, dd MMMM yyyy', 'fr')
+                        .format(now)
+                        .capitalizeFirst ??
+                    '',
                 style: const TextStyle(color: Color(0xFF8E8E8E)),
               ),
               const SizedBox(height: 10),
@@ -213,7 +218,15 @@ class _HomePageState extends State<HomePage> {
                     (index) => Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"][index],
+                        [
+                          "Lun",
+                          "Mar",
+                          "Mer",
+                          "Jeu",
+                          "Ven",
+                          "Sam",
+                          "Dim"
+                        ][index],
                         style: const TextStyle(
                           color: Color(0xFF8E8E8E),
                           fontWeight: FontWeight.bold,
@@ -232,11 +245,19 @@ class _HomePageState extends State<HomePage> {
                         ),
                         padding: EdgeInsets.only(left: isSelected ? 0 : 2),
                         child: Align(
-                          alignment: isSelected ? Alignment.center : Alignment.centerLeft,
+                          alignment: isSelected
+                              ? Alignment.center
+                              : Alignment.centerLeft,
                           child: Text(
-                            startOfWeek.add(Duration(days: index)).day.toString().padLeft(2, '0'),
+                            startOfWeek
+                                .add(Duration(days: index))
+                                .day
+                                .toString()
+                                .padLeft(2, '0'),
                             style: TextStyle(
-                              color: isSelected ? AppColor.appWhite : const Color(0xFF8E8E8E),
+                              color: isSelected
+                                  ? AppColor.appWhite
+                                  : const Color(0xFF8E8E8E),
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -250,7 +271,8 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 35),
               Container(
                 height: 145,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: const Color(0xFF111111),
@@ -262,13 +284,18 @@ class _HomePageState extends State<HomePage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('IMC', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
+                        Text('IMC',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 20)),
                         SizedBox(height: 10),
-                        Text('22,8', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28)),
+                        Text('22,8',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 28)),
                         SizedBox(height: 18),
                         Text(
                           'Catégorie : Surpoids',
-                          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 12),
                         ),
                       ],
                     ),
@@ -287,7 +314,8 @@ class _HomePageState extends State<HomePage> {
                           child: Center(
                             child: Text(
                               'Élevé',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                           ),
                         )
@@ -301,9 +329,11 @@ class _HomePageState extends State<HomePage> {
                 child: ListView.separated(
                   padding: const EdgeInsets.only(bottom: 20),
                   shrinkWrap: true,
-                  separatorBuilder: (context, index) => const SizedBox(height: 15),
-                  itemCount: categories.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 15),
+                  itemCount: categories.length + 1,
                   itemBuilder: (context, index) {
+                    if (index == 0) return const QuestionnaireCard();
                     final widgets = [
                       Expanded(
                         flex: 6,
@@ -313,8 +343,9 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                categories[index].title,
-                                style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+                                categories[index - 1].title,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 20),
                               ),
                               const SizedBox(height: 10),
                               const Expanded(
@@ -332,7 +363,8 @@ class _HomePageState extends State<HomePage> {
                       Expanded(
                         flex: 5,
                         child: ClipRRect(
-                          borderRadius: const BorderRadius.all(Radius.circular(16)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(16)),
                           child: Image.asset(
                             'assets/images/category_image.jpg',
                             fit: BoxFit.cover,
@@ -345,11 +377,13 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          onTap: () => setState(
-                              () => selectedIndex == index ? selectedIndex = null : selectedIndex = index),
+                          onTap: () => setState(() => selectedIndex == index - 1
+                              ? selectedIndex = null
+                              : selectedIndex = index - 1),
                           child: Container(
                             height: 100,
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 10),
                             width: double.infinity,
                             decoration: BoxDecoration(
                               color: const Color(0xFF111111),
@@ -357,26 +391,34 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: index.isOdd ? widgets.reversed.toList() : widgets,
+                              children: index.isOdd
+                                  ? widgets.reversed.toList()
+                                  : widgets,
                             ),
                           ),
                         ),
-                        if (selectedIndex == index) ...[
-                          ...categories[index].actions.map(
+                        if (selectedIndex == index - 1) ...[
+                          ...categories[index - 1].actions.map(
                                 (e) => GestureDetector(
                                   behavior: HitTestBehavior.opaque,
                                   onTap: e.$2,
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                            horizontal: 20)
+                                        .copyWith(top: 10),
                                     child: Row(
                                       children: [
-                                        const Icon(CupertinoIcons.check_mark, size: 15),
+                                        const Icon(CupertinoIcons.check_mark,
+                                            size: 15),
                                         const SizedBox(width: 15),
                                         Expanded(
-                                          child: Text(e.$1, maxLines: 1, overflow: TextOverflow.ellipsis),
+                                          child: Text(e.$1,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis),
                                         ),
                                         const SizedBox(width: 15),
-                                        const Icon(CupertinoIcons.right_chevron, size: 15),
+                                        const Icon(CupertinoIcons.right_chevron,
+                                            size: 15),
                                       ],
                                     ),
                                   ),
@@ -399,5 +441,6 @@ class _HomePageState extends State<HomePage> {
 class Category {
   final String title;
   final List<(String, VoidCallback?)> actions;
-  Category({required this.title, List<(String, VoidCallback?)>? actions}) : actions = actions ?? [];
+  Category({required this.title, List<(String, VoidCallback?)>? actions})
+      : actions = actions ?? [];
 }

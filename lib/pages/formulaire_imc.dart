@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-import 'global_test_result_page.dart';
-
+//import 'global_test_result_page.dart';
 
 enum Sexe { femme, homme }
 
@@ -19,7 +18,7 @@ class _FormulaireImcState extends State<FormulaireImc> {
   final Color customRed = const Color(0xFFb01f00);
 
   Sexe _selectedSexe = Sexe.femme;
- // Femme par défaut
+  // Femme par défaut
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +54,8 @@ class _FormulaireImcState extends State<FormulaireImc> {
 
               SizedBox(height: 50),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
                 child: Text(
                   "Profil :",
                   style: TextStyle(color: Colors.white, fontSize: 18),
@@ -65,7 +65,8 @@ class _FormulaireImcState extends State<FormulaireImc> {
               SizedBox(height: 30),
 
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
                 child: TextField(
                   cursorColor: customRed,
                   style: TextStyle(color: Colors.white),
@@ -89,7 +90,8 @@ class _FormulaireImcState extends State<FormulaireImc> {
               SizedBox(height: 30),
 
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
                 child: TextField(
                   cursorColor: customRed,
                   style: TextStyle(color: Colors.white),
@@ -113,7 +115,8 @@ class _FormulaireImcState extends State<FormulaireImc> {
               SizedBox(height: 30),
 
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
                 child: TextField(
                   cursorColor: customRed,
                   style: TextStyle(color: Colors.white),
@@ -137,7 +140,8 @@ class _FormulaireImcState extends State<FormulaireImc> {
               SizedBox(height: 30),
 
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
                 child: Text(
                   "Sexe :",
                   style: TextStyle(color: Colors.white, fontSize: 18),
@@ -186,8 +190,10 @@ class _FormulaireImcState extends State<FormulaireImc> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: customRed,
-                    padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-                    textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+                    textStyle:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24.0),
                     ),
