@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
     List<Category> categories = [
       Category(
         title: 'Endurance',
+        subtitle: '1 exercice cardio à réaliser',
         image: 'assets/images/endurance.jpeg',
         actions: [
           (
@@ -57,6 +58,7 @@ class _HomePageState extends State<HomePage> {
       ),
       Category(
         title: 'Force',
+        subtitle: 'Tests de force musculaire',
         image: 'assets/images/force2.jpg',
         actions: [
           (
@@ -112,6 +114,7 @@ class _HomePageState extends State<HomePage> {
       ),
       Category(
         title: 'Équilibre',
+        subtitle: 'Test unipodal simple',
         image: 'assets/images/equilibre.jpg',
         actions: [
           (
@@ -139,6 +142,7 @@ class _HomePageState extends State<HomePage> {
       ),
       Category(
         title: 'Souplesse',
+        subtitle: '3 tests à compléter',
         image: 'assets/images/akram-huseyn-ZJzCO-un8dI-unsplash.jpg',
         actions: [
           (
@@ -352,11 +356,12 @@ class _HomePageState extends State<HomePage> {
                                     fontWeight: FontWeight.w500, fontSize: 20),
                               ),
                               const SizedBox(height: 10),
-                              const Expanded(
+                              Expanded(
                                 child: Text(
-                                  'Neque porro quisquam est qui dolorem',
+                                  categories[index - 1].subtitle,
                                   maxLines: 2,
-                                  style: TextStyle(color: Color(0xFF8E8E8E)),
+                                  style:
+                                      const TextStyle(color: Color(0xFF8E8E8E)),
                                 ),
                               ),
                             ],
