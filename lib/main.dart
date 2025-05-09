@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/questionnaire': (context) => QuestionnaireScreen(),
-        '/testpage': (context) => HomeScreen(nom: "nom", prenom: "prenom", poids: "60", taille: "33", age: "12", sexe: "femme")
+        '/testpage': (context) => HomeScreen(nom: "", prenom: "", poids: "", taille: "", age: "", sexe: "")
       },
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.rightToLeftWithFade,

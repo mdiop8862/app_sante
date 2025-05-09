@@ -9,15 +9,19 @@ class CustomValueSelectorPage extends StatefulWidget {
     required this.pageTitle,
     required this.labelText,
     required this.values,
+    this.onSelected, // Ajout du paramètre onSelected
   });
   final String pageTitle, labelText;
   final List<String> values;
+  final Function(String)? onSelected; // Fonction qui sera appelée à chaque sélection
+
   @override
   State<CustomValueSelectorPage> createState() => _CustomValueSelectorPageState();
 }
 
 class _CustomValueSelectorPageState extends State<CustomValueSelectorPage> {
   int? selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,8 +45,16 @@ class _CustomValueSelectorPageState extends State<CustomValueSelectorPage> {
                   final isSelected = selectedIndex == index;
                   return GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onTap: () =>
-                        setState(() => selectedIndex == index ? selectedIndex = null : selectedIndex = index),
+                    onTap: () {
+                      setState(() {
+                        selectedIndex = isSelected ? null : index;
+                      });
+
+                      // Appeler la fonction onSelected si elle est définie
+                      if (widget.onSelected != null && selectedIndex != null) {
+                        widget.onSelected!(widget.values[selectedIndex!]);
+                      }
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                       decoration: BoxDecoration(
@@ -69,6 +81,7 @@ class _CustomValueSelectorPageState extends State<CustomValueSelectorPage> {
         padding: const EdgeInsets.symmetric(horizontal: 30).copyWith(bottom: 40, top: 15),
         child: ElevatedButton(
           onPressed: () {
+            // Lorsque l'utilisateur appuie sur 'Terminer', on vérifie si une sélection a été faite
             if (selectedIndex == null) return;
             Get.off(() => const TestResultPage());
           },

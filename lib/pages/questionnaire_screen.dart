@@ -138,10 +138,41 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     final question = questions[currentQuestionIndex];
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white), // Icône de retour avec couleur rouge
+          onPressed: () {
+            if (currentQuestionIndex > 0) {
+              // Si l'utilisateur n'est pas à la première question, on revient à la question précédente
+              setState(() {
+                currentQuestionIndex--; // On diminue l'index de la question pour revenir à la question précédente
+              });
+            } else {
+              // Si l'utilisateur est à la première question, on le ramène à la page precedente
+              Navigator.pop(context);
+              // Retour à la page principale
+            }
+          },
+        ),
+        title: Row(
+          children: [
+            Expanded(
+              child: Center(
+                child: Text(
+                  "Création de Profil",
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+
+
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
@@ -157,17 +188,13 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                 backgroundColor: Colors.grey[300],
               ),
               SizedBox(height: 30),
-              Text("Question ${currentQuestionIndex + 1} / ${questions.length}",
-                  style: TextStyle(fontSize: 15)),
+              Text("Question ${currentQuestionIndex + 1} / ${questions.length}", style: TextStyle(fontSize: 15)),
               SizedBox(height: 50),
               Text(question['text'], style: TextStyle(fontSize: 18)),
               SizedBox(height: 30),
               ...List.generate(question['options'].length, (index) {
                 return RadioListTile<int>(
-                  title: Text(
-                    question['options'][index],
-                    style: TextStyle(color: Colors.grey),
-                  ),
+                  title: Text(question['options'][index], style: TextStyle(color: Colors.grey)),
                   value: index,
                   groupValue: selectedOption,
                   activeColor: primaryColor,
@@ -178,13 +205,12 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                   },
                 );
               }),
-              SizedBox(height: 20),
             ],
           ),
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(90.0),
+        padding: const EdgeInsets.all(60),
         child: ElevatedButton(
           onPressed: nextQuestion,
           style: ElevatedButton.styleFrom(
@@ -196,5 +222,4 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
       ),
     );
   }
-
 }
