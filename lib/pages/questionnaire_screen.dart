@@ -112,6 +112,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 60),
             LinearProgressIndicator(
               value: selectedOption != null
                   ? (currentQuestionIndex + 1) / questions.length
@@ -123,9 +124,15 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
             Text("Question ${currentQuestionIndex + 1} / ${questions.length}", style: TextStyle(fontSize: 15)),
             SizedBox(height: 50),
             Text(question['text'], style: TextStyle(fontSize: 18)),
+            SizedBox(height: 30),
             ...List.generate(question['options'].length, (index) {
               return RadioListTile<int>(
-                title: Text(question['options'][index]),
+                title: Text(
+                  question['options'][index],
+                  style: TextStyle(
+                          color: Colors.grey
+                        ),
+                ),
                 value: index,
                 groupValue: selectedOption,
                 activeColor: primaryColor,
@@ -136,7 +143,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                 },
               );
             }),
-            Spacer(),
+            SizedBox(height: 160),
             Center(
               child: ElevatedButton(
                 onPressed: nextQuestion,
