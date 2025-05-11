@@ -1,17 +1,20 @@
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'package:appli_ap_sante/pages/test_result_page.dart';
 class QuestionnaireScreen extends StatefulWidget {
   @override
   _QuestionnaireScreenState createState() => _QuestionnaireScreenState();
 }
 
 class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
+  bool isQuestionnaireCompleted = false;
   int currentQuestionIndex = 0;
   final Color primaryColor = Color(0xFFb01f00);
   int? selectedOption;
   final Map<int, int> scores = {};
 
   final List<Map<String, dynamic>> questions = [
+
     {
       'text': 'Combien de temps passez-vous en position assise par jour (loisirs, télé, ordinateur, travail, etc.) ?',
       'options': [
@@ -65,6 +68,8 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         'Plus de 10 h'
       ],
     },
+
+
     {
       'text': 'Combien de minutes par jour consacrez-vous à la marche ?',
       'options': [
@@ -99,8 +104,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
 
   void nextQuestion() {
     if (selectedOption != null) {
-      scores[currentQuestionIndex] =
-          getScore(currentQuestionIndex, selectedOption!);
+      scores[currentQuestionIndex] = getScore(currentQuestionIndex, selectedOption!);
       if (currentQuestionIndex < questions.length - 1) {
         setState(() {
           currentQuestionIndex++;
@@ -109,29 +113,36 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
       } else {
         int total = scores.values.reduce((a, b) => a + b);
         int scoreGlobal = calculerScoreGlobal(total);
+        isQuestionnaireCompleted = true;
+        print(scoreGlobal);
 
+        // Affichage du Dialog
         showDialog(
           context: context,
-          builder: (_) =>
-              AlertDialog(
-                backgroundColor: Colors.white, // Rouge foncé
-                title: Text(
-                  "Résultat",
-                  style: TextStyle(color: Colors.black),
-                ),
-                content: Text(
-                  "Vous avez terminé le questionnaire !",
-                  style: TextStyle(color: Colors.black),
-                ),
-                actions: [
-                  TextButton(
-                      child: Text("OK", style: TextStyle(color: primaryColor),),
-                      onPressed: () =>
-                          Navigator.pushReplacementNamed(
-                              context, '/testpage') // Va à la page "accueil"
-                  ),
-                ],
+          builder: (_) => AlertDialog(
+            backgroundColor: Colors.white, // Couleur de fond
+            title: Text(
+              "Résultat",
+              style: TextStyle(color: Colors.black),
+            ),
+            content: Text(
+              "Vous avez terminé le questionnaire !",
+              style: TextStyle(color: Colors.black),
+            ),
+            actions: [
+              TextButton(
+                child: Text("OK", style: TextStyle(color: primaryColor)),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Ferme l'AlertDialog
+                  Navigator.of(context).pop({
+                    'scoreGlobal': scoreGlobal,
+                    'fait': true,
+                  });
+
+                },
               ),
+            ],
+          ),
         );
       }
     }
@@ -163,7 +174,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
             Expanded(
               child: Center(
                 child: Text(
-                  "Création de Profil",
+                  "Questionnaire Ricci & Gagnon",
                   style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -179,7 +190,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 60),
+              SizedBox(height: 40),
               LinearProgressIndicator(
                 value: selectedOption != null
                     ? (currentQuestionIndex + 1) / questions.length
@@ -187,11 +198,11 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                 color: primaryColor,
                 backgroundColor: Colors.grey[300],
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               Text("Question ${currentQuestionIndex + 1} / ${questions.length}", style: TextStyle(fontSize: 15)),
-              SizedBox(height: 50),
+              SizedBox(height: 40),
               Text(question['text'], style: TextStyle(fontSize: 18)),
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               ...List.generate(question['options'].length, (index) {
                 return RadioListTile<int>(
                   title: Text(question['options'][index], style: TextStyle(color: Colors.grey)),
@@ -223,3 +234,4 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
     );
   }
 }
+

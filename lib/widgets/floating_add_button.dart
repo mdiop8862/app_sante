@@ -24,12 +24,14 @@ class FloatingAddButton extends StatelessWidget {
       overlayOpacity: 0.0,
 
       children: [
+        /*
         SpeedDialChild(
           child: const Icon(Icons.assessment),
           label: 'Résultats',
           onTap: onNavigateToResults,
           labelStyle: const TextStyle(color: Colors.black , fontWeight: FontWeight.bold),
         ),
+         */
         SpeedDialChild(
           child: const Icon(Icons.person),
           label: 'Profil',

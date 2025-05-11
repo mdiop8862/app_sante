@@ -1,4 +1,5 @@
 import 'package:appli_ap_sante/pages/test_result_page.dart';
+import 'package:appli_ap_sante/pages/home_screen.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -143,7 +144,7 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
         child: ElevatedButton(
           onPressed: () {
             widget.onSubmit(_formValues);
-            Get.off(() => const TestResultPage());
+            Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(
             fixedSize: Size(MediaQuery.sizeOf(context).width * .7, 45),

@@ -35,28 +35,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final Color primaryColor = Color(0xFFb01f00);
   List<List<bool>> allTestsCompletion = [
-    [false, false], // Endurance: 2 sous-tests
-    [false, false, false], // Force: 3 sous-tests
-    [false], // Équilibre: 1 sous-test
-    [false, false, false], // Souplesse: 3 sous-tests
+    [false, false],
+    [false, false, false],
+    [false],
+    [false, false, false],
   ];
 
-  // Liste pour suivre l'état de chaque test (complété ou non)
-  List<bool> testsCompleted = [false, false, false, false];
-
-  // Calcul de la progression (en pourcentage)
+  bool questionnaireFait = false;
+  int scorequestionnaire = 0;
   double getProgress() {
     int completedSubTests = 0;
     int totalSubTests = 0;
-
-    // Calcul des sous-tests complétés
     for (var test in allTestsCompletion) {
       completedSubTests += test.where((subTest) => subTest).length;
       totalSubTests += test.length;
     }
-
     return completedSubTests / totalSubTests;
+  }
+
+  bool checkAllTestsDone() {
+    return allTestsCompletion.every((test) => test.every((done) => done)) && questionnaireFait;
   }
 
   @override
@@ -76,9 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
               age: widget.age,
               sexe: widget.sexe,
             ));
-          } else if (action == 'Résultats') {
+          }
+          /*
+          else if (action == 'Résultats') {
+
             Get.to(() => const TestResultPage());
-          } else if (action == 'Présentation du projet') {
+          } */else if (action == 'Présentation du projet') {
             Get.to(() => const PresentationPage());
           }
         },
@@ -91,21 +94,42 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               TopBar(selectedDate: today),
               const SizedBox(height: 24),
-              ProgressionWidget(progression: getProgress()),
-              // Mise à jour de la progression
+              ProgressionWidget(
+                progression: getProgress(),
+                showButton: checkAllTestsDone(),
+                onVoirResultat: () {
+                  double poids = double.tryParse(widget.poids) ?? 0;
+                  double tailleEnMetres = (double.tryParse(widget.taille) ?? 0) / 100;
+                  double imc = tailleEnMetres > 0 ? poids / (tailleEnMetres * tailleEnMetres) : 0;
+                  Get.to(() => TestResultPage(scorequestionnaire: scorequestionnaire, imc: imc));// comment passer le score de l'utilisateur
+                },
+              ),
+
               const SizedBox(height: 16),
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
                     QuestionnaireCard(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/questionnaire');
+                      onTap: () async {
+                        final result = await Navigator.pushNamed(context, '/questionnaire');
+
+                        if (result is Map) {
+                          final int? score = result['scoreGlobal'];
+                          final bool? questionnaire = result['fait'];
+
+                          if (score != null && questionnaire == true) {
+                            setState(() {
+                              questionnaireFait = true;
+                              scorequestionnaire = score;
+                              // Tu peux aussi stocker total si besoin
+                            });
+                          }
+                        }
                       },
+
                     ),
                     const SizedBox(height: 12),
-
-                    // Endurance Test Card
                     ExpandableTestCard(
                       title: 'Endurance',
                       subtitle: '1 exercice cardio à réaliser',
@@ -159,8 +183,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     const SizedBox(height: 12),
-
-                    // Force Test Card
                     ExpandableTestCard(
                       title: 'Force',
                       subtitle: 'Tests de force musculaire',
@@ -244,8 +266,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     const SizedBox(height: 12),
-
-                    // Équilibre Test Card
                     ExpandableTestCard(
                       title: 'Équilibre',
                       subtitle: 'Test unipodal simple',
@@ -283,13 +303,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     const SizedBox(height: 12),
-
-                    // Souplesse Test Card
                     ExpandableTestCard(
                       title: 'Souplesse',
                       subtitle: '3 tests à compléter',
-                      imagePath:
-                      'assets/images/akram-huseyn-ZJzCO-un8dI-unsplash.jpg',
+                      imagePath: 'assets/images/akram-huseyn-ZJzCO-un8dI-unsplash.jpg',
                       exercises: ['Main / Pied', 'Épaule', 'Flexomètre'],
                       isCompleted: allTestsCompletion[3],
                       onExerciseTap: (exerciseName) {
@@ -359,7 +376,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                       },
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 20),
+
                   ],
                 ),
               ),

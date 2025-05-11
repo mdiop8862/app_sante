@@ -83,7 +83,7 @@ class _CustomValueSelectorPageState extends State<CustomValueSelectorPage> {
           onPressed: () {
             // Lorsque l'utilisateur appuie sur 'Terminer', on vérifie si une sélection a été faite
             if (selectedIndex == null) return;
-            Get.off(() => const TestResultPage());
+              Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(fixedSize: Size(MediaQuery.sizeOf(context).width * .7, 45)),
           child: const Text('Terminer'),

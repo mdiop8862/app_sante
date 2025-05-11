@@ -136,6 +136,8 @@ class _FormulaireImcState extends State<FormulaireImc> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
+
+
                     Get.to(() => HomeScreen(
                       nom: _nomController.text,
                       prenom: _prenomController.text,
@@ -144,6 +146,7 @@ class _FormulaireImcState extends State<FormulaireImc> {
                       age: _ageController.text,
                       sexe: _selectedSexe == Sexe.femme ? 'Femme' : 'Homme',
                     ));
+
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: customRed,

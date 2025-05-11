@@ -5,10 +5,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class TestResultPage extends StatefulWidget {
-  const TestResultPage({super.key});
+  final int scorequestionnaire;  // Accepter le score ici
+  final double imc;
+
+  const TestResultPage({super.key, required this.scorequestionnaire, required this.imc});
+
   @override
   State<TestResultPage> createState() => _TestResultPageState();
 }
+
 
 class _TestResultPageState extends State<TestResultPage> {
   @override
@@ -32,9 +37,10 @@ class _TestResultPageState extends State<TestResultPage> {
           const SizedBox(height: 20),
           Row(
             children: [
+
               Container(height: 40, width: 40, color: const Color(0xFF2249FF)),
               const SizedBox(width: 18),
-              const Text('25.1', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)),
+              Text('${widget.imc.toStringAsFixed(2)}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)),
             ],
           ),
           const SizedBox(height: 20),
@@ -45,9 +51,10 @@ class _TestResultPageState extends State<TestResultPage> {
           const SizedBox(height: 20),
           Row(
             children: [
-              Container(height: 40, width: 40, color: AppColor.appWhite),
+
+              Container(height: 40, width: 40, color: getColorFromScore(widget.scorequestionnaire)),
               const SizedBox(width: 18),
-              const Text('A faire', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)),
+              Text('${widget.scorequestionnaire}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)), // Afficher le score ici
             ],
           ),
           const SizedBox(height: 30),
@@ -133,5 +140,22 @@ class ColorsSection extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Color getColorFromScore(int score) {
+  switch (score) {
+    case 1:
+      return Colors.red;
+    case 2:
+      return Colors.orange;
+    case 3:
+      return Colors.yellow;
+    case 4:
+      return Colors.green;
+    case 5:
+      return Colors.blue;
+    default:
+      return Colors.grey; // Par défaut si score non valide
   }
 }

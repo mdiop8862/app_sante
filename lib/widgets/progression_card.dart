@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 
 class ProgressionWidget extends StatelessWidget {
   final double progression; // Entre 0.0 et 1.0
+  final bool showButton;
+  final VoidCallback onVoirResultat;
 
   const ProgressionWidget({
     super.key,
     required this.progression,
+    required this.showButton,
+    required this.onVoirResultat,
   });
 
   @override
@@ -21,11 +25,11 @@ class ProgressionWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // 📝 Texte "Progression"
+          // 📝 Texte "Progression" + bouton
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
+            children: [
+              const Text(
                 'Progression',
                 style: TextStyle(
                   color: Colors.white70,
@@ -33,10 +37,21 @@ class ProgressionWidget extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              if (showButton)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: ElevatedButton(
+                    onPressed: onVoirResultat,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFB32C2C),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    ),
+                    child: const Text('Résultat'),
+                  ),
+                ),
             ],
           ),
-
-          // 🔴 Cercle à droite
+          // 🔴 Cercle de progression
           Stack(
             alignment: Alignment.center,
             children: [
