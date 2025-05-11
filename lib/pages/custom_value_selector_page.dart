@@ -93,9 +93,12 @@ class _CustomValueSelectorPageState extends State<CustomValueSelectorPage> {
             .copyWith(bottom: 40, top: 15),
         child: ElevatedButton(
           onPressed: () {
-            // Lorsque l'utilisateur appuie sur 'Terminer', on vérifie si une sélection a été faite
             if (selectedIndex == null) return;
-            Navigator.pop(context);
+            final selectedValue = widget.values[selectedIndex!];
+            if (widget.onSelected != null) {
+              widget.onSelected!(selectedValue); 
+            }
+            Navigator.pop(context, true); // renvoie un booléen au parent
           },
           style: ElevatedButton.styleFrom(
               fixedSize: Size(MediaQuery.sizeOf(context).width * .7, 45)),
