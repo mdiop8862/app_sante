@@ -1,5 +1,4 @@
 import 'package:appli_ap_sante/pages/test_result_page.dart';
-import 'package:appli_ap_sante/pages/home_screen.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,18 +35,13 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
       ),
       body: Column(
         children: [
-          if (widget.subtitle != null && widget.subtitle!.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Text(
-                widget.subtitle!,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+            child: Text(
+              widget.subtitle ?? "",
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
             ),
+          ),
           Expanded(
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
@@ -91,7 +85,9 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
                         items: field.options!
                             .map((option) => DropdownMenuItem(
                           value: option,
-                          child: Text(option, style: const TextStyle(color: Colors.white)),
+                          child: Text(option,
+                              style:
+                              const TextStyle(color: Colors.white)),
                         ))
                             .toList(),
                         decoration: InputDecoration(
@@ -101,15 +97,18 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide.none,
                           ),
-                          contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 12),
                         ),
-                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                        style:
+                        const TextStyle(color: Colors.white, fontSize: 16),
                       )
                     else
                       TextField(
                         cursorColor: AppColor.appWhite,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         keyboardType: TextInputType.number,
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
@@ -121,8 +120,8 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
                           ),
-                          contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide.none,
@@ -140,7 +139,8 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
         ],
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30).copyWith(bottom: 40, top: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 30)
+            .copyWith(bottom: 40, top: 15),
         child: ElevatedButton(
           onPressed: () {
             widget.onSubmit(_formValues);
@@ -165,7 +165,6 @@ class CustomFormField {
   final String? hintText;
   final bool isSelectable;
   final List<String>? options;
-
 
   CustomFormField({
     required this.title,

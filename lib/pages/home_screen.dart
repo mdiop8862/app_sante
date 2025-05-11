@@ -143,6 +143,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test d’endurance",
+                                subtitle:
+                                "Procédure : parcourir en marchant le plus de mètres en 6 minutes",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de marche – 6 minutes',
@@ -164,6 +166,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test d’endurance",
+                                subtitle:
+                                "Procédure : pendant 3 minutes monter et descendre une marche en 4 temps sur une cadence de 96 bips par minute. A la fin des 3 minutes le sujet s'assoit sur la marche et dispose d'une minute de repos.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de la montée de marche',
@@ -200,6 +204,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test de force",
+                                subtitle:
+                                "Procédure : faire des flexions assis-debout pendant 30 secondes, bas en croix sur la poitrine.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de la montée de marche',
@@ -221,7 +227,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test de force",
-                                formFields: [
+                                subtitle:
+                                "Procédure : le test de la chaise consiste à se placer le dos contre un mur, les pieds écartés de 20cm, puis glisser vers le bas en fléchissant les jambes et en éloignant les pieds de façon à obtenir un angle de 90° entre le tronc et la cuisse et entre la cuisse et la jambe.",
+                              formFields: [
                                   CustomFormField(
                                     title: 'Test de la chaise',
                                     labelText: 'Nombre de secondes',
@@ -242,6 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test de force",
+                                subtitle: "Procédure: ",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de handgrip (main droite)',
@@ -279,6 +288,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test d’équilibre",
+                                subtitle:
+                                "Procédure : placer les mains sur les hanches et mettre un pied à plat sur le genou opposé. Fermer les yeux et démarrer le chronomètre. On a le droit à 2 essais par jambe et le meilleur des deux sera pris en compte. Le test peut se dérouler pieds nus.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test du flamand - pied droit',
@@ -316,6 +327,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test de souplesse",
+                                subtitle:
+                                "Procédure : se positionner assis, les jambes en extension, les lantes de pieds sont verticales contre le montant du flexomètre. Tendre les mains vers l'avant et poser les mains l'une sur l'autre. Il faut chercher à pousser ses mains le plus loin possible vers l'avant sans fléchir les genoux et sans à-coup. La position maximale doit être maintenue 3 secondes pour être validée.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de Flexomètre',
@@ -337,6 +350,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             MaterialPageRoute(
                               builder: (_) => CustomValueSelectorPage(
                                 pageTitle: 'Test de souplesse',
+                                subtitle: "Procédure : Se positionner debout, les jambes en extension. Fléchir le tronc et amener les mains les plus bas possible dans plier les jambes.",
                                 labelText: 'Quelle est la position de tes mains ?',
                                 values: [
                                   'Les mains sur les cuisses',
@@ -358,6 +372,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             MaterialPageRoute(
                               builder: (_) => CustomValueSelectorPage(
                                 pageTitle: 'Test de souplesse',
+                                subtitle:
+                                "Procédure : passer une main par-dessus l'épaule et la faire glisser dans le dos quasiment dans l'axe de la colonne vertébrale. Réaliser la même opération avec la seconde main mais cette fois ci par-dessous l'épaule. Le but du test est de venir toucher ou attraper les mains dans le dos.",
                                 labelText: 'Où tes mains se touchent-elles ?',
                                 values: [
                                   'Je ne parviens pas à mettre les deux mains dans le dos',
