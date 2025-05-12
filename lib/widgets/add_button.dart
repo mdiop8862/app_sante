@@ -17,18 +17,18 @@ class AddButton extends StatelessWidget {
     ];
 
     return ExpandableFab(
-      closeBackgroundColor: AppColor.primaryColor,
-      closeShadowColor: Colors.grey,
+      closeBackgroundColor: AppColor.appWhite,
+      closeShadowColor: AppColor.primaryColor,
       closeElevation: 5,
       openElevation: 4,
       distance: 100.0,
       closeIcon: const Icon(
         Icons.close,
-        color: AppColor.appWhite,
+        color: AppColor.primaryColor,
       ),
       openIcon: const Icon(
         Icons.add,
-        color: AppColor.appWhite,
+        color: AppColor.primaryColor,
       ),
       children: List.generate(titles.length, (index) {
         return ActionButton(

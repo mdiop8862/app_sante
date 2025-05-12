@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/questionnaire': (context) => QuestionnaireScreen(),
-        '/testpage': (context) => HomeScreen(nom: "", prenom: "", poids: "", taille: "", age: "", sexe: "")
+        '/testpage': (context) => HomeScreen(
+            nom: "", prenom: "", poids: "", taille: "", age: "", sexe: "")
       },
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.rightToLeftWithFade,
@@ -55,8 +56,10 @@ class MyApp extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColor.primaryColor,
             foregroundColor: AppColor.appWhite,
-            textStyle: const TextStyle(fontFamily: 'inter', fontWeight: FontWeight.bold, fontSize: 18),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            textStyle: const TextStyle(
+                fontFamily: 'inter', fontWeight: FontWeight.bold, fontSize: 18),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
       ),
