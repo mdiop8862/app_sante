@@ -78,4 +78,3 @@ int calculScoreMarche6Min({
   return 0; // Cas non couvert
 }
 
-// Test de la montée de marche (fréquence cardiaque à la fin de l’épreuve)
