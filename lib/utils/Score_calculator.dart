@@ -78,3 +78,65 @@ int calculScoreMarche6Min({
   return 0; // Cas non couvert
 }
 
+// Score Flexométre
+
+int calculScore(String sexe, int age, int valeur) {
+  sexe = sexe.toUpperCase();
+
+  String tranche;
+  if (age < 20) {
+    tranche = "-19";
+  } else if (age < 30) {
+    tranche = "20-29";
+  } else if (age < 40) {
+    tranche = "30-39";
+  } else if (age < 50) {
+    tranche = "40-49";
+  } else if (age < 60) {
+    tranche = "50-59";
+  } else {
+    tranche = "60+";
+  }
+
+  Map<String, Map<String, List<List<int>>>> colorThresholds = {
+    "-19": {
+      "Femme": [[1, 22], [23, 31], [32, 39], [40, 47], [48, 50]],
+      "Homme": [[1, 20], [21, 30], [31, 39], [40, 48], [49, 50]],
+    },
+    "20-29": {
+      "Femme": [[1, 21], [22, 30], [31, 38], [39, 46], [47, 50]],
+      "Homme": [[1, 20], [21, 28], [29, 37], [38, 47], [48, 50]],
+    },
+    "30-39": {
+      "Femme": [[1, 21], [22, 30], [31, 38], [39, 46], [47, 50]],
+      "Homme": [[1, 18], [19, 27], [28, 36], [37, 45], [46, 50]],
+    },
+    "40-49": {
+      "Femme": [[1, 19], [20, 28], [29, 37], [38, 46], [47, 50]],
+      "Homme": [[1, 16], [17, 25], [26, 34], [35, 44], [45, 50]],
+    },
+    "50-59": {
+      "Femme": [[1, 20], [21, 28], [29, 36], [37, 45], [46, 50]],
+      "Homme": [[1, 13], [14, 23], [24, 32], [33, 41], [42, 50]],
+    },
+    "60+": {
+      "Femme": [[1, 18], [19, 26], [27, 35], [36, 43], [44, 50]],
+      "Homme": [[1, 11], [12, 21], [22, 30], [31, 40], [41, 50]],
+    },
+  };
+
+  var plages = colorThresholds[tranche]?[sexe];
+  if (plages == null) {
+    print("Tranche d'âge ou sexe non reconnu");
+    return 0;
+  }
+
+  for (int i = 0; i < plages.length; i++) {
+    if (valeur >= plages[i][0] && valeur <= plages[i][1]) {
+      return i + 1;
+    }
+  }
+
+  return 0;
+}
+
