@@ -56,7 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool checkAllTestsDone() {
-    return allTestsCompletion.every((test) => test.every((done) => done)) && questionnaireFait;
+    return allTestsCompletion.every((test) => test.every((done) => done)) &&
+        questionnaireFait;
   }
 
   @override
@@ -69,19 +70,20 @@ class _HomeScreenState extends State<HomeScreen> {
         onActionSelected: (String action) {
           if (action == 'Profils') {
             Get.to(() => ProfilePage(
-              nom: widget.nom,
-              prenom: widget.prenom,
-              poids: widget.poids,
-              taille: widget.taille,
-              age: widget.age,
-              sexe: widget.sexe,
-            ));
+                  nom: widget.nom,
+                  prenom: widget.prenom,
+                  poids: widget.poids,
+                  taille: widget.taille,
+                  age: widget.age,
+                  sexe: widget.sexe,
+                ));
           }
           /*
           else if (action == 'Résultats') {
 
             Get.to(() => const TestResultPage());
-          } */else if (action == 'Présentation du projet') {
+          } */
+          else if (action == 'Présentation du projet') {
             Get.to(() => const PresentationPage());
           }
         },
@@ -99,12 +101,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 showButton: checkAllTestsDone(),
                 onVoirResultat: () {
                   double poids = double.tryParse(widget.poids) ?? 0;
-                  double tailleEnMetres = (double.tryParse(widget.taille) ?? 0) / 100;
-                  double imc = tailleEnMetres > 0 ? poids / (tailleEnMetres * tailleEnMetres) : 0;
-                  Get.to(() => TestResultPage(scorequestionnaire: scorequestionnaire, imc: imc));// comment passer le score de l'utilisateur
+                  double tailleEnMetres =
+                      (double.tryParse(widget.taille) ?? 0) / 100;
+                  double imc = tailleEnMetres > 0
+                      ? poids / (tailleEnMetres * tailleEnMetres)
+                      : 0;
+                  Get.to(() => TestResultPage(
+                      scorequestionnaire: scorequestionnaire,
+                      imc: imc)); // comment passer le score de l'utilisateur
                 },
               ),
-
               const SizedBox(height: 16),
               Expanded(
                 child: ListView(
@@ -112,7 +118,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     QuestionnaireCard(
                       onTap: () async {
-                        final result = await Navigator.pushNamed(context, '/questionnaire');
+                        final result = await Navigator.pushNamed(
+                            context, '/questionnaire');
 
                         if (result is Map) {
                           final int? score = result['scoreGlobal'];
@@ -127,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           }
                         }
                       },
-
                     ),
                     const SizedBox(height: 12),
                     ExpandableTestCard(
@@ -144,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test d’endurance",
                                 subtitle:
-                                "Procédure : parcourir en marchant le plus de mètres en 6 minutes",
+                                    "Procédure : parcourir en marchant le plus de mètres en 6 minutes",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de marche – 6 minutes',
@@ -167,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test d’endurance",
                                 subtitle:
-                                "Procédure : pendant 3 minutes monter et descendre une marche en 4 temps sur une cadence de 96 bips par minute. A la fin des 3 minutes le sujet s'assoit sur la marche et dispose d'une minute de repos.",
+                                    "Procédure : pendant 3 minutes monter et descendre une marche en 4 temps sur une cadence de 96 bips par minute. A la fin des 3 minutes le sujet s'assoit sur la marche et dispose d'une minute de repos.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de la montée de marche',
@@ -205,12 +211,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test de force",
                                 subtitle:
-                                "Procédure : faire des flexions assis-debout pendant 30 secondes, bas en croix sur la poitrine.",
+                                    "Procédure : faire des flexions assis-debout pendant 30 secondes, bas en croix sur la poitrine.",
                                 formFields: [
                                   CustomFormField(
-                                    title: 'Test de la montée de marche',
-                                    labelText: 'Fréquence cardiaque',
-                                    hintText: 'bpm',
+                                    title: 'Test du assis-debout - 30 sec',
+                                    labelText: 'Nombre de répétitions',
+                                    //hintText: 'bpm',
                                   ),
                                 ],
                                 onSubmit: (formValues) {
@@ -228,8 +234,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test de force",
                                 subtitle:
-                                "Procédure : le test de la chaise consiste à se placer le dos contre un mur, les pieds écartés de 20cm, puis glisser vers le bas en fléchissant les jambes et en éloignant les pieds de façon à obtenir un angle de 90° entre le tronc et la cuisse et entre la cuisse et la jambe.",
-                              formFields: [
+                                    "Procédure : le test de la chaise consiste à se placer le dos contre un mur, les pieds écartés de 20cm, puis glisser vers le bas en fléchissant les jambes et en éloignant les pieds de façon à obtenir un angle de 90° entre le tronc et la cuisse et entre la cuisse et la jambe.",
+                                formFields: [
                                   CustomFormField(
                                     title: 'Test de la chaise',
                                     labelText: 'Nombre de secondes',
@@ -289,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test d’équilibre",
                                 subtitle:
-                                "Procédure : placer les mains sur les hanches et mettre un pied à plat sur le genou opposé. Fermer les yeux et démarrer le chronomètre. On a le droit à 2 essais par jambe et le meilleur des deux sera pris en compte. Le test peut se dérouler pieds nus.",
+                                    "Procédure : placer les mains sur les hanches et mettre un pied à plat sur le genou opposé. Fermer les yeux et démarrer le chronomètre. On a le droit à 2 essais par jambe et le meilleur des deux sera pris en compte. Le test peut se dérouler pieds nus.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test du flamand - pied droit',
@@ -317,7 +323,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ExpandableTestCard(
                       title: 'Souplesse',
                       subtitle: '3 tests à compléter',
-                      imagePath: 'assets/images/akram-huseyn-ZJzCO-un8dI-unsplash.jpg',
+                      imagePath:
+                          'assets/images/akram-huseyn-ZJzCO-un8dI-unsplash.jpg',
                       exercises: ['Main / Pied', 'Épaule', 'Flexomètre'],
                       isCompleted: allTestsCompletion[3],
                       onExerciseTap: (exerciseName) {
@@ -328,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (_) => CustomFormBuilderPage(
                                 title: "Test de souplesse",
                                 subtitle:
-                                "Procédure : se positionner assis, les jambes en extension, les lantes de pieds sont verticales contre le montant du flexomètre. Tendre les mains vers l'avant et poser les mains l'une sur l'autre. Il faut chercher à pousser ses mains le plus loin possible vers l'avant sans fléchir les genoux et sans à-coup. La position maximale doit être maintenue 3 secondes pour être validée.",
+                                    "Procédure : se positionner assis, les jambes en extension, les lantes de pieds sont verticales contre le montant du flexomètre. Tendre les mains vers l'avant et poser les mains l'une sur l'autre. Il faut chercher à pousser ses mains le plus loin possible vers l'avant sans fléchir les genoux et sans à-coup. La position maximale doit être maintenue 3 secondes pour être validée.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de Flexomètre',
@@ -350,8 +357,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             MaterialPageRoute(
                               builder: (_) => CustomValueSelectorPage(
                                 pageTitle: 'Test de souplesse',
-                                subtitle: "Procédure : Se positionner debout, les jambes en extension. Fléchir le tronc et amener les mains les plus bas possible dans plier les jambes.",
-                                labelText: 'Quelle est la position de tes mains ?',
+                                subtitle:
+                                    "Procédure : Se positionner debout, les jambes en extension. Fléchir le tronc et amener les mains les plus bas possible dans plier les jambes.",
+                                labelText:
+                                    'Quelle est la position de tes mains ?',
                                 values: [
                                   'Les mains sur les cuisses',
                                   'Les mains sur les genoux',
@@ -373,7 +382,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (_) => CustomValueSelectorPage(
                                 pageTitle: 'Test de souplesse',
                                 subtitle:
-                                "Procédure : passer une main par-dessus l'épaule et la faire glisser dans le dos quasiment dans l'axe de la colonne vertébrale. Réaliser la même opération avec la seconde main mais cette fois ci par-dessous l'épaule. Le but du test est de venir toucher ou attraper les mains dans le dos.",
+                                    "Procédure : passer une main par-dessus l'épaule et la faire glisser dans le dos quasiment dans l'axe de la colonne vertébrale. Réaliser la même opération avec la seconde main mais cette fois ci par-dessous l'épaule. Le but du test est de venir toucher ou attraper les mains dans le dos.",
                                 labelText: 'Où tes mains se touchent-elles ?',
                                 values: [
                                   'Je ne parviens pas à mettre les deux mains dans le dos',
@@ -393,7 +402,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     const SizedBox(height: 20),
-
                   ],
                 ),
               ),
