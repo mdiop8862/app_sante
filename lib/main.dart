@@ -5,9 +5,14 @@ import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart'; // Assure-toi que ce fichier a été généré
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -40,9 +45,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'inter',
         textTheme: ThemeData.dark().textTheme.apply(
-              fontFamily: 'inter',
-              bodyColor: AppColor.appWhite,
-            ),
+          fontFamily: 'inter',
+          bodyColor: AppColor.appWhite,
+        ),
         scaffoldBackgroundColor: Colors.black,
         appBarTheme: const AppBarTheme(
           surfaceTintColor: Colors.transparent,
@@ -59,7 +64,7 @@ class MyApp extends StatelessWidget {
             textStyle: const TextStyle(
                 fontFamily: 'inter', fontWeight: FontWeight.bold, fontSize: 18),
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
       ),

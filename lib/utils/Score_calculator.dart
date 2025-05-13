@@ -307,3 +307,92 @@ int calculerScoreTestChaise(int dureeEnSecondes) {
   if (dureeEnSecondes <= 270) return 5;
   return 0;
 }
+
+
+int calculScoreMonteeMarche({
+  required String sexe,
+  required int age,
+  required int bpm,
+}) {
+  if (sexe == 'Homme' && age <= 25) {
+    if (bpm >= 108) return 1;
+    if (bpm >= 101) return 2;
+    if (bpm >= 94) return 3;
+    if (bpm >= 85) return 4;
+    return 5;
+  }
+
+  if (sexe == 'Femme' && age <= 25) {
+    if (bpm > 120) return 1;
+    if (bpm > 110) return 2;
+    if (bpm > 102) return 3;
+    if (bpm > 93) return 4;
+    return 5;
+  }
+
+  if (sexe == 'Homme' && age <= 35) {
+    if (bpm > 110) return 1;
+    if (bpm > 102) return 2;
+    if (bpm > 94) return 3;
+    if (bpm > 85) return 4;
+    return 5;
+  }
+
+  if (sexe == 'Femme' && age <= 35) {
+    if (bpm > 120) return 1;
+    if (bpm > 110) return 2;
+    if (bpm > 101) return 3;
+    if (bpm > 92) return 4;
+    return 5;
+  }
+
+  if (sexe == 'Homme' && age <= 45) {
+    if (bpm > 113) return 1;
+    if (bpm > 104) return 2;
+    if (bpm > 98) return 3;
+    if (bpm > 88) return 4;
+    return 5;
+  }
+
+  if (sexe == 'Femme' && age <= 45) {
+    if (bpm > 120) return 1;
+    if (bpm > 112) return 2;
+    if (bpm > 104) return 3;
+    if (bpm > 96) return 4;//
+    return 5;
+  }
+
+  if (sexe == 'Homme' && age <= 55) {
+    if (bpm > 119) return 1;
+    if (bpm > 111) return 2;
+    if (bpm > 101) return 3;
+    if (bpm > 93) return 4;//
+    return 5;
+  }
+
+  if (sexe == 'Femme' && age <= 55) {
+    if (bpm > 124) return 1;
+    if (bpm > 118) return 2;
+    if (bpm > 110) return 3;
+    if (bpm > 101) return 4;
+    return 5;
+  }
+
+  if (sexe == 'Homme' && age <= 65) {
+    if (bpm > 117) return 1;
+    if (bpm > 109) return 2;
+    if (bpm > 100) return 3;
+    if (bpm > 94) return 4;
+    return 5;
+  }
+
+  if (sexe == 'Femme' && age <= 65) {
+    if (bpm > 127) return 1;
+    if (bpm > 118) return 2;
+    if (bpm > 111) return 3;
+    if (bpm > 103) return 4;
+    return 5;
+  }
+
+  return 0; // Valeurs incorrectes ou incomplètes
+}

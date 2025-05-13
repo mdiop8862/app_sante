@@ -1,8 +1,10 @@
 import 'package:appli_ap_sante/pages/test_result_page.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
+import '../utils/Score_calculator.dart'; // Ce fichier contient les fonctions de calcul
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import  '../utils/FirebaseManagement.dart' ;
 
 class CustomFormBuilderPage extends StatefulWidget {
   const CustomFormBuilderPage({
@@ -25,6 +27,28 @@ class CustomFormBuilderPage extends StatefulWidget {
 class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
   final Map<String, String> _formValues = {};
 
+  void _handleSubmit() {
+    widget.onSubmit(_formValues);
+
+    final testTitle = widget.title.toLowerCase();
+    const String sexe = "Homme";
+    const int age = 23;
+
+    Map<String, int> testScores = {};
+
+    if (testTitle.contains("marche – 6")) {
+
+    }
+
+    if (testTitle.contains("montée de marche")) {
+
+    }
+
+
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,13 +59,14 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-            child: Text(
-              widget.subtitle ?? "",
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          if (widget.subtitle != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+              child: Text(
+                widget.subtitle!,
+                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              ),
             ),
-          ),
           Expanded(
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
@@ -49,7 +74,6 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
               separatorBuilder: (_, __) => const SizedBox(height: 30),
               itemBuilder: (context, index) {
                 final field = widget.formFields[index];
-
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -71,66 +95,30 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-
-                    // Sélecteur ou champ texte
-                    if (field.isSelectable && field.options != null)
-                      DropdownButtonFormField<String>(
-                        dropdownColor: Colors.grey[900],
-                        value: _formValues[field.title],
-                        onChanged: (value) {
-                          setState(() {
-                            if (value != null) _formValues[field.title] = value;
-                          });
-                        },
-                        items: field.options!
-                            .map((option) => DropdownMenuItem(
-                          value: option,
-                          child: Text(option,
-                              style:
-                              const TextStyle(color: Colors.white)),
-                        ))
-                            .toList(),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: const Color(0xFF111111),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
+                    TextField(
+                      cursorColor: AppColor.appWhite,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        fillColor: const Color(0xFF111111),
+                        filled: true,
+                        hintText: field.hintText,
+                        hintStyle: const TextStyle(
+                          color: Color(0xFF8E8E8E),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
                         ),
-                        style:
-                        const TextStyle(color: Colors.white, fontSize: 16),
-                      )
-                    else
-                      TextField(
-                        cursorColor: AppColor.appWhite,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        keyboardType: TextInputType.number,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
-                          fillColor: const Color(0xFF111111),
-                          filled: true,
-                          hintText: field.hintText,
-                          hintStyle: const TextStyle(
-                            color: Color(0xFF8E8E8E),
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
                         ),
-                        onChanged: (value) {
-                          _formValues[field.title] = value;
-                        },
                       ),
+                      onChanged: (value) {
+                        _formValues[field.title] = value;
+                      },
+                    ),
                   ],
                 );
               },
@@ -139,13 +127,9 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
         ],
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30)
-            .copyWith(bottom: 40, top: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 30).copyWith(bottom: 40, top: 15),
         child: ElevatedButton(
-          onPressed: () {
-            widget.onSubmit(_formValues);
-            Navigator.pop(context);
-          },
+          onPressed: _handleSubmit,
           style: ElevatedButton.styleFrom(
             fixedSize: Size(MediaQuery.sizeOf(context).width * .7, 45),
             shape: RoundedRectangleBorder(
@@ -163,14 +147,10 @@ class CustomFormField {
   final String title;
   final String labelText;
   final String? hintText;
-  final bool isSelectable;
-  final List<String>? options;
 
   CustomFormField({
     required this.title,
     required this.labelText,
     this.hintText,
-    this.isSelectable = false,
-    this.options,
   });
 }
