@@ -9,6 +9,9 @@ class ProfilePage extends StatelessWidget {
   final String taille;
   final String age;
   final String sexe;
+  final String userId ;
+
+
 
   const ProfilePage({
     Key? key,
@@ -18,6 +21,7 @@ class ProfilePage extends StatelessWidget {
     required this.taille,
     required this.age,
     required this.sexe,
+    required this.userId ,
   }) : super(key: key);
 
   @override
@@ -60,6 +64,8 @@ class ProfilePage extends StatelessWidget {
                       initialTaille: taille,
                       initialage: age,
                       initialSexe: sexe,
+                        userId: userId
+
                     ));
                   },
                   style: ElevatedButton.styleFrom(

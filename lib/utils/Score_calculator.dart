@@ -81,7 +81,7 @@ int calculScoreMarche6Min({
 // Score Flexométre
 
 int calculScore(String sexe, int age, int valeur) {
-  sexe = sexe.toUpperCase();
+ // sexe = sexe.toUpperCase();
 
   String tranche;
   if (age < 20) {
@@ -221,7 +221,6 @@ int calculerScoreTestAssisDebout({
 }) {
   if (repetitions <= 0) return 0;
   repetitions = repetitions.clamp(0, 40);
-  sexe = sexe.toUpperCase();
 
   if (sexe == 'Homme' && age >= 20 && age <= 29) {
     if (repetitions <= 19) return 1;
@@ -395,4 +394,29 @@ int calculScoreMonteeMarche({
   }
 
   return 0; // Valeurs incorrectes ou incomplètes
+}
+
+
+String scoreMainPied(int niveau) {
+  const positions = {
+    1: 'Les mains sur les cuisses',
+    2: 'Les mains sur les genoux',
+    3: 'Les mains sur les tibias',
+    4: 'Les mains sur les chevilles',
+    5: 'La paume de la main touche le sol',
+  };
+
+  return positions[niveau] ?? 'Niveau invalide';
+}
+
+String scoreEpaule(int niveau) {
+  const positions = {
+    1: "Je ne parviens pas à mettre deux mains dans le dos",
+    2: "Mes deux mains dans le dos ne se touchent pas",
+    3: "Les bouts des doigts se touchent",
+    4: "Les doigts s'agrippent",
+    5: "Les mains parviennent à se superposer",
+  };
+
+  return positions[niveau] ?? "Niveauinvalide";
 }

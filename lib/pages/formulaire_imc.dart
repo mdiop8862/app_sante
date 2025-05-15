@@ -11,6 +11,7 @@ class FormulaireImc extends StatefulWidget {
   final String? initialTaille;
   final String? initialage;
   final String? initialSexe;
+  final String userId;
 
   const FormulaireImc({
     Key? key,
@@ -20,6 +21,7 @@ class FormulaireImc extends StatefulWidget {
     this.initialTaille,
     this.initialage,
     this.initialSexe,
+    required this.userId,
   }) : super(key: key);
 
   @override
@@ -139,12 +141,14 @@ class _FormulaireImcState extends State<FormulaireImc> {
 
 
                     Get.to(() => HomeScreen(
+
                       nom: _nomController.text,
                       prenom: _prenomController.text,
                       poids: _poidsController.text,
                       taille: _tailleController.text,
                       age: _ageController.text,
                       sexe: _selectedSexe == Sexe.femme ? 'Femme' : 'Homme',
+                      userId: widget.userId,
                     ));
 
                   },

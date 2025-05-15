@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
   final String taille;
   final String age;
   final String sexe;
-
+  final String userId;
   const HomeScreen({
     Key? key,
     required this.nom,
@@ -28,6 +28,7 @@ class HomeScreen extends StatefulWidget {
     required this.taille,
     required this.age,
     required this.sexe,
+    required this.userId,
   }) : super(key: key);
 
   @override
@@ -76,13 +77,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   taille: widget.taille,
                   age: widget.age,
                   sexe: widget.sexe,
+              userId: widget.userId,
                 ));
           }
-          /*
           else if (action == 'Résultats') {
+            double poids = double.tryParse(widget.poids) ?? 0;
+            double tailleEnMetres = (double.tryParse(widget.taille) ?? 0) / 100;
+            double imc = tailleEnMetres > 0 ? poids / (tailleEnMetres * tailleEnMetres) : 0;
 
-            Get.to(() => const TestResultPage());
-          } */
+            Get.to(() => TestResultPage(
+              scorequestionnaire: scorequestionnaire,
+              imc: imc,
+              userId: widget.userId,
+            ));
+          }
+
           else if (action == 'Présentation du projet') {
             Get.to(() => const PresentationPage());
           }
@@ -108,7 +117,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       : 0;
                   Get.to(() => TestResultPage(
                       scorequestionnaire: scorequestionnaire,
-                      imc: imc)); // comment passer le score de l'utilisateur
+                      imc: imc  ,
+                      userId: widget.userId,) ); // comment passer le score de l'utilisateur
                 },
               ),
               const SizedBox(height: 16),
@@ -148,6 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
+                                userId: widget.userId,
                                 title: "Test d’endurance",
                                 subtitle:
                                     "Procédure : parcourir en marchant le plus de mètres en 6 minutes",
@@ -171,6 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
+                                userId: widget.userId,
                                 title: "Test d’endurance",
                                 subtitle:
                                     "Procédure : pendant 3 minutes monter et descendre une marche en 4 temps sur une cadence de 96 bips par minute. A la fin des 3 minutes le sujet s'assoit sur la marche et dispose d'une minute de repos.",
@@ -209,6 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
+                                userId: widget.userId,
                                 title: "Test de force",
                                 subtitle:
                                     "Procédure : faire des flexions assis-debout pendant 30 secondes, bas en croix sur la poitrine.",
@@ -232,6 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
+                                userId: widget.userId,
                                 title: "Test de force",
                                 subtitle:
                                     "Procédure : le test de la chaise consiste à se placer le dos contre un mur, les pieds écartés de 20cm, puis glisser vers le bas en fléchissant les jambes et en éloignant les pieds de façon à obtenir un angle de 90° entre le tronc et la cuisse et entre la cuisse et la jambe.",
@@ -255,6 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
+                                userId: widget.userId,
                                 title: "Test de force",
                                 subtitle: "Procédure: ",
                                 formFields: [
@@ -293,6 +308,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
+                                userId: widget.userId,
                                 title: "Test d’équilibre",
                                 subtitle:
                                     "Procédure : placer les mains sur les hanches et mettre un pied à plat sur le genou opposé. Fermer les yeux et démarrer le chronomètre. On a le droit à 2 essais par jambe et le meilleur des deux sera pris en compte. Le test peut se dérouler pieds nus.",
@@ -333,6 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => CustomFormBuilderPage(
+                                userId: widget.userId,
                                 title: "Test de souplesse",
                                 subtitle:
                                     "Procédure : se positionner assis, les jambes en extension, les lantes de pieds sont verticales contre le montant du flexomètre. Tendre les mains vers l'avant et poser les mains l'une sur l'autre. Il faut chercher à pousser ses mains le plus loin possible vers l'avant sans fléchir les genoux et sans à-coup. La position maximale doit être maintenue 3 secondes pour être validée.",
@@ -356,6 +373,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => CustomValueSelectorPage(
+                                userId: widget.userId,
                                 pageTitle: 'Test de souplesse',
                                 subtitle:
                                     "Procédure : Se positionner debout, les jambes en extension. Fléchir le tronc et amener les mains les plus bas possible dans plier les jambes.",
@@ -380,6 +398,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => CustomValueSelectorPage(
+                                userId: widget.userId,
                                 pageTitle: 'Test de souplesse',
                                 subtitle:
                                     "Procédure : passer une main par-dessus l'épaule et la faire glisser dans le dos quasiment dans l'axe de la colonne vertébrale. Réaliser la même opération avec la seconde main mais cette fois ci par-dessous l'épaule. Le but du test est de venir toucher ou attraper les mains dans le dos.",

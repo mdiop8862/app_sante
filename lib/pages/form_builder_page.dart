@@ -5,20 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import  '../utils/FirebaseManagement.dart' ;
+import '../utils/automatiqueDetection.dart';
 
 class CustomFormBuilderPage extends StatefulWidget {
+  final String userId; // à ajouter dans le constructeur
+  final String title;
+  final String? subtitle;
+  final List<CustomFormField> formFields;
+  final Function(Map<String, String>) onSubmit;
+
   const CustomFormBuilderPage({
     super.key,
+    required this.userId,
     required this.title,
     this.subtitle,
     required this.formFields,
     required this.onSubmit,
   });
 
-  final String title;
-  final String? subtitle;
-  final List<CustomFormField> formFields;
-  final Function(Map<String, String>) onSubmit;
+
 
   @override
   State<CustomFormBuilderPage> createState() => _CustomFormBuilderPageState();
@@ -27,24 +32,21 @@ class CustomFormBuilderPage extends StatefulWidget {
 class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
   final Map<String, String> _formValues = {};
 
-  void _handleSubmit() {
+  void _handleSubmit() async {
     widget.onSubmit(_formValues);
 
-    final testTitle = widget.title.toLowerCase();
-    const String sexe = "Homme";
-    const int age = 23;
+    // Déduction automatique
+    final String category = detectCategory(widget.title.toLowerCase());
+    final String testKey  = normalizeTestKey(widget.formFields.first.title);
 
-    Map<String, int> testScores = {};
+    await saveFormDataToUserDoc(
+      userId: widget.userId,
+      category: category,
+      testKey: testKey,
+      data: _formValues,
+    );
 
-    if (testTitle.contains("marche – 6")) {
-
-    }
-
-    if (testTitle.contains("montée de marche")) {
-
-    }
-
-
+    Navigator.pop(context); // ou Get.back();
   }
 
 

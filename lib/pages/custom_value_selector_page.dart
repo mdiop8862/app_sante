@@ -1,22 +1,25 @@
-import 'package:appli_ap_sante/pages/test_result_page.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../utils/FirebaseManagement.dart';
+import '../utils/automatiqueDetection.dart';
 
 class CustomValueSelectorPage extends StatefulWidget {
+  final String pageTitle, labelText;
+  final String? subtitle;
+  final List<String> values;
+  final Function(String)? onSelected;
+  final String userId; // 👈 Ajouté
+
   const CustomValueSelectorPage({
     super.key,
     required this.pageTitle,
     this.subtitle,
     required this.labelText,
     required this.values,
-    this.onSelected, // Ajout du paramètre onSelected
+    this.onSelected,
+    required this.userId, // 👈 requis
   });
-  final String pageTitle, labelText;
-  final String? subtitle;
-  final List<String> values;
-  final Function(String)?
-  onSelected; // Fonction qui sera appelée à chaque sélection
 
   @override
   State<CustomValueSelectorPage> createState() =>
@@ -34,14 +37,15 @@ class _CustomValueSelectorPageState extends State<CustomValueSelectorPage> {
         padding: const EdgeInsets.symmetric(horizontal: 25).copyWith(top: 20),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-              child: Text(
-                widget.subtitle ?? "",
-                style:
-                const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+            if (widget.subtitle != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+                child: Text(
+                  widget.subtitle!,
+                  style:
+                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                ),
               ),
-            ),
             Text(
               widget.labelText,
               style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 21),
@@ -92,13 +96,27 @@ class _CustomValueSelectorPageState extends State<CustomValueSelectorPage> {
         padding: const EdgeInsets.symmetric(horizontal: 30)
             .copyWith(bottom: 40, top: 15),
         child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             if (selectedIndex == null) return;
+
             final selectedValue = widget.values[selectedIndex!];
+
+            // 🔁 Enregistrement Firestore
+            final category = detectCategory(widget.pageTitle);
+            final testKey = normalizeTestKey(widget.labelText);
+
+            await saveFormDataToUserDoc(
+              userId: widget.userId,
+              category: category,
+              testKey: testKey,
+              data: {"reponse": selectedValue},
+            );
+
             if (widget.onSelected != null) {
-              widget.onSelected!(selectedValue); 
+              widget.onSelected!(selectedValue);
             }
-            Navigator.pop(context, true); // renvoie un booléen au parent
+
+            Navigator.pop(context, true);
           },
           style: ElevatedButton.styleFrom(
               fixedSize: Size(MediaQuery.sizeOf(context).width * .7, 45)),
@@ -108,4 +126,3 @@ class _CustomValueSelectorPageState extends State<CustomValueSelectorPage> {
     );
   }
 }
-

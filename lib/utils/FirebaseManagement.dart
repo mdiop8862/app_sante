@@ -1,16 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Future<void> saveTestResultToFirestore({
+Future<void> saveFormDataToUserDoc({
   required String userId,
-  required String category, // ex: "endurance"
-  required String testKey,  // ex: "marche6mn"
-  required Map<String, dynamic> data, // les valeurs à enregistrer
+  required String category,
+  required String testKey,
+  required Map<String, String> data,
 }) async {
-  final docRef = FirebaseFirestore.instance.collection('users').doc(userId);
+  final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
 
-  await docRef.set({
-    category: {
-      testKey: data,
+  try {
+    await userRef.set({
+      category: {
+        testKey: data
+      }
+    }, SetOptions(merge: true));
+
+    print('✅ Formulaire "$testKey" sauvegardé dans catégorie "$category"');
+  } catch (e) {
+    print('❌ Erreur lors de la sauvegarde Firestore : $e');
+  }
+}
+
+
+Future<Map<String, dynamic>> getUserTestData(String userId) async {
+  final doc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+  if (!doc.exists) return {};
+
+  final data = doc.data()!;
+  Map<String, dynamic> result = {
+    'sexe': data['sexe'],
+    'age': data['age'],
+    'tests': <String, Map<String, dynamic>>{},
+  };
+
+  for (final category in ['endurance', 'force', 'souplesse', 'equilibre']) {
+    if (data[category] != null && data[category] is Map<String, dynamic>) {
+      result['tests'][category] = Map<String, dynamic>.from(data[category]);
     }
-  }, SetOptions(merge: true)); // fusionne sans écraser les autres données
+  }
+
+  return result;
 }

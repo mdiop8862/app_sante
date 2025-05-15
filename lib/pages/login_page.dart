@@ -134,11 +134,16 @@ class _LoginPageState extends State<LoginPage> {
                   child: e)),
               const SizedBox(height: 50),
               ElevatedButton(
-                onPressed: () => Get.offAll(() => const FormulaireImc()),
-                style: ElevatedButton.styleFrom(
-                    fixedSize: Size(MediaQuery.sizeOf(context).width * .7, 40)),
+                onPressed: () {
+                  final fakeUserId = 'nGO44bCJyAwoCDjf8V6P';  // un utilisateur fictif pour le moment
+                  Get.offAll(() => FormulaireImc(userId: fakeUserId));
+                },
                 child: const Text('Se connecter'),
               ),
+              const SizedBox(height: 25),
+
+
+
               const SizedBox(height: 25),
               ElevatedButton(
                 onPressed: () {},
