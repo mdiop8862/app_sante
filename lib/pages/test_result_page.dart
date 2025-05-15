@@ -123,6 +123,7 @@ class _TestResultPageState extends State<TestResultPage> {
     final souplesseWidgets = <Widget>[];
     if (souplesse != null) {
       final flexo = int.tryParse('${souplesse['test_de_flexomètre']?['Test de Flexomètre']}');
+
       if (flexo != null) {
         final score = calculScore(sexe, age, flexo);
         souplesseWidgets.add(_buildTestScore("Flexomètre", score, flexo.toString()));
@@ -133,6 +134,7 @@ class _TestResultPageState extends State<TestResultPage> {
     if (equilibre != null) {
       final piedDroit = int.tryParse('${equilibre['test_du_flamand_-_pied_droit']?['Test du flamand - pied droit']}');
       final piedGauche = int.tryParse('${equilibre['test_du_flamand_-_pied_gauche']?['Test du flamand - pied gauche']}');
+
       if (piedDroit != null && piedGauche != null) {
         final moyenneTemps = ((piedDroit + piedGauche) / 2).round();
         // fake score en attendant
