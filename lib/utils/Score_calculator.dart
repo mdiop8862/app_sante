@@ -420,3 +420,105 @@ String scoreEpaule(int niveau) {
 
   return positions[niveau] ?? "Niveauinvalide";
 }
+
+int calculerScoreTestFlamand({
+  required int age,
+  required String sexe,
+  required int secondes,
+}) {
+
+
+  if (age <= 30) {
+    if (sexe == 'Homme') {
+      if (secondes < 17) return 1;
+      if (secondes < 21) return 2;
+      if (secondes < 25) return 3;
+      if (secondes < 29) return 4;
+      return 5;
+    } else if (sexe == 'Femme') {
+      if (secondes < 14) return 1;
+      if (secondes < 18) return 2;
+      if (secondes < 22) return 3;
+      if (secondes < 26) return 4;
+      return 5;
+    }
+  } else if (age >= 31 && age <= 39) {
+    if (sexe == 'Homme') {
+      if (secondes < 14) return 1;
+      if (secondes < 17) return 2;
+      if (secondes < 22) return 3;
+      if (secondes < 26) return 4;
+      return 5;
+    } else if (sexe == 'Femme') {
+      if (secondes < 10) return 1;
+      if (secondes < 14) return 2;
+      if (secondes < 18) return 3;
+      if (secondes < 23) return 4;
+      return 5;
+    }
+  }
+
+  else if (age >= 40 && age <= 49) {
+    if (sexe == 'Homme') {
+      if (secondes < 10) return 1;
+      if (secondes < 14) return 2;
+      if (secondes < 18) return 3;
+      if (secondes < 23) return 4;
+      return 5;
+    } else if (sexe == 'Femme') {
+      if (secondes < 9) return 1;
+      if (secondes < 13) return 2;
+      if (secondes < 16) return 3;
+      if (secondes < 20) return 4;
+      return 5;
+    }
+  }
+
+  else if (age >= 50 && age <= 59) {
+    if (sexe == 'Homme') {
+      if (secondes < 9) return 1;
+      if (secondes < 13) return 2;
+      if (secondes < 16) return 3;
+      if (secondes < 20) return 4;
+      return 5;
+    } else if (sexe == 'Femme') {
+      if (secondes < 6) return 1;
+      if (secondes < 10) return 2;
+      if (secondes < 14) return 3;
+      if (secondes < 18) return 4;
+      return 5;
+    }
+  }
+
+  else if (age >= 60) {
+    if (sexe == 'Homme') {
+      if (secondes < 6) return 1;
+      if (secondes < 10) return 2;
+      if (secondes < 14) return 3;
+      if (secondes < 17) return 4;
+      return 5;
+    } else if (sexe == 'Femme') {
+      if (secondes < 6) return 1;
+      if (secondes < 9) return 2;
+      if (secondes < 12) return 3;
+      if (secondes < 14) return 4;
+      return 5;
+    }
+  }
+
+  // Par défaut si hors barème connu
+  return 0;
+}
+
+
+int imcScore(double imc){
+
+  if (imc < 18.5) return 1;
+  if (imc < 25) return 5;  // Normal
+  if (imc < 30) return 4;  // Surpoids léger
+  if (imc < 35) return 3;  // Obésité modérée
+  if (imc < 40) return 2;  // Obésité sévère
+  return 1; // Obésité morbide
+}
+
+

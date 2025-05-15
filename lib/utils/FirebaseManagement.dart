@@ -22,6 +22,7 @@ Future<void> saveFormDataToUserDoc({
 }
 
 
+
 Future<Map<String, dynamic>> getUserTestData(String userId) async {
   final doc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
   if (!doc.exists) return {};
@@ -30,6 +31,8 @@ Future<Map<String, dynamic>> getUserTestData(String userId) async {
   Map<String, dynamic> result = {
     'sexe': data['sexe'],
     'age': data['age'],
+    'poids' : data['poids'] ,
+    'taille' : data['taille'] ,
     'tests': <String, Map<String, dynamic>>{},
   };
 

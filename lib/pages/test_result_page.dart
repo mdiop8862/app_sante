@@ -1,5 +1,5 @@
+import 'package:appli_ap_sante/utils/Score_calculator.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
-import 'package:appli_ap_sante/utils/score_calculator.dart';
 import 'package:appli_ap_sante/utils/FirebaseManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,6 +10,7 @@ class TestResultPage extends StatefulWidget {
   final int scorequestionnaire;
   final double imc;
   final String userId;
+
 
   const TestResultPage({
     super.key,
@@ -26,12 +27,23 @@ class _TestResultPageState extends State<TestResultPage> {
   Map<String, Map<String, dynamic>> testResults = {};
   String sexe = '';
   int age = 0;
+  double poids = 0 ;
+  double taille = 0 ;
+
 
   @override
   void initState() {
     super.initState();
     fetchUserData();
   }
+
+  double get imcValue {
+    double t = taille / 100; // cm -> m
+    if (t <= 0 || poids <= 0) return 0;
+    return poids / (t * t);
+  }
+
+
 
   Future<void> fetchUserData() async {
     final result = await getUserTestData(widget.userId);
@@ -40,9 +52,13 @@ class _TestResultPageState extends State<TestResultPage> {
     setState(() {
       sexe = result['sexe'] ?? '';
       age = int.tryParse('${result['age']}') ?? 0;
+      taille = double.tryParse('${result['taille']}') ?? 0;
+      poids = double.tryParse('${result['poids']}') ?? 0;
       testResults = Map<String, Map<String, dynamic>>.from(result['tests']);
     });
   }
+
+
 
   Widget _buildTestScore(String label, int score, String value) {
     return Column(
@@ -169,14 +185,21 @@ class _TestResultPageState extends State<TestResultPage> {
 
     final equilibreWidgets = <Widget>[];
     if (equilibre != null) {
-      final piedDroit = int.tryParse('${equilibre['test_du_flamand_-_pied_droit']?['Test du flamand - pied droit']}');
-      final piedGauche = int.tryParse('${equilibre['test_du_flamand_-_pied_gauche']?['Test du flamand - pied gauche']}');
+      final piedDroit = int.tryParse('${equilibre['test_du_flamand']?['Test du flamand - pied droit']}');
+      final piedGauche = int.tryParse('${equilibre['test_du_flamand']?['Test du flamand - pied gauche']}');
+      int NoteRetenu = 0 ;
 
       if (piedDroit != null && piedGauche != null) {
-        final moyenneTemps = ((piedDroit + piedGauche) / 2).round();
-        // fake score en attendant
-        final  score = 2 ;
-        equilibreWidgets.add(_buildTestScore("Test du flamand", score, '$moyenneTemps s'));
+        if(piedDroit > piedGauche) {
+          NoteRetenu = piedDroit ;
+        }else{
+          NoteRetenu = piedGauche ;
+        }
+
+        final score = calculerScoreTestFlamand(age: age, sexe: sexe, secondes: NoteRetenu) ;
+        //print('votre score est : ${score}') ;
+
+        equilibreWidgets.add(_buildTestScore("Test du flamand", score, '$NoteRetenu s'));
       }
     }
 
@@ -194,14 +217,23 @@ class _TestResultPageState extends State<TestResultPage> {
           const Text('Indice de masse Corporelle (IMC)',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           const SizedBox(height: 10),
+
           Row(
+
             children: [
-              Container(height: 40, width: 40, color: const Color(0xFF2249FF)),
+              Container(
+                height: 40,
+                width: 40,
+                color: getColorFromScore(imcScore(imcValue)),
+              ),
               const SizedBox(width: 12),
-              Text(widget.imc.toStringAsFixed(1),
-                  style: const TextStyle(fontSize: 21, fontWeight: FontWeight.bold)),
+              Text(
+                  imcValue.toStringAsFixed(1),
+                style: const TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
+              ),
             ],
           ),
+
           const SizedBox(height: 25),
           const Text('Niveau d’activité physique',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
