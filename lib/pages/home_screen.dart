@@ -77,22 +77,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   taille: widget.taille,
                   age: widget.age,
                   sexe: widget.sexe,
-              userId: widget.userId,
+                  userId: widget.userId,
                 ));
-          }
-          else if (action == 'Résultats') {
+          } else if (action == 'Résultats') {
             double poids = double.tryParse(widget.poids) ?? 0;
             double tailleEnMetres = (double.tryParse(widget.taille) ?? 0) / 100;
-            double imc = tailleEnMetres > 0 ? poids / (tailleEnMetres * tailleEnMetres) : 0;
+            double imc = tailleEnMetres > 0
+                ? poids / (tailleEnMetres * tailleEnMetres)
+                : 0;
 
             Get.to(() => TestResultPage(
-              scorequestionnaire: scorequestionnaire,
-              imc: imc,
-              userId: widget.userId,
-            ));
-          }
-
-          else if (action == 'Présentation du projet') {
+                  scorequestionnaire: scorequestionnaire,
+                  imc: imc,
+                  userId: widget.userId,
+                ));
+          } else if (action == 'Présentation du projet') {
             Get.to(() => const PresentationPage());
           }
         },
@@ -116,9 +115,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? poids / (tailleEnMetres * tailleEnMetres)
                       : 0;
                   Get.to(() => TestResultPage(
-                      scorequestionnaire: scorequestionnaire,
-                      imc: imc  ,
-                      userId: widget.userId,) ); // comment passer le score de l'utilisateur
+                        scorequestionnaire: scorequestionnaire,
+                        imc: imc,
+                        userId: widget.userId,
+                      )); // comment passer le score de l'utilisateur
                 },
               ),
               const SizedBox(height: 16),
@@ -271,7 +271,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (_) => CustomFormBuilderPage(
                                 userId: widget.userId,
                                 title: "Test de force",
-                                subtitle: "Procédure: ",
+                                subtitle:
+                                    "Procédure: Prendre le dynanomètre dans la main. Tenir la pognée dans le prolongement du bras, à la hauteur de la cuisse et éloignée du corps(angle de 45°). Serrer vigoureusement la poignée en exerçant une force maximale. Changer de mains.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de handgrip (main droite)',
