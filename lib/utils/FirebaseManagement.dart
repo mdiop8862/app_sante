@@ -15,13 +15,29 @@ Future<void> saveFormDataToUserDoc({
       }
     }, SetOptions(merge: true));
 
-    print('✅ Formulaire "$testKey" sauvegardé dans catégorie "$category"');
+    print('Formulaire "$testKey" sauvegardé dans catégorie "$category"');
   } catch (e) {
-    print('❌ Erreur lors de la sauvegarde Firestore : $e');
+    print('Erreur lors de la sauvegarde Firestore : $e');
   }
 }
 
+Future<void> saveQuestionnaire({
+  required String userId,
+  int? scoreQuestionnaire,
+}) async {
+  final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
 
+  Map<String, dynamic> updateData = {};
+
+  if (scoreQuestionnaire != null) updateData['scoreQuestionnaire'] = scoreQuestionnaire;
+
+  try {
+    await userRef.set(updateData, SetOptions(merge: true));
+    print('questionnaire sauvegardés');
+  } catch (e) {
+    print('Erreur sauvegarde questionnaire : $e');
+  }
+}
 
 Future<Map<String, dynamic>> getUserTestData(String userId) async {
   final doc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
@@ -29,6 +45,7 @@ Future<Map<String, dynamic>> getUserTestData(String userId) async {
 
   final data = doc.data()!;
   Map<String, dynamic> result = {
+    'scoreQuestionnaire': data['scoreQuestionnaire'],
     'sexe': data['sexe'],
     'age': data['age'],
     'poids' : data['poids'] ,
