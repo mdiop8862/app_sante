@@ -15,9 +15,9 @@ Future<void> saveFormDataToUserDoc({
       }
     }, SetOptions(merge: true));
 
-    print('✅ Formulaire "$testKey" sauvegardé dans catégorie "$category"');
+    print('Formulaire "$testKey" sauvegardé dans catégorie "$category"');
   } catch (e) {
-    print('❌ Erreur lors de la sauvegarde Firestore : $e');
+    print('Erreur lors de la sauvegarde Firestore : $e');
   }
 }
 
@@ -35,7 +35,7 @@ Future<void> saveQuestionnaire({
     await userRef.set(updateData, SetOptions(merge: true));
     print('questionnaire sauvegardés');
   } catch (e) {
-    print('❌ Erreur sauvegarde questionnaire : $e');
+    print('Erreur sauvegarde questionnaire : $e');
   }
 }
 
