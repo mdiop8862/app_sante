@@ -4,6 +4,7 @@ import 'package:appli_ap_sante/utils/FirebaseManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'global_test_result_page.dart' ;
 
 class TestResultPage extends StatefulWidget {
   final int scorequestionnaire;
@@ -123,10 +124,46 @@ class _TestResultPageState extends State<TestResultPage> {
     final souplesseWidgets = <Widget>[];
     if (souplesse != null) {
       final flexo = int.tryParse('${souplesse['test_de_flexomètre']?['Test de Flexomètre']}');
-
+      final mainPied = '${souplesse['quelle_est_la_position_de_tes_mains_?']?['reponse']}' ;
+      final epaule = '${souplesse['où_tes_mains_se_touchent-elles_?']?['reponse']}' ;
       if (flexo != null) {
         final score = calculScore(sexe, age, flexo);
         souplesseWidgets.add(_buildTestScore("Flexomètre", score, flexo.toString()));
+      }
+      if(mainPied != null){
+        const positions = {
+          1: 'Les mains sur les cuisses',
+          2: 'Les mains sur les genoux',
+          3: 'Les mains sur les tibias',
+          4: 'Les mains sur les chevilles',
+          5: 'La paume de la main touche le sol',
+        };
+        // Trouver la clé correspondant à la valeur
+        final key = positions.entries
+            .firstWhere((entry) => entry.value == mainPied, orElse: () => const MapEntry(-1, ''))
+            .key;
+        souplesseWidgets.add(_buildTestScore("Main/Pied", key, mainPied));
+
+
+      }
+
+      if(epaule != null){
+        const positions = {
+          1: "Je ne parviens pas à mettre deux mains dans le dos",
+          2: "Mes deux mains dans le dos ne se touchent pas",
+          3: "Les bouts des doigts se touchent",
+          4: "Les doigts s'agrippent",
+          5: "Les mains parviennent à se superposer",
+        };
+
+        // Trouver la clé correspondant à la valeur
+        final key = positions.entries
+            .firstWhere((entry) => entry.value == epaule, orElse: () => const MapEntry(-1, ''))
+            .key;
+        souplesseWidgets.add(_buildTestScore("Epaule", key, epaule));
+
+
+
       }
     }
 
@@ -142,11 +179,6 @@ class _TestResultPageState extends State<TestResultPage> {
         equilibreWidgets.add(_buildTestScore("Test du flamand", score, '$moyenneTemps s'));
       }
     }
-
-
-
-
-
 
     return Scaffold(
       appBar: AppBar(title: const Text('Résultats')),
@@ -194,6 +226,27 @@ class _TestResultPageState extends State<TestResultPage> {
           const SizedBox(height: 25),
           ...buildCategoryWidgets("Equilibre", equilibreWidgets),
         ],
+      ),
+
+      bottomNavigationBar: SizedBox(
+        height: 60,
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 30),
+            child: IconButton(
+              onPressed: () => Get.to(() => const GlobalTestResultPage()),
+              icon: Transform.scale(
+                scaleX: 2,
+                child: const Icon(
+                  Icons.arrow_forward,
+                  size: 30,
+                  color: AppColor.primaryColor,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
