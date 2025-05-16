@@ -1,14 +1,14 @@
-import 'package:appli_ap_sante/pages/test_result_page.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
-import '../utils/Score_calculator.dart'; // Ce fichier contient les fonctions de calcul
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import  '../utils/FirebaseManagement.dart' ;
+import '../utils/FirebaseManagement.dart';
 import '../utils/automatiqueDetection.dart';
+import '../widgets/custom_loader.dart'; // ou utils, selon où tu l’as mis
+
 
 class CustomFormBuilderPage extends StatefulWidget {
-  final String userId; // à ajouter dans le constructeur
+  final String userId;
   final String title;
   final String? subtitle;
   final List<CustomFormField> formFields;
@@ -31,13 +31,51 @@ class CustomFormBuilderPage extends StatefulWidget {
 
 class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
   final Map<String, String> _formValues = {};
+  final Map<String, TextEditingController> _controllers = {};
+  bool isModification = false;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initControllers();
+    _loadExistingData();
+  }
+
+  void _initControllers() {
+    for (var field in widget.formFields) {
+      _controllers[field.title] = TextEditingController();
+    }
+  }
+
+  Future<void> _loadExistingData() async {
+    final userData = await getUserTestData(widget.userId);
+    final tests = userData['tests'] ?? {};
+    final category = detectCategory(widget.title.toLowerCase());
+    final testKey = normalizeTestKey(widget.formFields.first.title);
+
+    final existingData = tests[category]?[testKey];
+    if (existingData != null) {
+      isModification = true ;
+      for (var entry in existingData.entries) {
+        final controller = _controllers[entry.key];
+        if (controller != null) {
+          controller.text = entry.value.toString();
+          _formValues[entry.key] = entry.value.toString();
+        }
+      }
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   void _handleSubmit() async {
     widget.onSubmit(_formValues);
 
-    // Déduction automatique
     final String category = detectCategory(widget.title.toLowerCase());
-    final String testKey  = normalizeTestKey(widget.formFields.first.title);
+    final String testKey = normalizeTestKey(widget.formFields.first.title);
 
     await saveFormDataToUserDoc(
       userId: widget.userId,
@@ -46,10 +84,16 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
       data: _formValues,
     );
 
-    Navigator.pop(context); // ou Get.back();
+    Get.back(); // ou Navigator.pop(context);
   }
 
-
+  @override
+  void dispose() {
+    for (var controller in _controllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +103,20 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
         title: Text(widget.title),
         backgroundColor: Colors.black,
       ),
-      body: Column(
+      body: isLoading
+          ? const  CustomLoader(message: 'Récupération des données...')
+          : Column(
         children: [
           if (widget.subtitle != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
               child: Text(
                 widget.subtitle!,
-                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
               ),
             ),
           Expanded(
@@ -76,6 +126,8 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
               separatorBuilder: (_, __) => const SizedBox(height: 30),
               itemBuilder: (context, index) {
                 final field = widget.formFields[index];
+                final controller = _controllers[field.title]!;
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -98,6 +150,7 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
                     ),
                     const SizedBox(height: 20),
                     TextField(
+                      controller: controller,
                       cursorColor: AppColor.appWhite,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       keyboardType: TextInputType.number,
@@ -138,7 +191,7 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: const Text('Terminer'),
+          child: Text(isModification ? 'Modifier' : 'Terminer'),
         ),
       ),
     );
