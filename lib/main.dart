@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/questionnaire': (context) => QuestionnaireScreen(userId: "",),
         '/testpage': (context) => HomeScreen(
-            nom: "", prenom: "", poids: "", taille: "", age: "", sexe: "" , userId: "",)
+          nom: "", prenom: "", poids: "", taille: "", age: "", sexe: "" , userId: "",)
       },
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.rightToLeftWithFade,

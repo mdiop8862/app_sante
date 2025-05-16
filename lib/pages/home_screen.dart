@@ -87,8 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 : 0;
 
             Get.to(() => TestResultPage(
-                  scorequestionnaire: scorequestionnaire,
-                  imc: imc,
+
                   userId: widget.userId,
                 ));
           } else if (action == 'Présentation du projet') {
@@ -115,8 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? poids / (tailleEnMetres * tailleEnMetres)
                       : 0;
                   Get.to(() => TestResultPage(
-                        scorequestionnaire: scorequestionnaire,
-                        imc: imc,
+
                         userId: widget.userId,
                       )); // comment passer le score de l'utilisateur
                 },

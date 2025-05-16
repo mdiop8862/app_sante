@@ -4,32 +4,26 @@ import 'package:appli_ap_sante/utils/FirebaseManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'global_test_result_page.dart' ;
+import 'global_test_result_page.dart';
 
 class TestResultPage extends StatefulWidget {
-  final int scorequestionnaire;
-  final double imc;
   final String userId;
 
-
-  const TestResultPage({
-    super.key,
-    required this.scorequestionnaire,
-    required this.imc,
-    required this.userId,
-  });
+  const TestResultPage({super.key, required this.userId});
 
   @override
   State<TestResultPage> createState() => _TestResultPageState();
 }
 
 class _TestResultPageState extends State<TestResultPage> {
+  Map<String, double> moyenneScores = {};
+
   Map<String, Map<String, dynamic>> testResults = {};
   String sexe = '';
   int age = 0;
-  double poids = 0 ;
-  double taille = 0 ;
-
+  double poids = 0;
+  double taille = 0;
+  int scoreQuestionnaire = 0;
 
   @override
   void initState() {
@@ -37,13 +31,16 @@ class _TestResultPageState extends State<TestResultPage> {
     fetchUserData();
   }
 
+  double moyenneScore(List<int> scores) {
+    if (scores.isEmpty) return 0;
+    return scores.reduce((a, b) => a + b) / scores.length;
+  }
+
   double get imcValue {
     double t = taille / 100; // cm -> m
     if (t <= 0 || poids <= 0) return 0;
     return poids / (t * t);
   }
-
-
 
   Future<void> fetchUserData() async {
     final result = await getUserTestData(widget.userId);
@@ -54,11 +51,10 @@ class _TestResultPageState extends State<TestResultPage> {
       age = int.tryParse('${result['age']}') ?? 0;
       taille = double.tryParse('${result['taille']}') ?? 0;
       poids = double.tryParse('${result['poids']}') ?? 0;
-      testResults = Map<String, Map<String, dynamic>>.from(result['tests']);
+      testResults = Map<String, Map<String, dynamic>>.from(result['tests'] ?? {});
+      scoreQuestionnaire = result['scoreQuestionnaire'] ?? 0;
     });
   }
-
-
 
   Widget _buildTestScore(String label, int score, String value) {
     return Column(
@@ -79,11 +75,9 @@ class _TestResultPageState extends State<TestResultPage> {
               ),
             ),
             const SizedBox(width: 10),
-            Text(
-              '$score',
-              style: const TextStyle(
-                  fontWeight: FontWeight.w600, fontSize: 15),
-            ),
+            Text('$score',
+                style: const TextStyle(
+                    fontWeight: FontWeight.w600, fontSize: 15)),
           ],
         ),
         const SizedBox(height: 25),
@@ -91,9 +85,8 @@ class _TestResultPageState extends State<TestResultPage> {
     );
   }
 
-
   List<Widget> buildCategoryWidgets(String title, List<Widget> children) {
-    if (children.isEmpty) return [Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18))];
+    if (children.isEmpty) return [];
     return [
       Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
       const Divider(height: 50),
@@ -108,45 +101,64 @@ class _TestResultPageState extends State<TestResultPage> {
     final souplesse = testResults['souplesse'];
     final equilibre = testResults['equilibre'];
 
+    final enduranceScores = <int>[];
+    final forceScores = <int>[];
+    final equilibreScores = <int>[];
+    final souplesseScores = <int>[];
+
     final enduranceWidgets = <Widget>[];
     if (endurance != null) {
       final marche = int.tryParse('${endurance['test_de_marche__6_minutes']?['Test de marche – 6 minutes']}');
       if (marche != null) {
         final score = calculScoreMarche6Min(sexe: sexe, age: age, distance: marche);
         enduranceWidgets.add(_buildTestScore("6 min walk", score, marche.toString()));
+        enduranceScores.add(score);
       }
+
       final montee = int.tryParse('${endurance['test_de_la_montée_de_marche']?['Test de la montée de marche']}');
       if (montee != null) {
         final score = calculScoreMonteeMarche(sexe: sexe, age: age, bpm: montee);
         enduranceWidgets.add(_buildTestScore("Step Test", score, montee.toString()));
+        enduranceScores.add(score);
+      }
+      if (enduranceScores.isNotEmpty) {
+        moyenneScores['endurance'] = moyenneScore(enduranceScores);
       }
     }
 
     final forceWidgets = <Widget>[];
     if (force != null) {
       final assis = int.tryParse('${force['test_du_assis-debout_-_30_sec']?['Test du assis-debout - 30 sec']}');
-      print(assis) ;
       if (assis != null) {
         final score = calculerScoreTestAssisDebout(age: age, sexe: sexe, repetitions: assis);
         forceWidgets.add(_buildTestScore("Assis-Debout", score, assis.toString()));
+        forceScores.add(score);
       }
+
       final chaise = int.tryParse('${force['test_de_la_chaise']?['Test de la chaise']}');
       if (chaise != null) {
         final score = calculerScoreTestChaise(chaise);
         forceWidgets.add(_buildTestScore("Test de la chaise", score, chaise.toString()));
+        forceScores.add(score);
+      }
+      if (forceScores.isNotEmpty) {
+        moyenneScores['force'] = moyenneScore(forceScores);
       }
     }
 
     final souplesseWidgets = <Widget>[];
     if (souplesse != null) {
       final flexo = int.tryParse('${souplesse['test_de_flexomètre']?['Test de Flexomètre']}');
-      final mainPied = '${souplesse['quelle_est_la_position_de_tes_mains_?']?['reponse']}' ;
-      final epaule = '${souplesse['où_tes_mains_se_touchent-elles_?']?['reponse']}' ;
+      final mainPied = '${souplesse['quelle_est_la_position_de_tes_mains_?']?['reponse']}';
+      final epaule = '${souplesse['où_tes_mains_se_touchent-elles_?']?['reponse']}';
+
       if (flexo != null) {
         final score = calculScore(sexe, age, flexo);
         souplesseWidgets.add(_buildTestScore("Flexomètre", score, flexo.toString()));
+        souplesseScores.add(score);
       }
-      if(mainPied != null){
+
+      if (mainPied.isNotEmpty) {
         const positions = {
           1: 'Les mains sur les cuisses',
           2: 'Les mains sur les genoux',
@@ -154,16 +166,14 @@ class _TestResultPageState extends State<TestResultPage> {
           4: 'Les mains sur les chevilles',
           5: 'La paume de la main touche le sol',
         };
-        // Trouver la clé correspondant à la valeur
         final key = positions.entries
             .firstWhere((entry) => entry.value == mainPied, orElse: () => const MapEntry(-1, ''))
             .key;
         souplesseWidgets.add(_buildTestScore("Main/Pied", key, mainPied));
-
-
+        souplesseScores.add(key);
       }
 
-      if(epaule != null){
+      if (epaule.isNotEmpty) {
         const positions = {
           1: "Je ne parviens pas à mettre deux mains dans le dos",
           2: "Mes deux mains dans le dos ne se touchent pas",
@@ -171,15 +181,15 @@ class _TestResultPageState extends State<TestResultPage> {
           4: "Les doigts s'agrippent",
           5: "Les mains parviennent à se superposer",
         };
-
-        // Trouver la clé correspondant à la valeur
         final key = positions.entries
             .firstWhere((entry) => entry.value == epaule, orElse: () => const MapEntry(-1, ''))
             .key;
         souplesseWidgets.add(_buildTestScore("Epaule", key, epaule));
+        souplesseScores.add(key);
+      }
 
-
-
+      if (souplesseScores.isNotEmpty) {
+        moyenneScores['souplesse'] = moyenneScore(souplesseScores);
       }
     }
 
@@ -187,19 +197,15 @@ class _TestResultPageState extends State<TestResultPage> {
     if (equilibre != null) {
       final piedDroit = int.tryParse('${equilibre['test_du_flamand']?['Test du flamand - pied droit']}');
       final piedGauche = int.tryParse('${equilibre['test_du_flamand']?['Test du flamand - pied gauche']}');
-      int NoteRetenu = 0 ;
-
       if (piedDroit != null && piedGauche != null) {
-        if(piedDroit > piedGauche) {
-          NoteRetenu = piedDroit ;
-        }else{
-          NoteRetenu = piedGauche ;
-        }
+        final note = piedDroit > piedGauche ? piedDroit : piedGauche;
+        final score = calculerScoreTestFlamand(age: age, sexe: sexe, secondes: note);
+        equilibreWidgets.add(_buildTestScore("Test du flamand", score, '$note s'));
+        equilibreScores.add(score);
+      }
 
-        final score = calculerScoreTestFlamand(age: age, sexe: sexe, secondes: NoteRetenu) ;
-        //print('votre score est : ${score}') ;
-
-        equilibreWidgets.add(_buildTestScore("Test du flamand", score, '$NoteRetenu s'));
+      if (equilibreScores.isNotEmpty) {
+        moyenneScores['equilibre'] = moyenneScore(equilibreScores);
       }
     }
 
@@ -210,16 +216,14 @@ class _TestResultPageState extends State<TestResultPage> {
         children: [
           const SizedBox(height: 10),
           ColorsSection(
-            showWhen: (index) => index == widget.scorequestionnaire - 1,
+            showWhen: (index) => index == scoreQuestionnaire - 1,
             child: SvgPicture.asset('assets/svg/smiley.svg'),
           ),
           const SizedBox(height: 30),
           const Text('Indice de masse Corporelle (IMC)',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           const SizedBox(height: 10),
-
           Row(
-
             children: [
               Container(
                 height: 40,
@@ -227,22 +231,19 @@ class _TestResultPageState extends State<TestResultPage> {
                 color: getColorFromScore(imcScore(imcValue)),
               ),
               const SizedBox(width: 12),
-              Text(
-                  imcValue.toStringAsFixed(1),
-                style: const TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
-              ),
+              Text(imcValue.toStringAsFixed(1),
+                  style: const TextStyle(fontSize: 21, fontWeight: FontWeight.bold)),
             ],
           ),
-
           const SizedBox(height: 25),
           const Text('Niveau d’activité physique',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           const SizedBox(height: 10),
           Row(
             children: [
-              Container(height: 40, width: 40, color: getColorFromScore(widget.scorequestionnaire)),
+              Container(height: 40, width: 40, color: getColorFromScore(scoreQuestionnaire)),
               const SizedBox(width: 12),
-              Text('${widget.scorequestionnaire}',
+              Text('$scoreQuestionnaire',
                   style: const TextStyle(fontSize: 21, fontWeight: FontWeight.bold)),
             ],
           ),
@@ -256,10 +257,9 @@ class _TestResultPageState extends State<TestResultPage> {
           const SizedBox(height: 25),
           ...buildCategoryWidgets("Souplesse", souplesseWidgets),
           const SizedBox(height: 25),
-          ...buildCategoryWidgets("Equilibre", equilibreWidgets),
+          ...buildCategoryWidgets("Équilibre", equilibreWidgets),
         ],
       ),
-
       bottomNavigationBar: SizedBox(
         height: 60,
         child: Align(
@@ -267,7 +267,7 @@ class _TestResultPageState extends State<TestResultPage> {
           child: Padding(
             padding: const EdgeInsets.only(right: 30),
             child: IconButton(
-              onPressed: () => Get.to(() => const GlobalTestResultPage()),
+              onPressed: () => Get.to(() => GlobalTestResultPage(imc: imcValue, scoreQuestionnaire: scoreQuestionnaire, scoresMoyens: moyenneScores,)),
               icon: Transform.scale(
                 scaleX: 2,
                 child: const Icon(
