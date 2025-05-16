@@ -1,7 +1,11 @@
-
 import 'package:flutter/material.dart';
-import 'package:appli_ap_sante/pages/test_result_page.dart';
+import 'package:appli_ap_sante/utils/FirebaseManagement.dart'; // fonction saveFormDataToUserDoc
+
 class QuestionnaireScreen extends StatefulWidget {
+  final String userId;  // Ajout du userId
+
+  const QuestionnaireScreen({Key? key, required this.userId}) : super(key: key);
+
   @override
   _QuestionnaireScreenState createState() => _QuestionnaireScreenState();
 }
@@ -14,7 +18,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   final Map<int, int> scores = {};
 
   final List<Map<String, dynamic>> questions = [
-
+    // Sedentarité
     {
       'text': 'Combien de temps passez-vous en position assise par jour (loisirs, télé, ordinateur, travail, etc.) ?',
       'options': [
@@ -25,6 +29,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         'Plus de 5 h'
       ],
     },
+    // Question B et C
     {
       'text': 'Pratiquez-vous régulièrement une ou des activités physiques ?',
       'options': ['Non', 'Oui'],
@@ -68,8 +73,6 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         'Plus de 10 h'
       ],
     },
-
-
     {
       'text': 'Combien de minutes par jour consacrez-vous à la marche ?',
       'options': [
@@ -114,32 +117,27 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         int total = scores.values.reduce((a, b) => a + b);
         int scoreGlobal = calculerScoreGlobal(total);
         isQuestionnaireCompleted = true;
-        print(scoreGlobal);
 
-        // Affichage du Dialog
         showDialog(
           context: context,
           builder: (_) => AlertDialog(
-            backgroundColor: Colors.white, // Couleur de fond
-            title: Text(
-              "Résultat",
-              style: TextStyle(color: Colors.black),
-            ),
-            content: Text(
-              "Vous avez terminé le questionnaire !",
-              style: TextStyle(color: Colors.black),
-            ),
+            backgroundColor: Colors.white,
+            title: Text("Résultat", style: TextStyle(color: Colors.black)),
+            content: Text("Vous avez terminé le questionnaire !", style: TextStyle(color: Colors.black)),
             actions: [
               TextButton(
                 child: Text("OK", style: TextStyle(color: primaryColor)),
-                onPressed: () {
-                  Navigator.of(context).pop(); // Ferme l'AlertDialog
-                  Navigator.of(context).pop({
-                    'scoreGlobal': scoreGlobal,
-                    'fait': true,
-                  });
-
-                },
+                onPressed: () async {
+                  int total = scores.values.reduce((a, b) => a + b);
+                  int scoreGlobal = calculerScoreGlobal(total);
+                  print(scoreGlobal);
+                  await saveQuestionnaire(
+                    userId: widget.userId,
+                    scoreQuestionnaire: scoreGlobal,
+                  );
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  },
               ),
             ],
           ),
@@ -155,35 +153,24 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white), // Icône de retour avec couleur rouge
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             if (currentQuestionIndex > 0) {
-              // Si l'utilisateur n'est pas à la première question, on revient à la question précédente
               setState(() {
-                currentQuestionIndex--; // On diminue l'index de la question pour revenir à la question précédente
+                currentQuestionIndex--;
               });
             } else {
-              // Si l'utilisateur est à la première question, on le ramène à la page precedente
               Navigator.pop(context);
-              // Retour à la page principale
             }
           },
         ),
-        title: Row(
-          children: [
-            Expanded(
-              child: Center(
-                child: Text(
-                  "Questionnaire Ricci & Gagnon",
-                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ],
+        title: Center(
+          child: Text(
+            "Questionnaire Ricci & Gagnon",
+            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
-
-
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
@@ -234,4 +221,3 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
     );
   }
 }
-

@@ -81,7 +81,7 @@ int calculScoreMarche6Min({
 // Score Flexométre
 
 int calculScore(String sexe, int age, int valeur) {
- // sexe = sexe.toUpperCase();
+  // sexe = sexe.toUpperCase();
 
   String tranche;
   if (age < 20) {
@@ -219,9 +219,7 @@ int calculerScoreTestAssisDebout({
   required String sexe,
   required int repetitions,
 }) {
-  if (repetitions <= 0) return 0;
-  repetitions = repetitions.clamp(0, 40);
-
+  if (repetitions <= 0 || repetitions > 40) return 0;
   if (sexe == 'Homme' && age >= 20 && age <= 29) {
     if (repetitions <= 19) return 1;
     if (repetitions <= 25) return 2;
@@ -307,7 +305,6 @@ int calculerScoreTestChaise(int dureeEnSecondes) {
   return 0;
 }
 
-
 int calculScoreMonteeMarche({
   required String sexe,
   required int age,
@@ -357,7 +354,7 @@ int calculScoreMonteeMarche({
     if (bpm > 120) return 1;
     if (bpm > 112) return 2;
     if (bpm > 104) return 3;
-    if (bpm > 96) return 4;//
+    if (bpm > 96) return 4; //
     return 5;
   }
 
@@ -365,7 +362,7 @@ int calculScoreMonteeMarche({
     if (bpm > 119) return 1;
     if (bpm > 111) return 2;
     if (bpm > 101) return 3;
-    if (bpm > 93) return 4;//
+    if (bpm > 93) return 4; //
     return 5;
   }
 
@@ -396,7 +393,6 @@ int calculScoreMonteeMarche({
   return 0; // Valeurs incorrectes ou incomplètes
 }
 
-
 String scoreMainPied(int niveau) {
   const positions = {
     1: 'Les mains sur les cuisses',
@@ -426,8 +422,6 @@ int calculerScoreTestFlamand({
   required String sexe,
   required int secondes,
 }) {
-
-
   if (age <= 30) {
     if (sexe == 'Homme') {
       if (secondes < 17) return 1;
@@ -456,9 +450,7 @@ int calculerScoreTestFlamand({
       if (secondes < 23) return 4;
       return 5;
     }
-  }
-
-  else if (age >= 40 && age <= 49) {
+  } else if (age >= 40 && age <= 49) {
     if (sexe == 'Homme') {
       if (secondes < 10) return 1;
       if (secondes < 14) return 2;
@@ -472,9 +464,7 @@ int calculerScoreTestFlamand({
       if (secondes < 20) return 4;
       return 5;
     }
-  }
-
-  else if (age >= 50 && age <= 59) {
+  } else if (age >= 50 && age <= 59) {
     if (sexe == 'Homme') {
       if (secondes < 9) return 1;
       if (secondes < 13) return 2;
@@ -488,9 +478,7 @@ int calculerScoreTestFlamand({
       if (secondes < 18) return 4;
       return 5;
     }
-  }
-
-  else if (age >= 60) {
+  } else if (age >= 60) {
     if (sexe == 'Homme') {
       if (secondes < 6) return 1;
       if (secondes < 10) return 2;
@@ -510,15 +498,113 @@ int calculerScoreTestFlamand({
   return 0;
 }
 
-
-int imcScore(double imc){
-
+int imcScore(double imc) {
   if (imc < 18.5) return 1;
-  if (imc < 25) return 5;  // Normal
-  if (imc < 30) return 4;  // Surpoids léger
-  if (imc < 35) return 3;  // Obésité modérée
-  if (imc < 40) return 2;  // Obésité sévère
+  if (imc < 25) return 5; // Normal
+  if (imc < 30) return 4; // Surpoids léger
+  if (imc < 35) return 3; // Obésité modérée
+  if (imc < 40) return 2; // Obésité sévère
   return 1; // Obésité morbide
 }
 
+// Score test handgrip
+int calculerScoreTestHandgrip({
+  required int age,
+  required String sexe,
+  required int forcemax,
+}) {
+  if (forcemax < 45 || forcemax > 125) return 0;
+  final s = sexe.toUpperCase();
 
+  if (s == 'Homme') {
+    if (age >= 15 && age <= 19) {
+      if (forcemax <= 83) return 1;
+      if (forcemax <= 94) return 2;
+      if (forcemax <= 103) return 3;
+      if (forcemax <= 112) return 4;
+      return 5;
+    }
+    if (age >= 20 && age <= 29) {
+      if (forcemax <= 96) return 1;
+      if (forcemax <= 105) return 2;
+      if (forcemax <= 112) return 3;
+      if (forcemax <= 123) return 4;
+      return 5;
+    }
+    if (age >= 30 && age <= 39) {
+      if (forcemax <= 96) return 1;
+      if (forcemax <= 104) return 2;
+      if (forcemax <= 112) return 3;
+      if (forcemax <= 122) return 4;
+      return 5;
+    }
+    if (age >= 40 && age <= 49) {
+      if (forcemax <= 93) return 1;
+      if (forcemax <= 101) return 2;
+      if (forcemax <= 109) return 3;
+      if (forcemax <= 118) return 4;
+      return 5;
+    }
+    if (age >= 50 && age <= 59) {
+      if (forcemax <= 86) return 1;
+      if (forcemax <= 95) return 2;
+      if (forcemax <= 101) return 3;
+      if (forcemax <= 109) return 4;
+      return 5;
+    }
+    if (age >= 60) {
+      if (forcemax <= 78) return 1;
+      if (forcemax <= 85) return 2;
+      if (forcemax <= 92) return 3;
+      if (forcemax <= 101) return 4;
+      return 5;
+    }
+  }
+
+  if (s == 'Femme') {
+    if (age >= 15 && age <= 19) {
+      if (forcemax <= 53) return 1;
+      if (forcemax <= 58) return 2;
+      if (forcemax <= 63) return 3;
+      if (forcemax <= 70) return 4;
+      return 5;
+    }
+    if (age >= 20 && age <= 29) {
+      if (forcemax <= 54) return 1;
+      if (forcemax <= 60) return 2;
+      if (forcemax <= 64) return 3;
+      if (forcemax <= 70) return 4;
+      return 5;
+    }
+    if (age >= 30 && age <= 39) {
+      if (forcemax <= 56) return 1;
+      if (forcemax <= 60) return 2;
+      if (forcemax <= 65) return 3;
+      if (forcemax <= 72) return 4;
+      return 5;
+    }
+    if (age >= 40 && age <= 49) {
+      if (forcemax <= 54) return 1;
+      if (forcemax <= 58) return 2;
+      if (forcemax <= 64) return 3;
+      if (forcemax <= 77) return 4;
+      return 5;
+    }
+    if (age >= 50 && age <= 59) {
+      if (forcemax <= 50) return 1;
+      if (forcemax <= 54) return 2;
+      if (forcemax <= 58) return 3;
+      if (forcemax <= 64) return 4;
+      return 5;
+    }
+    if (age >= 60) {
+      if (forcemax <= 47) return 1;
+      if (forcemax <= 50) return 2;
+      if (forcemax <= 53) return 3;
+      if (forcemax <= 59) return 4;
+      return 5;
+    }
+  }
+
+  return 0;
+}
