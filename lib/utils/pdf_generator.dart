@@ -14,6 +14,9 @@ Future<void> generateGlobalTestResultPdf({
   final pdf = pw.Document();
 
   final ttfNoto = pw.Font.ttf(await rootBundle.load('fonts/Inter-VariableFont_opsz,wght.ttf'));
+  final imageBytes = await rootBundle.load('images/echelle.png');
+  final image = pw.MemoryImage(imageBytes.buffer.asUint8List());
+
 
   PdfColor getPdfColor(int score) {
     switch (score) {
@@ -251,6 +254,11 @@ Future<void> generateGlobalTestResultPdf({
     pw.MultiPage(
       build: (context) => [
         pw.Text('Résultats globaux', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold, font: ttfNoto)),
+        //pw.SizedBox(height: 10),
+        // Insertion image ici
+        pw.Center(
+          child: pw.Image(image, width: 800, height: 150),
+        ),
         pw.SizedBox(height: 10),
         pw.Text('Score global : ${scoreGlobal.toStringAsFixed(1)} / 5', style: pw.TextStyle(fontSize: 16, font: ttfNoto)),
         pw.SizedBox(height: 20),

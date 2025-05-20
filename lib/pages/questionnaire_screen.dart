@@ -127,11 +127,11 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
             actions: [
               TextButton(
                 child: Text("OK", style: TextStyle(color: primaryColor)),
-                onPressed: () async {
+                onPressed: ()  {
                   int total = scores.values.reduce((a, b) => a + b);
                   int scoreGlobal = calculerScoreGlobal(total);
                   print(scoreGlobal);
-                  await saveQuestionnaire(
+                  saveQuestionnaire(
                     userId: widget.userId,
                     scoreQuestionnaire: scoreGlobal,
                   );

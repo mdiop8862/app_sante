@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Mon App',
       initialRoute: '/',
       routes: {
-        '/questionnaire': (context) => QuestionnaireScreen(userId: "",),
+        '/questionnaire': (context) => QuestionnaireScreen(userId: "nGO44bCJyAwoCDjf8V6P"),
         '/testpage': (context) => HomeScreen(
           nom: "", prenom: "", poids: "", taille: "", age: "", sexe: "" , userId: "",)
       },

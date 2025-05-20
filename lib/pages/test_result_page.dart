@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:appli_ap_sante/pages/global_test_result_page.dart';
 
-import 'global_test_result_page.dart';
 
 class TestResultPage extends StatefulWidget {
   final String userId;
