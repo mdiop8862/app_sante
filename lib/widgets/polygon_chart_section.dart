@@ -4,21 +4,28 @@ import 'package:flutter/material.dart';
 class PolygonChartSection extends StatelessWidget {
   final double imc;
   final int scoreQuestionnaire;
-  final Map<String, double> scoresMoyens;
+  final Map<String, List<int>> scoresMoyens;
+  final Map<String, Map<String, dynamic>> testResults;
   const PolygonChartSection({
     super.key,
     required this.imc,
     required this.scoreQuestionnaire,
     required this.scoresMoyens,
+  required this.testResults,
   });
+  double moyenneScore(List<int> scores) {
+    if (scores.isEmpty) return 0;
+    return scores.reduce((a, b) => a + b) / scores.length;
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    final endurance = scoresMoyens['endurance'] ?? 0;
-    final force = scoresMoyens['force'] ?? 0;
-    final equilibre = scoresMoyens['equilibre'] ?? 0;
-    final souplesse = scoresMoyens['souplesse'] ?? 0;
+    final endurance = moyenneScore(scoresMoyens['endurance'] ?? []);
+    final force = moyenneScore(scoresMoyens['force'] ?? []);
+    final equilibre = moyenneScore(scoresMoyens['equilibre'] ?? []);
+    final souplesse = moyenneScore(scoresMoyens['souplesse'] ?? []);
+
     final questionnaireScore = scoreQuestionnaire.toDouble();
     final imcSc = _imcScore(imc);
     print(endurance);

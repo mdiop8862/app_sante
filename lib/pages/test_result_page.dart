@@ -4,6 +4,8 @@ import 'package:appli_ap_sante/utils/FirebaseManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:appli_ap_sante/pages/global_test_result_page.dart';
+
 import 'global_test_result_page.dart';
 
 class TestResultPage extends StatefulWidget {
@@ -16,7 +18,7 @@ class TestResultPage extends StatefulWidget {
 }
 
 class _TestResultPageState extends State<TestResultPage> {
-  Map<String, double> moyenneScores = {};
+  Map<String, List<int>> moyenneScores = {};
 
   Map<String, Map<String, dynamic>> testResults = {};
   String sexe = '';
@@ -110,19 +112,19 @@ class _TestResultPageState extends State<TestResultPage> {
     if (endurance != null) {
       final marche = int.tryParse('${endurance['test_de_marche__6_minutes']?['Test de marche – 6 minutes']}');
       if (marche != null) {
-        final score = calculScoreMarche6Min(sexe: sexe, age: age, distance: marche);
+        final score = calculScoreMarche6Min(sexe: sexe, age: age, distance: marche); //
         enduranceWidgets.add(_buildTestScore("6 min walk", score, marche.toString()));
         enduranceScores.add(score);
       }
 
       final montee = int.tryParse('${endurance['test_de_la_montée_de_marche']?['Test de la montée de marche']}');
       if (montee != null) {
-        final score = calculScoreMonteeMarche(sexe: sexe, age: age, bpm: montee);
+        final score = calculScoreMonteeMarche(sexe: sexe, age: age, bpm: montee);// par exemple ici on a le score de test de marche que je veux faire apparaitre sur l'image
         enduranceWidgets.add(_buildTestScore("Step Test", score, montee.toString()));
         enduranceScores.add(score);
       }
       if (enduranceScores.isNotEmpty) {
-        moyenneScores['endurance'] = moyenneScore(enduranceScores);
+        moyenneScores['endurance'] = enduranceScores;
       }
     }
 
@@ -137,12 +139,12 @@ class _TestResultPageState extends State<TestResultPage> {
 
       final chaise = int.tryParse('${force['test_de_la_chaise']?['Test de la chaise']}');
       if (chaise != null) {
-        final score = calculerScoreTestChaise(chaise);
+        final score = calculerScoreTestChaise(chaise); //par exemple le score de test de la chaise:
         forceWidgets.add(_buildTestScore("Test de la chaise", score, chaise.toString()));
         forceScores.add(score);
       }
       if (forceScores.isNotEmpty) {
-        moyenneScores['force'] = moyenneScore(forceScores);
+        moyenneScores['force'] = forceScores;
       }
     }
 
@@ -155,6 +157,7 @@ class _TestResultPageState extends State<TestResultPage> {
       if (flexo != null) {
         final score = calculScore(sexe, age, flexo);
         souplesseWidgets.add(_buildTestScore("Flexomètre", score, flexo.toString()));
+        //print(score);
         souplesseScores.add(score);
       }
 
@@ -189,7 +192,7 @@ class _TestResultPageState extends State<TestResultPage> {
       }
 
       if (souplesseScores.isNotEmpty) {
-        moyenneScores['souplesse'] = moyenneScore(souplesseScores);
+        moyenneScores['souplesse'] = souplesseScores;
       }
     }
 
@@ -205,7 +208,7 @@ class _TestResultPageState extends State<TestResultPage> {
       }
 
       if (equilibreScores.isNotEmpty) {
-        moyenneScores['equilibre'] = moyenneScore(equilibreScores);
+        moyenneScores['equilibre'] = equilibreScores;
       }
     }
 
@@ -267,7 +270,7 @@ class _TestResultPageState extends State<TestResultPage> {
           child: Padding(
             padding: const EdgeInsets.only(right: 30),
             child: IconButton(
-              onPressed: () => Get.to(() => GlobalTestResultPage(imc: imcValue, scoreQuestionnaire: scoreQuestionnaire, scoresMoyens: moyenneScores,)),
+              onPressed: () => Get.to(() => GlobalTestResultPage(imc: imcValue, scoreQuestionnaire: scoreQuestionnaire, scoresMoyens: moyenneScores,testResults: testResults)),
               icon: Transform.scale(
                 scaleX: 2,
                 child: const Icon(

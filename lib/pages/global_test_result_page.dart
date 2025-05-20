@@ -1,22 +1,32 @@
+// main widget file
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:appli_ap_sante/widgets/polygon_chart_section.dart';
 import 'package:flutter/material.dart';
 import 'package:appli_ap_sante/utils/Score_calculator.dart';
+import 'package:appli_ap_sante/utils/pdf_generator.dart';
+import 'package:flutter/rendering.dart';
 
 class GlobalTestResultPage extends StatefulWidget {
   final double imc;
   final int scoreQuestionnaire;
-  final Map<String, double> scoresMoyens;
+  final Map<String, List<int>> scoresMoyens;
+  final Map<String, Map<String, dynamic>> testResults;
+
   const GlobalTestResultPage({
     super.key,
     required this.imc,
     required this.scoreQuestionnaire,
     required this.scoresMoyens,
+    required this.testResults,
   });
+
   @override
   State<GlobalTestResultPage> createState() => _GlobalTestResultPageState();
 }
 
 class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
+  final GlobalKey chartKey = GlobalKey();
   late double scoreGlobal;
 
   @override
@@ -25,24 +35,29 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
     scoreGlobal = _calculateGlobalScore();
   }
 
-
   double _calculateGlobalScore() {
-    // Récupère tous les scores sous forme double
     final imc_Score = imcScore(widget.imc).toDouble();
     final questionnaireScore = widget.scoreQuestionnaire.toDouble();
+    final moyennesList = widget.scoresMoyens.values.map((liste) {
+      if (liste.isEmpty) return 0.0;
+      return liste.reduce((a, b) => a + b) / liste.length;
+    }).toList();
 
-    // Moyenne des scores moyens (endurance, force, etc)
-    final scores = widget.scoresMoyens.values.map((e) => e.toDouble()).toList();
     double moyenneScoresMoyens = 0;
-    if (scores.isNotEmpty) {
-      moyenneScoresMoyens = scores.reduce((a, b) => a + b) / scores.length;
+    if (moyennesList.isNotEmpty) {
+      moyenneScoresMoyens = moyennesList.reduce((a, b) => a + b) / moyennesList.length;
     }
 
-    // Calcul de la moyenne globale sur 3 valeurs
     return (imc_Score + questionnaireScore + moyenneScoresMoyens) / 3;
   }
 
-
+  Future<Uint8List?> captureWidgetAsImage(GlobalKey key) async {
+    final boundary = key.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+    if (boundary == null) return null;
+    final image = await boundary.toImage(pixelRatio: 3.0);
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    return byteData?.buffer.asUint8List();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,16 +68,16 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Score global : ${scoreGlobal.toStringAsFixed(1)} / 5',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
+            Text('Score global : ${scoreGlobal.toStringAsFixed(1)} / 5', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             const SizedBox(height: 100),
-            PolygonChartSection(
-              imc: widget.imc,
-              scoreQuestionnaire: widget.scoreQuestionnaire,
-              scoresMoyens: widget.scoresMoyens,
-            ),
+
+              PolygonChartSection(
+                imc: widget.imc,
+                scoreQuestionnaire: widget.scoreQuestionnaire,
+                scoresMoyens: widget.scoresMoyens,
+                testResults: widget.testResults,
+              ),
+
             const Spacer(),
             const Text('Recommendation', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             const SizedBox(height: 16),
@@ -73,9 +88,12 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
             const SizedBox(height: 30),
             Align(
               child: ElevatedButton(
-                onPressed: () {
-                  // Téléchargement ou autre action
-                  print(widget.scoresMoyens);
+                onPressed: () async {
+                    await generateGlobalTestResultPdf(
+                      imc: widget.imc,
+                      scoreQuestionnaire: widget.scoreQuestionnaire,
+                      scoresMoyens: widget.scoresMoyens,
+                    );
                 },
                 style: ElevatedButton.styleFrom(fixedSize: Size(MediaQuery.sizeOf(context).width * .7, 45)),
                 child: const Text('Télécharger'),
