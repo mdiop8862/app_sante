@@ -47,6 +47,4 @@ flutter:
         - asset: assets/fonts/Inter-Italic-VariableFont_opsz,wght.ttf
           style: italic
 
-    - family: roboto
-      fonts:
-        - asset: assets/fonts/NotoSans-Regular.ttf
+
