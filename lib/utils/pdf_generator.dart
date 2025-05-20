@@ -1,46 +1,41 @@
 import 'dart:math';
+import 'dart:typed_data';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:appli_ap_sante/utils/Score_calculator.dart';
 
-// Ta fonction principale
-Future<void> generateGlobalTestResultPdf({
+// Fonction principale de génération PDF
+Future<Uint8List?> generateGlobalTestResultPdf({
   required double imc,
   required int scoreQuestionnaire,
   required Map<String, List<int>> scoresMoyens,
+  bool printDirectly = false,
 }) async {
   final pdf = pw.Document();
 
-  final ttfNoto = pw.Font.ttf(await rootBundle.load('fonts/Inter-VariableFont_opsz,wght.ttf'));
-  final imageBytes = await rootBundle.load('images/echelle.png');
+  final ttfNoto = pw.Font.ttf(await rootBundle.load('assets/fonts/Inter-VariableFont_opsz,wght.ttf'));
+  final imageBytes = await rootBundle.load('assets/images/echelle.png');
   final image = pw.MemoryImage(imageBytes.buffer.asUint8List());
 
-
+  // Définition des couleurs selon score
   PdfColor getPdfColor(int score) {
     switch (score) {
-      case 1:
-        return PdfColors.red;
-      case 2:
-        return PdfColors.orange;
-      case 3:
-        return PdfColors.yellow;
-      case 4:
-        return PdfColors.green;
-      case 5:
-        return PdfColors.blue;
-      default:
-        return PdfColors.grey;
+      case 1: return PdfColors.red;
+      case 2: return PdfColors.orange;
+      case 3: return PdfColors.yellow;
+      case 4: return PdfColors.green;
+      case 5: return PdfColors.blue;
+      default: return PdfColors.grey;
     }
   }
 
+  // Construction d'une ligne de score avec barres colorées
   pw.Widget buildTestScoreRow(String label, int score) {
     final clampedScore = score.clamp(1, 5);
     return pw.Padding(
       padding: const pw.EdgeInsets.symmetric(vertical: 4),
       child: pw.Row(
-        crossAxisAlignment: pw.CrossAxisAlignment.center,
         children: [
           pw.Expanded(
             flex: 3,
@@ -59,14 +54,7 @@ Future<void> generateGlobalTestResultPdf({
                     color: color,
                     alignment: pw.Alignment.center,
                     child: isActive
-                        ? pw.Text(
-                      "✓", // Utilisation du ✓ unicode plus basique
-                      style: pw.TextStyle(
-                        font: ttfNoto,
-                        color: PdfColors.white,
-                        fontSize: 14,
-                      ),
-                    )
+                        ? pw.Text("✓", style: pw.TextStyle(font: ttfNoto, color: PdfColors.white, fontSize: 14))
                         : null,
                   ),
                 );
@@ -84,12 +72,6 @@ Future<void> generateGlobalTestResultPdf({
       ),
     );
   }
-
-  double moyenneScore(List<int> scores) {
-    if (scores.isEmpty) return 0;
-    return scores.reduce((a, b) => a + b) / scores.length;
-  }
-
   pw.Widget buildRadarChartPdf(Map<String, double> scores, Map<String, double> displayVals, {double maxScore = 5}) {
     final fixedLabels = ['Endurance', 'Questionnaire', 'IMC', 'Force', 'Équilibre', 'Souplesse'];
     final labels = fixedLabels;
@@ -114,9 +96,9 @@ Future<void> generateGlobalTestResultPdf({
                 final angleStep = 2 * pi / count;
                 final center = PdfPoint(centerX, centerY);
 
-                // Grille + labels niveaux (0 à 5)
+                // Grille + labels niveaux (1 à 5), 1 au centre, 5 au bord
                 for (int level = 1; level <= maxScore; level++) {
-                  final levelRatio = level / maxScore;
+                  final levelRatio = (level - 1) / (maxScore - 1); // 0 pour 1, 1 pour 5
                   final points = <PdfPoint>[];
 
                   for (int i = 0; i < count; i++) {
@@ -143,7 +125,7 @@ Future<void> generateGlobalTestResultPdf({
 
                   canvas
                     ..setColor(PdfColors.amber)
-                    ..drawString(font, 8, '${level}', x - 5, y - 3);
+                    ..drawString(font, 8, '$level', x - 5, y - 3);
                 }
 
                 // Traits radiaux
@@ -159,11 +141,11 @@ Future<void> generateGlobalTestResultPdf({
                     ..strokePath();
                 }
 
-                // Points de données (utilise radarValues ici)
+                // Points de données (valeurs), 1 au centre, 5 au bord
                 final dataPoints = <PdfPoint>[];
                 for (int i = 0; i < count; i++) {
                   final angle = i * angleStep - pi / 2;
-                  final valueRatio = values[i] / maxScore;
+                  final valueRatio = (values[i] - 1) / (maxScore - 1); // 0 pour 1, 1 pour 5
                   final x = center.x + cos(angle) * radius * valueRatio;
                   final y = center.y + sin(angle) * radius * valueRatio;
                   dataPoints.add(PdfPoint(x, y));
@@ -214,20 +196,17 @@ Future<void> generateGlobalTestResultPdf({
   }
 
 
+  double moyenneScore(List<int> scores) {
+    if (scores.isEmpty) return 0;
+    return scores.reduce((a, b) => a + b) / scores.length;
+  }
 
-
-  final testLabels = {
-    'endurance': ['Marche 6 min', 'Montée de marche'],
-    'force': ['Assis-debout 30s', 'Test de la chaise'],
-    'souplesse': ['Flexomètre', 'Main/pied', 'Épaule'],
-    'equilibre': ['Test du flamand'],
-  };
-
-  final double imcScoreVal = imcScore(imc).toDouble();
+  final imcScoreVal = imcScore(imc).toDouble();
   final allScores = scoresMoyens.values.expand((v) => v).toList();
   final moyenneScores = allScores.isNotEmpty ? allScores.reduce((a, b) => a + b) / allScores.length : 0;
   final scoreGlobal = (imcScoreVal + scoreQuestionnaire + moyenneScores) / 3;
 
+  // Pour affichage
   final displayValues = {
     'Endurance': moyenneScore(scoresMoyens['endurance'] ?? []),
     'Questionnaire': scoreQuestionnaire.toDouble(),
@@ -237,32 +216,35 @@ Future<void> generateGlobalTestResultPdf({
     'Souplesse': moyenneScore(scoresMoyens['souplesse'] ?? []),
   };
 
-// Valeurs échangées pour tracer le radar
-    final radarValues = {
-    'Endurance': moyenneScore(scoresMoyens['force'] ?? []),        // force → endurance
-    'Questionnaire': imcScoreVal,                                // imc → questionnaire
-    'IMC': scoreQuestionnaire.toDouble(),                        // questionnaire → imc
-    'Force': moyenneScore(scoresMoyens['endurance'] ?? []),      // endurance → force
-    'Équilibre': moyenneScore(scoresMoyens['souplesse'] ?? []),  // souplesse → équilibre
-    'Souplesse': moyenneScore(scoresMoyens['equilibre'] ?? []),  // équilibre → souplesse
+  // Pour graphique radar (valeurs échangées)
+  final radarValues = {
+    'Endurance': moyenneScore(scoresMoyens['force'] ?? []),
+    'Questionnaire': imcScoreVal,
+    'IMC': scoreQuestionnaire.toDouble(),
+    'Force': moyenneScore(scoresMoyens['endurance'] ?? []),
+    'Équilibre': moyenneScore(scoresMoyens['souplesse'] ?? []),
+    'Souplesse': moyenneScore(scoresMoyens['equilibre'] ?? []),
   };
 
+  final testLabels = {
+    'endurance': ['Marche 6 min', 'Montée de marche'],
+    'force': ['Assis-debout 30s', 'Test de la chaise'],
+    'souplesse': ['Flexomètre', 'Main/pied', 'Épaule'],
+    'equilibre': ['Test du flamand'],
+  };
 
-  print(radarValues);
-
+  // Ajout d'une page complète
   pdf.addPage(
     pw.MultiPage(
       build: (context) => [
         pw.Text('Résultats globaux', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold, font: ttfNoto)),
-        //pw.SizedBox(height: 10),
-        // Insertion image ici
-        pw.Center(
-          child: pw.Image(image, width: 800, height: 150),
-        ),
+        pw.SizedBox(height: 10),
+        pw.Center(child: pw.Image(image, width: 800, height: 150)),
         pw.SizedBox(height: 10),
         pw.Text('Score global : ${scoreGlobal.toStringAsFixed(1)} / 5', style: pw.TextStyle(fontSize: 16, font: ttfNoto)),
-        pw.SizedBox(height: 20),
+        pw.SizedBox(height: 10),
 
+        // IMC
         pw.Text('Indice de masse corporelle (IMC)', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: ttfNoto)),
         pw.SizedBox(height: 5),
         pw.Row(children: [
@@ -272,6 +254,7 @@ Future<void> generateGlobalTestResultPdf({
         ]),
         pw.SizedBox(height: 20),
 
+        // Activité physique
         pw.Text("Niveau d'activité physique", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: ttfNoto)),
         pw.SizedBox(height: 5),
         pw.Row(children: [
@@ -279,11 +262,11 @@ Future<void> generateGlobalTestResultPdf({
           pw.SizedBox(width: 10),
           pw.Text(scoreQuestionnaire.toString(), style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold, font: ttfNoto)),
         ]),
-        pw.SizedBox(height: 20),
-
-        pw.Text("Détail des scores par catégorie", style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold, font: ttfNoto)),
         pw.SizedBox(height: 10),
 
+        // Détails des tests
+        pw.Text("Détail des scores par catégorie", style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold, font: ttfNoto)),
+        pw.SizedBox(height: 10),
         for (final entry in scoresMoyens.entries)
           pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -299,13 +282,14 @@ Future<void> generateGlobalTestResultPdf({
                   buildTestScoreRow(testLabels[entry.key]![i], entry.value[i]),
             ],
           ),
-
-        pw.SizedBox(height: 20),
-        pw.Text("Graphique radar", style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold, font: ttfNoto)),
         pw.SizedBox(height: 10),
 
+        // Graphique radar
+        pw.Text("Graphique radar", style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold, font: ttfNoto)),
+        pw.SizedBox(height: 10),
         buildRadarChartPdf(radarValues, displayValues),
 
+        // Recommandation
         pw.SizedBox(height: 30),
         pw.Text("Recommandation", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 16, font: ttfNoto)),
         pw.SizedBox(height: 10),
@@ -318,5 +302,27 @@ Future<void> generateGlobalTestResultPdf({
     ),
   );
 
-  await Printing.layoutPdf(onLayout: (format) async => pdf.save());
+  if (printDirectly) {
+    // affiche la boîte d'impression, pas besoin de retourner les bytes ici
+    await Printing.layoutPdf(onLayout: (format) async => pdf.save());
+    return null; // rien à retourner car on imprime directement
+  } else {
+    // retourne les bytes pour traitement ultérieur
+    return pdf.save();
+  }
+
 }
+
+// Score IMC
+int imcScore(double imc) {
+  if (imc < 18.5) return 1;
+  if (imc < 25) return 5;
+  if (imc < 30) return 3;
+  return 1;
+}
+
+
+
+
+
+

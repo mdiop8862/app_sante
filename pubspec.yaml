@@ -18,6 +18,8 @@ dependencies:
   printing: ^5.12.0
 
 
+
+
   flutter_speed_dial: ^7.0.0
   flutter_localizations:
     sdk: flutter
@@ -26,6 +28,8 @@ dependencies:
   flutter_svg: ^2.1.0
   fl_chart: ^0.71.0
   animated_expandable_fab: any
+
+
 
 dev_dependencies:
   flutter_test:
