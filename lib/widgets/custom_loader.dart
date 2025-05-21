@@ -15,7 +15,8 @@ class CustomLoader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor), // rouge de l’app
+              valueColor: AlwaysStoppedAnimation<Color>(AppColor.primaryColor),
+              // rouge de l’app
               strokeWidth: 4,
             ),
             const SizedBox(height: 20),
