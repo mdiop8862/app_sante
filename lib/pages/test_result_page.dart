@@ -218,9 +218,21 @@ class _TestResultPageState extends State<TestResultPage> {
         children: [
           const SizedBox(height: 10),
           ColorsSection(
-            showWhen: (index) => index == scoreQuestionnaire - 1,
-            child: SvgPicture.asset('assets/svg/smiley.svg'),
+            showWhen: (index) => [0, 2, 4].contains(index),
+            childBuilder: (index) {
+              switch (index) {
+                case 0:
+                  return const Icon(Icons.sentiment_very_dissatisfied, color: Colors.black, size: 40);
+                case 2:
+                  return const Icon(Icons.sentiment_neutral, color: Colors.black, size: 40);
+                case 4:
+                  return const Icon(Icons.sentiment_very_satisfied, color: Colors.black, size: 40);
+                default:
+                  return const SizedBox.shrink();
+              }
+            },
           ),
+
           const SizedBox(height: 30),
           const Text('Indice de masse Corporelle (IMC)',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
@@ -287,13 +299,21 @@ class _TestResultPageState extends State<TestResultPage> {
 }
 
 class ColorsSection extends StatelessWidget {
-  const ColorsSection({super.key, this.child, this.showWhen});
+  const ColorsSection({
+    super.key,
+    this.child,
+    this.showWhen,
+    this.childBuilder,
+  });
+
   final Widget? child;
   final bool Function(int)? showWhen;
+  final Widget Function(int)? childBuilder;
 
   @override
   Widget build(BuildContext context) {
     final colors = [0xFFE00808, 0xFFFE5200, 0xFFFFD102, 0xFF02952A, 0xFF2249FF];
+
     return SizedBox(
       height: 40,
       child: Row(
@@ -304,7 +324,9 @@ class ColorsSection extends StatelessWidget {
               padding: const EdgeInsets.all(3),
               height: 40,
               color: Color(colors[index]),
-              child: showWhen?.call(index) == true ? child : null,
+              child: (childBuilder != null && showWhen?.call(index) == true)
+                  ? childBuilder!(index)
+                  : (showWhen?.call(index) == true ? child : null),
             ),
           ),
         ),
@@ -312,6 +334,7 @@ class ColorsSection extends StatelessWidget {
     );
   }
 }
+
 
 Color getColorFromScore(int score) {
   switch (score) {
@@ -324,7 +347,7 @@ Color getColorFromScore(int score) {
     case 4:
       return Colors.green;
     case 5:
-      return Colors.blue;
+      return Color(0xFF2249FF);
     default:
       return Colors.grey;
   }
