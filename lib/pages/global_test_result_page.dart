@@ -57,7 +57,8 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
 
     double moyenneScoresMoyens = 0;
     if (moyennesList.isNotEmpty) {
-      moyenneScoresMoyens = moyennesList.reduce((a, b) => a + b) / moyennesList.length;
+      moyenneScoresMoyens =
+          moyennesList.reduce((a, b) => a + b) / moyennesList.length;
     }
 
     return (imc_Score + questionnaireScore + moyenneScoresMoyens) / 3;
@@ -71,15 +72,12 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
 
       await file.writeAsBytes(pdfBytes);
 
-      await Share.shareXFiles([XFile(filePath)], text: 'Voici mon résultat de test santé 🩺');
+      await Share.shareXFiles([XFile(filePath)],
+          text: 'Voici mon résultat de test santé 🩺');
     } catch (e) {
       print('Erreur lors du partage : $e');
     }
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,18 +88,19 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Score global : ${scoreGlobal.toStringAsFixed(1)} / 5', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            Text('Score global : ${scoreGlobal.toStringAsFixed(1)} / 5',
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             const SizedBox(height: 100),
-
             PolygonChartSection(
               imc: widget.imc,
               scoreQuestionnaire: widget.scoreQuestionnaire,
               scoresMoyens: widget.scoresMoyens,
               testResults: widget.testResults,
             ),
-
             const Spacer(),
-            const Text('Recommendation', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            const Text('Recommendation',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             const SizedBox(height: 16),
             const Text(
               'Votre condition physique ne traduit pas bon état de santé. Nous vous invitons à contacter le SSE qui vous proposera un suivi médical',
@@ -114,17 +113,18 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () async {
-                       await generateGlobalTestResultPdf(
+                      await generateGlobalTestResultPdf(
                         imc: widget.imc,
                         scoreQuestionnaire: widget.scoreQuestionnaire,
                         scoresMoyens: widget.scoresMoyens,
-                         printDirectly: true,
+                        printDirectly: true,
                       );
                     },
                     icon: const Icon(Icons.download),
                     label: const Text('Télécharger'),
                     style: ElevatedButton.styleFrom(
-                      fixedSize: Size(MediaQuery.sizeOf(context).width * 0.42, 45),
+                      fixedSize:
+                          Size(MediaQuery.sizeOf(context).width * 0.42, 45),
                     ),
                   ),
                   const SizedBox(width: 20), // espace entre les boutons
@@ -132,7 +132,8 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
                     icon: Icon(Icons.share),
                     label: Text('Partager'),
                     style: ElevatedButton.styleFrom(
-                      fixedSize: Size(MediaQuery.sizeOf(context).width * 0.42, 45),
+                      fixedSize:
+                          Size(MediaQuery.sizeOf(context).width * 0.42, 45),
                     ),
                     onPressed: () async {
                       Uint8List? pdfData = await generateGlobalTestResultPdf(
@@ -147,11 +148,9 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
                       }
                     },
                   ),
-
                 ],
               ),
             ),
-
             const SizedBox(height: 30),
           ],
         ),
