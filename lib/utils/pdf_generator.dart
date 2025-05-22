@@ -17,7 +17,7 @@ Future<Uint8List?> generateGlobalTestResultPdf({
 
   final bluee = PdfColor.fromInt(0xFF3F3FFF);
   final ttfNoto = pw.Font.ttf(await rootBundle.load('assets/fonts/Inter-VariableFont_opsz,wght.ttf'));
-  final imageBytes = await rootBundle.load('assets/images/echelle.jpg');
+  final imageBytes = await rootBundle.load('assets/images/emoji.png');
   final image = pw.MemoryImage(imageBytes.buffer.asUint8List());
 
   // Définition des couleurs selon score
@@ -204,9 +204,20 @@ Future<Uint8List?> generateGlobalTestResultPdf({
   }
 
   final imcScoreVal = imcScore(imc).toDouble();
-  final allScores = scoresMoyens.values.expand((v) => v).toList();
-  final moyenneScores = allScores.isNotEmpty ? allScores.reduce((a, b) => a + b) / allScores.length : 0;
-  final scoreGlobal = (imcScoreVal + scoreQuestionnaire + moyenneScores) / 3;
+  final questionnaireScore = scoreQuestionnaire.toDouble();
+
+// Nouvelle méthode : moyenne par catégorie
+  final moyennesList = scoresMoyens.values.map((liste) {
+    if (liste.isEmpty) return 0.0;
+    return liste.reduce((a, b) => a + b) / liste.length;
+  }).toList();
+
+  final moyenneTests = moyennesList.isNotEmpty
+      ? moyennesList.reduce((a, b) => a + b) / moyennesList.length
+      : 0.0;
+
+  final scoreGlobal = (imcScoreVal + questionnaireScore + moyenneTests) / 3;
+
 
   // Pour affichage
   final displayValues = {
@@ -240,13 +251,11 @@ Future<Uint8List?> generateGlobalTestResultPdf({
     pw.MultiPage(
       build: (context) => [
         pw.Text('Résultats globaux', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold, font: ttfNoto)),
-        pw.SizedBox(height: 10),
         pw.Container(
           width: double.infinity, // prend toute la largeur disponible
           child: pw.Image(image, fit: pw.BoxFit.fitWidth),
         ),
 
-        pw.SizedBox(height: 10),
         pw.Text('Score global : ${scoreGlobal.toStringAsFixed(1)} / 5', style: pw.TextStyle(fontSize: 16, font: ttfNoto)),
         pw.SizedBox(height: 10),
 

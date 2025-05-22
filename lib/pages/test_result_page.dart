@@ -30,12 +30,13 @@ class _TestResultPageState extends State<TestResultPage> {
   void initState() {
     super.initState();
     fetchUserData();
+
   }
 
   double moyenneScore(List<int> scores) {
     if (scores.isEmpty) return 0;
     return scores.reduce((a, b) => a + b) / scores.length;
-  }
+    }
 
   double get imcValue {
     double t = taille / 100; // cm -> m
@@ -56,6 +57,7 @@ class _TestResultPageState extends State<TestResultPage> {
       scoreQuestionnaire = result['scoreQuestionnaire'] ?? 0;
     });
   }
+
 
   Widget _buildTestScore(String label, int score, String value) {
     return Column(
