@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -14,8 +15,9 @@ Future<Uint8List?> generateGlobalTestResultPdf({
 }) async {
   final pdf = pw.Document();
 
+  final bluee = PdfColor.fromInt(0xFF3F3FFF);
   final ttfNoto = pw.Font.ttf(await rootBundle.load('assets/fonts/Inter-VariableFont_opsz,wght.ttf'));
-  final imageBytes = await rootBundle.load('assets/images/echelle.png');
+  final imageBytes = await rootBundle.load('assets/images/echelle.jpg');
   final image = pw.MemoryImage(imageBytes.buffer.asUint8List());
 
   // Définition des couleurs selon score
@@ -25,7 +27,7 @@ Future<Uint8List?> generateGlobalTestResultPdf({
       case 2: return PdfColors.orange;
       case 3: return PdfColors.yellow;
       case 4: return PdfColors.green;
-      case 5: return PdfColors.blue;
+      case 5: return bluee;
       default: return PdfColors.grey;
     }
   }
@@ -239,7 +241,11 @@ Future<Uint8List?> generateGlobalTestResultPdf({
       build: (context) => [
         pw.Text('Résultats globaux', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold, font: ttfNoto)),
         pw.SizedBox(height: 10),
-        pw.Center(child: pw.Image(image, width: 800, height: 150)),
+        pw.Container(
+          width: double.infinity, // prend toute la largeur disponible
+          child: pw.Image(image, fit: pw.BoxFit.fitWidth),
+        ),
+
         pw.SizedBox(height: 10),
         pw.Text('Score global : ${scoreGlobal.toStringAsFixed(1)} / 5', style: pw.TextStyle(fontSize: 16, font: ttfNoto)),
         pw.SizedBox(height: 10),
