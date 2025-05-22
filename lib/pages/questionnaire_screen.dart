@@ -164,12 +164,11 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
             }
           },
         ),
-        title: Center(
-          child: Text(
+        title:  Text(
             "Questionnaire Ricci & Gagnon",
             style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
-        ),
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
