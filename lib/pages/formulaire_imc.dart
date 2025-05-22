@@ -30,8 +30,8 @@ class FormulaireImc extends StatefulWidget {
 
 class _FormulaireImcState extends State<FormulaireImc> {
   final Color customRed = const Color(0xFFb01f00);
+  final _formKey = GlobalKey<FormState>();
 
-  // Déclaration des contrôleurs
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
   final TextEditingController _poidsController = TextEditingController();
@@ -50,12 +50,8 @@ class _FormulaireImcState extends State<FormulaireImc> {
     _ageController.text = widget.initialage ?? '';
     if (widget.initialSexe?.toLowerCase() == 'femme') {
       _selectedSexe = Sexe.femme;
-    } else if (widget.initialSexe?.toLowerCase() == 'homme') {
-      _selectedSexe = Sexe.homme;
     }
-
   }
-
 
   @override
   void dispose() {
@@ -74,104 +70,158 @@ class _FormulaireImcState extends State<FormulaireImc> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  BackButton(
-                    color: customRed,
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        widget.initialNom != null ? "Modification de Profil" : "Création de Profil",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    BackButton(
+                      color: customRed,
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          widget.initialNom != null
+                              ? "Modification de Profil"
+                              : "Création de Profil",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              Text("Profil :", style: TextStyle(color: Colors.white, fontSize: 18)),
-              const SizedBox(height: 30),
-              Row(
-                children: [
-                  Expanded(child: _buildTextField("Nom", _nomController)),
-                  const SizedBox(width: 16),
-                  Expanded(child: _buildTextField("Prénom", _prenomController)),
-                ],
-              ),
-              const SizedBox(height: 24),
-              _buildTextField("Poids (kg)", _poidsController),
-              const SizedBox(height: 24),
-              _buildTextField("Taille (cm)", _tailleController),
-              const SizedBox(height: 24),
-              _buildTextField("Âge", _ageController),
-              const SizedBox(height: 24),
-              Text("Sexe :", style: TextStyle(color: Colors.white, fontSize: 18)),
-              Row(
-                children: [
-                  Radio<Sexe>(
-                    value: Sexe.femme,
-                    groupValue: _selectedSexe,
-                    onChanged: (value) => setState(() => _selectedSexe = value!),
-                    activeColor: customRed,
-                  ),
-                  const Text("Femme", style: TextStyle(color: Colors.white)),
-                  const SizedBox(width: 30),
-                  Radio<Sexe>(
-                    value: Sexe.homme,
-                    groupValue: _selectedSexe,
-                    onChanged: (value) => setState(() => _selectedSexe = value!),
-                    activeColor: customRed,
-                  ),
-                  const Text("Homme", style: TextStyle(color: Colors.white)),
-                ],
-              ),
-              const SizedBox(height: 30),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-
-
-                    Get.to(() => HomeScreen(
-
-                      nom: _nomController.text,
-                      prenom: _prenomController.text,
-                      poids: _poidsController.text,
-                      taille: _tailleController.text,
-                      age: _ageController.text,
-                      sexe: _selectedSexe == Sexe.femme ? 'Femme' : 'Homme',
-                      userId: widget.userId,
-                    ));
-
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: customRed,
-                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                    textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                  ),
-                  child: const Text('Valider', style: TextStyle(color: Colors.white)),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 30),
-            ],
+                const SizedBox(height: 30),
+                const Text("Profil :", style: TextStyle(color: Colors.white, fontSize: 18)),
+                const SizedBox(height: 30),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildTextField(
+                        label: "Nom",
+                        controller: _nomController,
+                        validator: (value) =>
+                        value == null || value.isEmpty ? "Nom requis" : null,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: _buildTextField(
+                        label: "Prénom",
+                        controller: _prenomController,
+                        validator: (value) =>
+                        value == null || value.isEmpty ? "Prénom requis" : null,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                _buildTextField(
+                  label: "Poids (kg)",
+                  controller: _poidsController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return "Poids requis";
+                    final poids = double.tryParse(value);
+                    if (poids == null || poids <= 0) return "Poids invalide";
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+                _buildTextField(
+                  label: "Taille (cm)",
+                  controller: _tailleController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return "Taille requise";
+                    final taille = double.tryParse(value);
+                    if (taille == null || taille <= 0) return "Taille invalide";
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+                _buildTextField(
+                  label: "Âge",
+                  controller: _ageController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return "Âge requis";
+                    final age = int.tryParse(value);
+                    if (age == null || age <= 0 || age > 120) return "Âge invalide";
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+                const Text("Sexe :", style: TextStyle(color: Colors.white, fontSize: 18)),
+                Row(
+                  children: [
+                    Radio<Sexe>(
+                      value: Sexe.femme,
+                      groupValue: _selectedSexe,
+                      onChanged: (value) => setState(() => _selectedSexe = value!),
+                      activeColor: customRed,
+                    ),
+                    const Text("Femme", style: TextStyle(color: Colors.white)),
+                    const SizedBox(width: 30),
+                    Radio<Sexe>(
+                      value: Sexe.homme,
+                      groupValue: _selectedSexe,
+                      onChanged: (value) => setState(() => _selectedSexe = value!),
+                      activeColor: customRed,
+                    ),
+                    const Text("Homme", style: TextStyle(color: Colors.white)),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        Get.to(() => HomeScreen(
+                          nom: _nomController.text,
+                          prenom: _prenomController.text,
+                          poids: _poidsController.text,
+                          taille: _tailleController.text,
+                          age: _ageController.text,
+                          sexe: _selectedSexe == Sexe.femme ? 'Femme' : 'Homme',
+                          userId: widget.userId,
+                        ));
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: customRed,
+                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                    ),
+                    child: const Text('Valider', style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+                const SizedBox(height: 30),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller) {
-    return TextField(
+  Widget _buildTextField({
+    required String label,
+    required TextEditingController controller,
+    required String? Function(String?) validator,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return TextFormField(
       controller: controller,
+      validator: validator,
+      keyboardType: keyboardType,
       cursorColor: customRed,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
@@ -179,9 +229,7 @@ class _FormulaireImcState extends State<FormulaireImc> {
         fillColor: Colors.grey[800],
         labelText: label,
         labelStyle: const TextStyle(color: Colors.white),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: customRed, width: 2),
           borderRadius: BorderRadius.circular(12),
