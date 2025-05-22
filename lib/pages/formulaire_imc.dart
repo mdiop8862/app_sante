@@ -5,8 +5,6 @@ import 'home_screen.dart';
 enum Sexe { femme, homme }
 
 class FormulaireImc extends StatefulWidget {
-  final String? initialNom;
-  final String? initialPrenom;
   final String? initialPoids;
   final String? initialTaille;
   final String? initialage;
@@ -15,8 +13,6 @@ class FormulaireImc extends StatefulWidget {
 
   const FormulaireImc({
     Key? key,
-    this.initialNom,
-    this.initialPrenom,
     this.initialPoids,
     this.initialTaille,
     this.initialage,
@@ -32,8 +28,6 @@ class _FormulaireImcState extends State<FormulaireImc> {
   final Color customRed = const Color(0xFFb01f00);
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nomController = TextEditingController();
-  final TextEditingController _prenomController = TextEditingController();
   final TextEditingController _poidsController = TextEditingController();
   final TextEditingController _tailleController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
@@ -43,8 +37,6 @@ class _FormulaireImcState extends State<FormulaireImc> {
   @override
   void initState() {
     super.initState();
-    _nomController.text = widget.initialNom ?? '';
-    _prenomController.text = widget.initialPrenom ?? '';
     _poidsController.text = widget.initialPoids ?? '';
     _tailleController.text = widget.initialTaille ?? '';
     _ageController.text = widget.initialage ?? '';
@@ -55,8 +47,6 @@ class _FormulaireImcState extends State<FormulaireImc> {
 
   @override
   void dispose() {
-    _nomController.dispose();
-    _prenomController.dispose();
     _poidsController.dispose();
     _tailleController.dispose();
     _ageController.dispose();
@@ -81,13 +71,11 @@ class _FormulaireImcState extends State<FormulaireImc> {
                       color: customRed,
                       onPressed: () => Navigator.pop(context),
                     ),
-                    Expanded(
+                    const Expanded(
                       child: Center(
                         child: Text(
-                          widget.initialNom != null
-                              ? "Modification de Profil"
-                              : "Création de Profil",
-                          style: const TextStyle(
+                          "Création de Profil",
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -100,28 +88,6 @@ class _FormulaireImcState extends State<FormulaireImc> {
                 const SizedBox(height: 30),
                 const Text("Profil :", style: TextStyle(color: Colors.white, fontSize: 18)),
                 const SizedBox(height: 30),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildTextField(
-                        label: "Nom",
-                        controller: _nomController,
-                        validator: (value) =>
-                        value == null || value.isEmpty ? "Nom requis" : null,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: _buildTextField(
-                        label: "Prénom",
-                        controller: _prenomController,
-                        validator: (value) =>
-                        value == null || value.isEmpty ? "Prénom requis" : null,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
                 _buildTextField(
                   label: "Poids (kg)",
                   controller: _poidsController,
@@ -184,12 +150,6 @@ class _FormulaireImcState extends State<FormulaireImc> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         Get.to(() => HomeScreen(
-                          nom: _nomController.text,
-                          prenom: _prenomController.text,
-                          poids: _poidsController.text,
-                          taille: _tailleController.text,
-                          age: _ageController.text,
-                          sexe: _selectedSexe == Sexe.femme ? 'Femme' : 'Homme',
                           userId: widget.userId,
                         ));
                       }

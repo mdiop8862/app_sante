@@ -107,15 +107,17 @@ class _CustomFormBuilderPageState extends State<CustomFormBuilderPage> {
           ? const  CustomLoader(message: 'Récupération des données...')
           : Column(
         children: [
+          const SizedBox(height: 20), // ✅ espace entre AppBar et contenu
           if (widget.subtitle != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
               child: Text(
                 widget.subtitle!,
                 style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: Colors.white,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 14,
+                   color : Color(0xFFCCCCCC) ,
+
                 ),
               ),
             ),

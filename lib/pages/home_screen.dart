@@ -13,21 +13,10 @@ import 'test_result_page.dart';
 import 'project_presentation.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String nom;
-  final String prenom;
-  final String poids;
-  final String taille;
-  final String age;
-  final String sexe;
+
   final String userId;
   const HomeScreen({
     Key? key,
-    required this.nom,
-    required this.prenom,
-    required this.poids,
-    required this.taille,
-    required this.age,
-    required this.sexe,
     required this.userId,
   }) : super(key: key);
 
@@ -71,20 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
         onActionSelected: (String action) {
           if (action == 'Profils') {
             Get.to(() => ProfilePage(
-                  nom: widget.nom,
-                  prenom: widget.prenom,
-                  poids: widget.poids,
-                  taille: widget.taille,
-                  age: widget.age,
-                  sexe: widget.sexe,
                   userId: widget.userId,
                 ));
           } else if (action == 'Résultats') {
-            double poids = double.tryParse(widget.poids) ?? 0;
-            double tailleEnMetres = (double.tryParse(widget.taille) ?? 0) / 100;
-            double imc = tailleEnMetres > 0
-                ? poids / (tailleEnMetres * tailleEnMetres)
-                : 0;
 
             Get.to(() => TestResultPage(
 
@@ -107,12 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 progression: getProgress(),
                 showButton: checkAllTestsDone(),
                 onVoirResultat: () {
-                  double poids = double.tryParse(widget.poids) ?? 0;
-                  double tailleEnMetres =
-                      (double.tryParse(widget.taille) ?? 0) / 100;
-                  double imc = tailleEnMetres > 0
-                      ? poids / (tailleEnMetres * tailleEnMetres)
-                      : 0;
                   Get.to(() => TestResultPage(
 
                         userId: widget.userId,

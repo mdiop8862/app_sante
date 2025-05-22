@@ -3,24 +3,13 @@ import 'package:get/get.dart';
 import 'formulaire_imc.dart';
 
 class ProfilePage extends StatelessWidget {
-  final String nom;
-  final String prenom;
-  final String poids;
-  final String taille;
-  final String age;
-  final String sexe;
+
   final String userId ;
 
 
 
   const ProfilePage({
     Key? key,
-    required this.nom,
-    required this.prenom,
-    required this.poids,
-    required this.taille,
-    required this.age,
-    required this.sexe,
     required this.userId ,
   }) : super(key: key);
 
@@ -47,23 +36,17 @@ class ProfilePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildInfoRow('Nom', nom),
-              _buildInfoRow('Prénom', prenom),
-              _buildInfoRow('Poids', '$poids kg'),
-              _buildInfoRow('Taille', '$taille cm'),
-              _buildInfoRow('Âge', age),
-              _buildInfoRow('Sexe', sexe),
+              _buildInfoRow('Nom', "Franklin"),
+              _buildInfoRow('Prénom', "Jean"),
+              _buildInfoRow('Poids', "80 kg"),
+              _buildInfoRow('Taille', '185 cm'),
+              _buildInfoRow('Âge', "23"),
+              _buildInfoRow('Sexe', "Homme"),
               const SizedBox(height: 30),
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Get.to(() => FormulaireImc(
-                      initialNom: nom,
-                      initialPrenom: prenom,
-                      initialPoids: poids,
-                      initialTaille: taille,
-                      initialage: age,
-                      initialSexe: sexe,
                         userId: userId
 
                     ));

@@ -33,27 +33,43 @@ class _CustomValueSelectorPageState extends State<CustomValueSelectorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.pageTitle)),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25).copyWith(top: 20),
-        child: Column(
+      body:
+      Column(
           children: [
-            if (widget.subtitle != null)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                child: Text(
-                  widget.subtitle!,
-                  style:
-                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-                ),
+            const SizedBox(height: 20), // ✅ espace entre AppBar et contenu
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.subtitle != null)
+                    Text(
+                      widget.subtitle!,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 14,
+                        color: Color(0xFFAAAAAA), // gris doux
+                      ),
+                    ),
+                  const SizedBox(height: 20),
+                  Text(
+                    widget.labelText,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
-            Text(
-              widget.labelText,
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 21),
             ),
-            const SizedBox(height: 30),
+
+
+            const SizedBox(height: 16),
+
             Expanded(
               child: ListView.separated(
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                 separatorBuilder: (context, index) =>
                 const SizedBox(height: 35),
                 itemCount: widget.values.length,
@@ -91,7 +107,6 @@ class _CustomValueSelectorPageState extends State<CustomValueSelectorPage> {
             ),
           ],
         ),
-      ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30)
             .copyWith(bottom: 40, top: 15),
