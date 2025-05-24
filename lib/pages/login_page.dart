@@ -5,6 +5,7 @@ import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../utils/FirebaseManagement.dart' ;
+import '../pages/formulaire_imc.dart' ;
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -48,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                       } else {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (_) => ProfilePage(userId: userProvider.email!)),
+                          MaterialPageRoute(builder: (_) => FormulaireImc(userId: userProvider.email!)),
                         );
                       }
                     }
