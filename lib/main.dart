@@ -1,19 +1,28 @@
-import 'package:appli_ap_sante/pages/home_screen.dart';
+//import 'package:appli_ap_sante/pages/home_screen.dart';
 import 'package:appli_ap_sante/pages/questionnaire_screen.dart';
 import 'package:appli_ap_sante/pages/splash_screen.dart';
+import 'package:appli_ap_sante/pages/home_screen.dart';
+import 'package:appli_ap_sante/pages/login_page.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart'; // Assure-toi que ce fichier a été généré
+import 'package:provider/provider.dart';
+import 'package:appli_ap_sante/providers/user_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => UserProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -24,9 +33,14 @@ class MyApp extends StatelessWidget {
       title: 'Mon App',
       initialRoute: '/',
       routes: {
-        '/questionnaire': (context) => QuestionnaireScreen(userId: "nGO44bCJyAwoCDjf8V6P"),
-        '/testpage': (context) => HomeScreen(
-          userId: "",)
+        '/questionnaire': (context) => const QuestionnaireScreen(userId: "nGO44bCJyAwoCDjf8V6P"),
+        '/login': (context) => const LoginScreen(),
+        '/home': (context) => const HomeScreen(
+
+          userId: "",
+        )
+        /*'/testpage': (context) => HomeScreen(
+          )*/
       },
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.rightToLeftWithFade,
@@ -61,10 +75,8 @@ class MyApp extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColor.primaryColor,
             foregroundColor: AppColor.appWhite,
-            textStyle: const TextStyle(
-                fontFamily: 'inter', fontWeight: FontWeight.bold, fontSize: 18),
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            textStyle: const TextStyle(fontFamily: 'inter', fontWeight: FontWeight.bold, fontSize: 18),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
       ),
