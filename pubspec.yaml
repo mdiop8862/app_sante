@@ -18,6 +18,12 @@ dependencies:
   printing: ^5.12.0
   path_provider: ^2.1.1
   share_plus: ^7.2.1
+  provider: ^6.1.1
+  openid_client: ^0.4.9
+  webview_flutter: ^4.13.0
+  flutter_appauth: ^2.0.3   # ou la dernière version disponible
+  flutter_secure_storage: ^7.0.1
+
 
 
 
