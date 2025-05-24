@@ -354,7 +354,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   'Les mains sur les cuisses',
                                   'Les mains sur les genoux',
                                   'Les mains sur les tibias',
-                                  'Les mains sur les chevilles'
+                                  'Les mains sur les chevilles' ,
+                                  'La paume de la main touche le sol'
                                 ],
                                 onSelected: (selectedValue) {
                                   setState(() {
@@ -378,6 +379,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   'Je ne parviens pas à mettre les deux mains dans le dos',
                                   'Mes deux mains dans le dos ne se touchent pas',
                                   'Les bouts des deux doigts se touchent',
+                                  "Les doigts s'agrippent" ,
                                   'Les mains parviennent à se superposer'
                                 ],
                                 onSelected: (selectedValue) {

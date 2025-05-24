@@ -179,9 +179,9 @@ class _TestResultPageState extends State<TestResultPage> {
 
       if (epaule.isNotEmpty) {
         const positions = {
-          1: "Je ne parviens pas à mettre deux mains dans le dos",
+          1: "Je ne parviens pas à mettre les deux mains dans le dos",
           2: "Mes deux mains dans le dos ne se touchent pas",
-          3: "Les bouts des doigts se touchent",
+          3: "Les bouts des deux doigts se touchent",
           4: "Les doigts s'agrippent",
           5: "Les mains parviennent à se superposer",
         };
