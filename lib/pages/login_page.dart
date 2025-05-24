@@ -1,11 +1,14 @@
 import 'package:appli_ap_sante/pages/home_screen.dart';
+import 'package:appli_ap_sante/pages/profile_page.dart';  // <-- Import de ta page profil
 import 'package:appli_ap_sante/providers/user_provider.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../utils/FirebaseManagement.dart' ;
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,19 +38,24 @@ class LoginScreen extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     final success = await userProvider.login();
-                    if (success) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => HomeScreen(
-                            userId: userProvider.email ?? '',
-                          ),
-                        ),
-                      );
+                    if (success && userProvider.email != null) {
+                      final hasProfile = await checkUserProfileExists(userProvider.email!);
+                      if (hasProfile) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => HomeScreen(userId: userProvider.email!)),
+                        );
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => ProfilePage(userId: userProvider.email!)),
+                        );
+                      }
                     }
                   },
                   child: const Text('Se connecter avec Unilim'),
                 ),
+
               ],
             );
           },

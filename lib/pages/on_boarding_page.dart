@@ -53,7 +53,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             const SizedBox(height: 72),
             ElevatedButton(
               onPressed: () =>
-                  currentPage == 0 ? setState(() => currentPage = 1) : Get.offAll(() => const LoginPage()),
+                  currentPage == 0 ? setState(() => currentPage = 1) : Get.offAll(() => const LoginScreen()),
               style: ElevatedButton.styleFrom(fixedSize: Size(MediaQuery.sizeOf(context).width * .7, 45)),
               child: Text(['Suivant', 'Commencer'][currentPage]),
             ),

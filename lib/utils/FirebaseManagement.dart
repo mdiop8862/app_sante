@@ -86,3 +86,26 @@ Future<bool> saveUserProfile({
   }
 }
 
+
+Future<bool> checkUserProfileExists(String userId) async {
+  try {
+    final doc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    if (!doc.exists) return false;
+
+    final data = doc.data();
+    if (data == null) return false;
+
+    // Vérifier si les champs de profil essentiels sont présents et non nuls
+    final hasPoids = data['poids'] != null;
+    final hasTaille = data['taille'] != null;
+    final hasAge = data['age'] != null;
+    final hasSexe = data['sexe'] != null;
+    final hasFaculte = data['faculte'] != null;
+
+    return hasPoids && hasTaille && hasAge && hasSexe && hasFaculte;
+  } catch (e) {
+    print('Erreur checkUserProfileExists: $e');
+    return false;
+  }
+}
+

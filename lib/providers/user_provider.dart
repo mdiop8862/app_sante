@@ -17,6 +17,8 @@ class UserProvider extends ChangeNotifier {
   String? prenom;
   String? email;
 
+
+
   Future<bool> login() async {
     _isLoading = true;
     _error = null;

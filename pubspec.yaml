@@ -21,8 +21,8 @@ dependencies:
   provider: ^6.1.1
   openid_client: ^0.4.9
   webview_flutter: ^4.13.0
-  flutter_appauth: ^2.0.3   # ou la dernière version disponible
-  flutter_secure_storage: ^7.0.1
+  flutter_appauth: ^6.0.2
+  flutter_secure_storage: ^9.0.0
 
 
 
