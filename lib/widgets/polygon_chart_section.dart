@@ -43,7 +43,7 @@ class PolygonChartSection extends StatelessWidget {
       child: RadarChart(
         RadarChartData(
           radarShape: RadarShape.polygon,
-          radarBorderData: const BorderSide(color: Color(0xFFCCFF00), width: 4),
+          radarBorderData: const BorderSide(color: Colors.grey, width: 4),
           gridBorderData: BorderSide(color: Colors.yellow.withOpacity(0.3), width: 1),
           tickBorderData: const BorderSide(color: Colors.transparent),
           ticksTextStyle: const TextStyle(color: Colors.yellow, fontSize: 10),
@@ -51,7 +51,7 @@ class PolygonChartSection extends StatelessWidget {
           isMinValueAtCenter: true,
           dataSets: [
             RadarDataSet(
-              fillColor: Colors.grey.withOpacity(0.4),
+              fillColor: Color(0xFFCCFF00),
               borderColor: Colors.transparent,
               entryRadius: 1,
               dataEntries: labelsWithScores
