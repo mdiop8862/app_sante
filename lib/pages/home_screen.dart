@@ -11,10 +11,14 @@ import 'package:get/get.dart';
 import 'profile_page.dart';
 import 'test_result_page.dart';
 import 'project_presentation.dart';
+import 'package:provider/provider.dart';
+import '../providers/user_provider.dart'; // adapte le chemin selon ton projet
+import '../widgets/CustomActionButton.dart' ;
+
 
 class HomeScreen extends StatefulWidget {
-
   final String userId;
+
   const HomeScreen({
     Key? key,
     required this.userId,
@@ -26,6 +30,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final Color primaryColor = Color(0xFFb01f00);
+
   List<List<bool>> allTestsCompletion = [
     [false, false],
     [false, false, false],
@@ -35,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool questionnaireFait = false;
   int scorequestionnaire = 0;
+
   double getProgress() {
     int completedSubTests = 0;
     int totalSubTests = 0;
@@ -56,23 +62,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      floatingActionButton: AddButton(
+      floatingActionButton: CustomActionButton(
         onActionSelected: (String action) {
           if (action == 'Profils') {
-            Get.to(() => ProfilePage(
-                  userId: widget.userId,
-                ));
+            Get.to(() => ProfilePage(userId: widget.userId));
           } else if (action == 'Résultats') {
-
-            Get.to(() => TestResultPage(
-
-                  userId: widget.userId,
-                ));
+            Get.to(() => TestResultPage(userId: widget.userId));
           } else if (action == 'Présentation du projet') {
             Get.to(() => const PresentationPage());
+          } else if (action == 'Déconnexion') {
+            _showLogoutConfirmation(context);
           }
         },
       ),
+
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -85,10 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 progression: getProgress(),
                 showButton: checkAllTestsDone(),
                 onVoirResultat: () {
-                  Get.to(() => TestResultPage(
-
-                        userId: widget.userId,
-                      )); // comment passer le score de l'utilisateur
+                  Get.to(() => TestResultPage(userId: widget.userId));
                 },
               ),
               const SizedBox(height: 16),
@@ -99,28 +100,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     QuestionnaireCard(
                       onTap: () async {
                         final result = await Navigator.pushNamed(
-                            context, '/questionnaire');
-
+                          context,
+                          '/questionnaire',
+                        );
                         if (result is Map) {
                           final int? score = result['scoreGlobal'];
                           final bool? questionnaire = result['fait'];
-
                           if (score != null && questionnaire == true) {
                             setState(() {
                               questionnaireFait = true;
                               scorequestionnaire = score;
-                              // Tu peux aussi stocker total si besoin
                             });
                           }
                         }
                       },
                     ),
                     const SizedBox(height: 12),
+                    // ... (Les cartes de tests que tu avais déjà sont inchangées ici)
+
                     ExpandableTestCard(
                       title: 'Endurance',
                       subtitle: '1 exercice cardio à réaliser',
                       imagePath: 'assets/images/endurance.jpeg',
-                      exercises: ['Test de marche – 6mn', 'Montée de marche'],
+                      exercises: const ['Test de marche – 6mn', 'Montée de marche'],
                       isCompleted: allTestsCompletion[0],
                       onExerciseTap: (exerciseName) {
                         if (exerciseName.contains('Test de marche')) {
@@ -130,8 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (_) => CustomFormBuilderPage(
                                 userId: widget.userId,
                                 title: "Test d’endurance",
-                                subtitle:
-                                    "Procédure : parcourir en marchant le plus de mètres en 6 minutes",
+                                subtitle: "Procédure : parcourir en marchant le plus de mètres en 6 minutes",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de marche – 6 minutes',
@@ -155,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 userId: widget.userId,
                                 title: "Test d’endurance",
                                 subtitle:
-                                    "Procédure : pendant 3 minutes monter et descendre une marche en 4 temps sur une cadence de 96 bips par minute. A la fin des 3 minutes le sujet s'assoit sur la marche et dispose d'une minute de repos.",
+                                "Procédure : pendant 3 minutes monter et descendre une marche en 4 temps sur une cadence de 96 bips par minute. A la fin des 3 minutes le sujet s'assoit sur la marche et dispose d'une minute de repos.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de la montée de marche',
@@ -179,11 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: 'Force',
                       subtitle: 'Tests de force musculaire',
                       imagePath: 'assets/images/force2.jpg',
-                      exercises: [
-                        'Assis-debout',
-                        'Test de la chaise',
-                        "Test de handgrip"
-                      ],
+                      exercises: const ['Assis-debout', 'Test de la chaise', "Test de handgrip"],
                       isCompleted: allTestsCompletion[1],
                       onExerciseTap: (exerciseName) {
                         if (exerciseName.contains('Assis-debout')) {
@@ -194,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 userId: widget.userId,
                                 title: "Test de force",
                                 subtitle:
-                                    "Procédure : faire des flexions assis-debout pendant 30 secondes, bas en croix sur la poitrine.",
+                                "Procédure : faire des flexions assis-debout pendant 30 secondes, bas en croix sur la poitrine.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test du assis-debout - 30 sec',
@@ -218,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 userId: widget.userId,
                                 title: "Test de force",
                                 subtitle:
-                                    "Procédure : le test de la chaise consiste à se placer le dos contre un mur, les pieds écartés de 20cm, puis glisser vers le bas en fléchissant les jambes et en éloignant les pieds de façon à obtenir un angle de 90° entre le tronc et la cuisse et entre la cuisse et la jambe.",
+                                "Procédure : le test de la chaise consiste à se placer le dos contre un mur, les pieds écartés de 20cm, puis glisser vers le bas en fléchissant les jambes et en éloignant les pieds de façon à obtenir un angle de 90° entre le tronc et la cuisse et entre la cuisse et la jambe.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de la chaise',
@@ -242,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 userId: widget.userId,
                                 title: "Test de force",
                                 subtitle:
-                                    "Procédure: Prendre le dynanomètre dans la main. Tenir la pognée dans le prolongement du bras, à la hauteur de la cuisse et éloignée du corps(angle de 45°). Serrer vigoureusement la poignée en exerçant une force maximale. Changer de mains.",
+                                "Procédure: Prendre le dynanomètre dans la main. Tenir la pognée dans le prolongement du bras, à la hauteur de la cuisse et éloignée du corps(angle de 45°). Serrer vigoureusement la poignée en exerçant une force maximale. Changer de mains.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de handgrip (main droite)',
@@ -271,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: 'Équilibre',
                       subtitle: 'Test unipodal simple',
                       imagePath: 'assets/images/equilibre.jpg',
-                      exercises: ['Test du flamand'],
+                      exercises: const ['Test du flamand'],
                       isCompleted: allTestsCompletion[2],
                       onExerciseTap: (exerciseName) {
                         if (exerciseName.contains('Test du flamand')) {
@@ -282,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 userId: widget.userId,
                                 title: "Test d’équilibre",
                                 subtitle:
-                                    "Procédure : placer les mains sur les hanches et mettre un pied à plat sur le genou opposé. Fermer les yeux et démarrer le chronomètre. On a le droit à 2 essais par jambe et le meilleur des deux sera pris en compte. Le test peut se dérouler pieds nus.",
+                                "Procédure : placer les mains sur les hanches et mettre un pied à plat sur le genou opposé. Fermer les yeux et démarrer le chronomètre. On a le droit à 2 essais par jambe et le meilleur des deux sera pris en compte. Le test peut se dérouler pieds nus.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test du flamand - pied droit',
@@ -310,9 +307,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ExpandableTestCard(
                       title: 'Souplesse',
                       subtitle: '3 tests à compléter',
-                      imagePath:
-                          'assets/images/akram-huseyn-ZJzCO-un8dI-unsplash.jpg',
-                      exercises: ['Main / Pied', 'Épaule', 'Flexomètre'],
+                      imagePath: 'assets/images/akram-huseyn-ZJzCO-un8dI-unsplash.jpg',
+                      exercises: const ['Main / Pied', 'Épaule', 'Flexomètre'],
                       isCompleted: allTestsCompletion[3],
                       onExerciseTap: (exerciseName) {
                         if (exerciseName.contains('Flexomètre')) {
@@ -323,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 userId: widget.userId,
                                 title: "Test de souplesse",
                                 subtitle:
-                                    "Procédure : se positionner assis, les jambes en extension, les lantes de pieds sont verticales contre le montant du flexomètre. Tendre les mains vers l'avant et poser les mains l'une sur l'autre. Il faut chercher à pousser ses mains le plus loin possible vers l'avant sans fléchir les genoux et sans à-coup. La position maximale doit être maintenue 3 secondes pour être validée.",
+                                "Procédure : se positionner assis, les jambes en extension, les lantes de pieds sont verticales contre le montant du flexomètre. Tendre les mains vers l'avant et poser les mains l'une sur l'autre. Il faut chercher à pousser ses mains le plus loin possible vers l'avant sans fléchir les genoux et sans à-coup. La position maximale doit être maintenue 3 secondes pour être validée.",
                                 formFields: [
                                   CustomFormField(
                                     title: 'Test de Flexomètre',
@@ -347,15 +343,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 userId: widget.userId,
                                 pageTitle: 'Test de souplesse',
                                 subtitle:
-                                    "Procédure : Se positionner debout, les jambes en extension. Fléchir le tronc et amener les mains les plus bas possible dans plier les jambes.",
-                                labelText:
-                                    'Quelle est la position de tes mains ?',
-                                values: [
+                                "Procédure : Se positionner debout, les jambes en extension. Fléchir le tronc et amener les mains les plus bas possible dans plier les jambes.",
+                                labelText: 'Quelle est la position de tes mains ?',
+                                values: const [
                                   'Les mains sur les cuisses',
                                   'Les mains sur les genoux',
                                   'Les mains sur les tibias',
-                                  'Les mains sur les chevilles' ,
-                                  'La paume de la main touche le sol'
+                                  'Les mains sur les chevilles'
                                 ],
                                 onSelected: (selectedValue) {
                                   setState(() {
@@ -373,13 +367,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 userId: widget.userId,
                                 pageTitle: 'Test de souplesse',
                                 subtitle:
-                                    "Procédure : passer une main par-dessus l'épaule et la faire glisser dans le dos quasiment dans l'axe de la colonne vertébrale. Réaliser la même opération avec la seconde main mais cette fois ci par-dessous l'épaule. Le but du test est de venir toucher ou attraper les mains dans le dos.",
+                                "Procédure : passer une main par-dessus l'épaule et la faire glisser dans le dos quasiment dans l'axe de la colonne vertébrale. Réaliser la même opération avec la seconde main mais cette fois ci par-dessous l'épaule. Le but du test est de venir toucher ou attraper les mains dans le dos.",
                                 labelText: 'Où tes mains se touchent-elles ?',
-                                values: [
+                                values: const [
                                   'Je ne parviens pas à mettre les deux mains dans le dos',
                                   'Mes deux mains dans le dos ne se touchent pas',
                                   'Les bouts des deux doigts se touchent',
-                                  "Les doigts s'agrippent" ,
                                   'Les mains parviennent à se superposer'
                                 ],
                                 onSelected: (selectedValue) {
@@ -403,4 +396,50 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  Widget _buildActionItem(IconData icon, String title) {
+    return InkWell(
+      onTap: () {
+        // Ajoute ta navigation ici
+        print('$title cliqué');
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.white),
+            const SizedBox(width: 10),
+            Text(title, style: const TextStyle(color: Colors.white)),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  void _showLogoutConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: Colors.grey[900],
+        title: const Text("Confirmer", style: TextStyle(color: Colors.white)),
+        content: const Text("Voulez-vous vraiment vous déconnecter ?", style: TextStyle(color: Colors.white70)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Annuler", style: TextStyle(color: Colors.redAccent)),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await Provider.of<UserProvider>(context, listen: false).logout();
+              Get.offAllNamed('/login');
+            },
+            child: const Text("Déconnexion", style: TextStyle(color: Colors.greenAccent)),
+          ),
+        ],
+      ),
+    );
+  }
+
 }

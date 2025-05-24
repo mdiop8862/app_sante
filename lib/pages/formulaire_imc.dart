@@ -39,19 +39,19 @@ class _FormulaireImcState extends State<FormulaireImc> {
   String? _selectedFaculte;
 
   final List<String> _facultes = [
-    'FST',
-    'FAC de medecine',
-    'Fac de pharmacie',
-    'FLSH',
-    'FDSE',
-    'IUT',
-    'ILFOMER',
-    'IAE',
-    'IPAG',
-    'INSPE',
-    'ENSIL-ENSCI',
-    'IFSI',
-    'IRFSS',
+    "FST",
+    "Fac de Médecine",
+    "Fac de Pharmacie",
+    "FLSH",
+    "FDSE",
+    "IUT",
+    "ILFOMER",
+    "IAE",
+    "IPAG",
+    "INSPE",
+    "ENSIL-ENSCI",
+    "IFSI",
+    "IRFSS"
   ];
 
   @override
