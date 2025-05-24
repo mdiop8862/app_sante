@@ -4,70 +4,71 @@ int calculScoreMarche6Min({
   required int age,
   required int distance,
 }) {
-  if (sexe == 'Homme' && age >= 20 && age <= 29) {
+  final s = sexe.toLowerCase();
+  if (sexe == 'homme' && age >= 20 && age <= 29) {
     if (distance < 725) return 1;
     if (distance < 763) return 2;
     if (distance < 801) return 3;
     if (distance < 839) return 4;
     return 5;
   }
-  if (sexe == 'Femme' && age >= 20 && age <= 29) {
+  if (sexe == 'femme' && age >= 20 && age <= 29) {
     if (distance < 672) return 1;
     if (distance < 707) return 2;
     if (distance < 742) return 3;
     if (distance < 777) return 4;
     return 5;
   }
-  if (sexe == 'Homme' && age >= 30 && age <= 39) {
+  if (sexe == 'homme' && age >= 30 && age <= 39) {
     if (distance < 675) return 1;
     if (distance < 713) return 2;
     if (distance < 751) return 3;
     if (distance < 789) return 4;
     return 5;
   }
-  if (sexe == 'Femme' && age >= 30 && age <= 39) {
+  if (sexe == 'femme' && age >= 30 && age <= 39) {
     if (distance < 614) return 1;
     if (distance < 649) return 2;
     if (distance < 684) return 3;
     if (distance < 719) return 4;
     return 5;
   }
-  if (sexe == 'Homme' && age >= 40 && age <= 49) {
+  if (sexe == 'homme' && age >= 40 && age <= 49) {
     if (distance < 585) return 1;
     if (distance < 624) return 2;
     if (distance < 662) return 3;
     if (distance < 700) return 4;
     return 5;
   }
-  if (sexe == 'Femme' && age >= 40 && age <= 49) {
+  if (sexe == 'femme' && age >= 40 && age <= 49) {
     if (distance < 556) return 1;
     if (distance < 591) return 2;
     if (distance < 626) return 3;
     if (distance < 661) return 4;
     return 5;
   }
-  if (sexe == 'Homme' && age >= 50 && age <= 59) {
+  if (sexe == 'homme' && age >= 50 && age <= 59) {
     if (distance < 575) return 1;
     if (distance < 613) return 2;
     if (distance < 651) return 3;
     if (distance < 689) return 4;
     return 5;
   }
-  if (sexe == 'Femme' && age >= 50 && age <= 59) {
+  if (sexe == 'femme' && age >= 50 && age <= 59) {
     if (distance < 498) return 1;
     if (distance < 533) return 2;
     if (distance < 568) return 3;
     if (distance < 603) return 4;
     return 5;
   }
-  if (sexe == 'Homme' && age >= 60) {
+  if (sexe == 'homme' && age >= 60) {
     if (distance < 524) return 1;
     if (distance < 562) return 2;
     if (distance < 600) return 3;
     if (distance < 638) return 4;
     return 5;
   }
-  if (sexe == 'Femme' && age >= 60) {
+  if (sexe == 'femme' && age >= 60) {
     if (distance < 441) return 1;
     if (distance < 476) return 2;
     if (distance < 511) return 3;
@@ -81,8 +82,7 @@ int calculScoreMarche6Min({
 // Score Flexométre
 
 int calculScore(String sexe, int age, int valeur) {
-  // sexe = sexe.toUpperCase();
-
+  final s = sexe.toLowerCase();
   String tranche;
   if (age < 20) {
     tranche = "-19";
@@ -100,14 +100,14 @@ int calculScore(String sexe, int age, int valeur) {
 
   Map<String, Map<String, List<List<int>>>> colorThresholds = {
     "-19": {
-      "Femme": [
+      "femme": [
         [1, 22],
         [23, 31],
         [32, 39],
         [40, 47],
         [48, 50]
       ],
-      "Homme": [
+      "homme": [
         [1, 20],
         [21, 30],
         [31, 39],
@@ -116,14 +116,14 @@ int calculScore(String sexe, int age, int valeur) {
       ],
     },
     "20-29": {
-      "Femme": [
+      "femme": [
         [1, 21],
         [22, 30],
         [31, 38],
         [39, 46],
         [47, 50]
       ],
-      "Homme": [
+      "homme": [
         [1, 20],
         [21, 28],
         [29, 37],
@@ -132,14 +132,14 @@ int calculScore(String sexe, int age, int valeur) {
       ],
     },
     "30-39": {
-      "Femme": [
+      "femme": [
         [1, 21],
         [22, 30],
         [31, 38],
         [39, 46],
         [47, 50]
       ],
-      "Homme": [
+      "homme": [
         [1, 18],
         [19, 27],
         [28, 36],
@@ -148,14 +148,14 @@ int calculScore(String sexe, int age, int valeur) {
       ],
     },
     "40-49": {
-      "Femme": [
+      "femme": [
         [1, 19],
         [20, 28],
         [29, 37],
         [38, 46],
         [47, 50]
       ],
-      "Homme": [
+      "homme": [
         [1, 16],
         [17, 25],
         [26, 34],
@@ -164,14 +164,14 @@ int calculScore(String sexe, int age, int valeur) {
       ],
     },
     "50-59": {
-      "Femme": [
+      "femme": [
         [1, 20],
         [21, 28],
         [29, 36],
         [37, 45],
         [46, 50]
       ],
-      "Homme": [
+      "homme": [
         [1, 13],
         [14, 23],
         [24, 32],
@@ -180,14 +180,14 @@ int calculScore(String sexe, int age, int valeur) {
       ],
     },
     "60+": {
-      "Femme": [
+      "femme": [
         [1, 18],
         [19, 26],
         [27, 35],
         [36, 43],
         [44, 50]
       ],
-      "Homme": [
+      "homme": [
         [1, 11],
         [12, 21],
         [22, 30],
@@ -219,71 +219,73 @@ int calculerScoreTestAssisDebout({
   required String sexe,
   required int repetitions,
 }) {
+  final s = sexe.toLowerCase();
+
   if (repetitions <= 0 || repetitions > 40) return 0;
-  if (sexe == 'Homme' && age >= 20 && age <= 29) {
+  if (sexe == 'homme' && age >= 20 && age <= 29) {
     if (repetitions <= 19) return 1;
     if (repetitions <= 25) return 2;
     if (repetitions <= 30) return 3;
     if (repetitions <= 33) return 4;
     if (repetitions <= 40) return 5;
   }
-  if (sexe == 'Femme' && age >= 20 && age <= 29) {
+  if (sexe == 'femme' && age >= 20 && age <= 29) {
     if (repetitions <= 20) return 1;
     if (repetitions <= 27) return 2;
     if (repetitions <= 31) return 3;
     if (repetitions <= 34) return 4;
     if (repetitions <= 40) return 5;
   }
-  if (sexe == 'Homme' && age >= 30 && age <= 39) {
+  if (sexe == 'homme' && age >= 30 && age <= 39) {
     if (repetitions <= 21) return 1;
     if (repetitions <= 31) return 2;
     if (repetitions <= 33) return 3;
     if (repetitions <= 34) return 4;
     if (repetitions <= 40) return 5;
   }
-  if (sexe == 'Femme' && age >= 30 && age <= 39) {
+  if (sexe == 'femme' && age >= 30 && age <= 39) {
     if (repetitions <= 18) return 1;
     if (repetitions <= 20) return 2;
     if (repetitions <= 22) return 3;
     if (repetitions <= 28) return 4;
     if (repetitions <= 40) return 5;
   }
-  if (sexe == 'Homme' && age >= 40 && age <= 49) {
+  if (sexe == 'homme' && age >= 40 && age <= 49) {
     if (repetitions <= 18) return 1;
     if (repetitions <= 19) return 2;
     if (repetitions <= 20) return 3;
     if (repetitions <= 24) return 4;
     if (repetitions <= 40) return 5;
   }
-  if (sexe == 'Femme' && age >= 40 && age <= 49) {
+  if (sexe == 'femme' && age >= 40 && age <= 49) {
     if (repetitions <= 15) return 1;
     if (repetitions <= 18) return 2;
     if (repetitions <= 22) return 3;
     if (repetitions <= 26) return 4;
     if (repetitions <= 40) return 5;
   }
-  if (sexe == 'Homme' && age >= 50 && age <= 59) {
+  if (sexe == 'homme' && age >= 50 && age <= 59) {
     if (repetitions <= 13) return 1;
     if (repetitions <= 15) return 2;
     if (repetitions <= 18) return 3;
     if (repetitions <= 20) return 4;
     if (repetitions <= 40) return 5;
   }
-  if (sexe == 'Femme' && age >= 50 && age <= 59) {
+  if (sexe == 'femme' && age >= 50 && age <= 59) {
     if (repetitions <= 11) return 1;
     if (repetitions <= 13) return 2;
     if (repetitions <= 17) return 3;
     if (repetitions <= 18) return 4;
     if (repetitions <= 40) return 5;
   }
-  if (sexe == 'Homme' && age >= 60) {
+  if (sexe == 'homme' && age >= 60) {
     if (repetitions <= 12) return 1;
     if (repetitions <= 14) return 2;
     if (repetitions <= 16) return 3;
     if (repetitions <= 18) return 4;
     if (repetitions <= 40) return 5;
   }
-  if (sexe == 'Femme' && age >= 60) {
+  if (sexe == 'femme' && age >= 60) {
     if (repetitions <= 10) return 1;
     if (repetitions <= 12) return 2;
     if (repetitions <= 14) return 3;
@@ -310,7 +312,8 @@ int calculScoreMonteeMarche({
   required int age,
   required int bpm,
 }) {
-  if (sexe == 'Homme' && age <= 25) {
+  final s = sexe.toLowerCase();
+  if (sexe == 'homme' && age <= 25) {
     if (bpm >= 108) return 1;
     if (bpm >= 101) return 2;
     if (bpm >= 94) return 3;
@@ -318,7 +321,7 @@ int calculScoreMonteeMarche({
     return 5;
   }
 
-  if (sexe == 'Femme' && age <= 25) {
+  if (sexe == 'femme' && age <= 25) {
     if (bpm > 120) return 1;
     if (bpm > 110) return 2;
     if (bpm > 102) return 3;
@@ -326,7 +329,7 @@ int calculScoreMonteeMarche({
     return 5;
   }
 
-  if (sexe == 'Homme' && age <= 35) {
+  if (sexe == 'homme' && age <= 35) {
     if (bpm > 110) return 1;
     if (bpm > 102) return 2;
     if (bpm > 94) return 3;
@@ -334,7 +337,7 @@ int calculScoreMonteeMarche({
     return 5;
   }
 
-  if (sexe == 'Femme' && age <= 35) {
+  if (sexe == 'femme' && age <= 35) {
     if (bpm > 120) return 1;
     if (bpm > 110) return 2;
     if (bpm > 101) return 3;
@@ -342,7 +345,7 @@ int calculScoreMonteeMarche({
     return 5;
   }
 
-  if (sexe == 'Homme' && age <= 45) {
+  if (sexe == 'homme' && age <= 45) {
     if (bpm > 113) return 1;
     if (bpm > 104) return 2;
     if (bpm > 98) return 3;
@@ -350,7 +353,7 @@ int calculScoreMonteeMarche({
     return 5;
   }
 
-  if (sexe == 'Femme' && age <= 45) {
+  if (sexe == 'femme' && age <= 45) {
     if (bpm > 120) return 1;
     if (bpm > 112) return 2;
     if (bpm > 104) return 3;
@@ -358,7 +361,7 @@ int calculScoreMonteeMarche({
     return 5;
   }
 
-  if (sexe == 'Homme' && age <= 55) {
+  if (sexe == 'homme' && age <= 55) {
     if (bpm > 119) return 1;
     if (bpm > 111) return 2;
     if (bpm > 101) return 3;
@@ -366,7 +369,7 @@ int calculScoreMonteeMarche({
     return 5;
   }
 
-  if (sexe == 'Femme' && age <= 55) {
+  if (sexe == 'femme' && age <= 55) {
     if (bpm > 124) return 1;
     if (bpm > 118) return 2;
     if (bpm > 110) return 3;
@@ -374,7 +377,7 @@ int calculScoreMonteeMarche({
     return 5;
   }
 
-  if (sexe == 'Homme' && age <= 65) {
+  if (sexe == 'homme' && age <= 65) {
     if (bpm > 117) return 1;
     if (bpm > 109) return 2;
     if (bpm > 100) return 3;
@@ -382,7 +385,7 @@ int calculScoreMonteeMarche({
     return 5;
   }
 
-  if (sexe == 'Femme' && age <= 65) {
+  if (sexe == 'femme' && age <= 65) {
     if (bpm > 127) return 1;
     if (bpm > 118) return 2;
     if (bpm > 111) return 3;
@@ -422,14 +425,15 @@ int calculerScoreTestFlamand({
   required String sexe,
   required int secondes,
 }) {
+  final s = sexe.toLowerCase();
   if (age <= 30) {
-    if (sexe == 'Homme') {
+    if (sexe == 'homme') {
       if (secondes < 17) return 1;
       if (secondes < 21) return 2;
       if (secondes < 25) return 3;
       if (secondes < 29) return 4;
       return 5;
-    } else if (sexe == 'Femme') {
+    } else if (sexe == 'femme') {
       if (secondes < 14) return 1;
       if (secondes < 18) return 2;
       if (secondes < 22) return 3;
@@ -437,13 +441,13 @@ int calculerScoreTestFlamand({
       return 5;
     }
   } else if (age >= 31 && age <= 39) {
-    if (sexe == 'Homme') {
+    if (sexe == 'homme') {
       if (secondes < 14) return 1;
       if (secondes < 17) return 2;
       if (secondes < 22) return 3;
       if (secondes < 26) return 4;
       return 5;
-    } else if (sexe == 'Femme') {
+    } else if (sexe == 'femme') {
       if (secondes < 10) return 1;
       if (secondes < 14) return 2;
       if (secondes < 18) return 3;
@@ -451,13 +455,13 @@ int calculerScoreTestFlamand({
       return 5;
     }
   } else if (age >= 40 && age <= 49) {
-    if (sexe == 'Homme') {
+    if (sexe == 'homme') {
       if (secondes < 10) return 1;
       if (secondes < 14) return 2;
       if (secondes < 18) return 3;
       if (secondes < 23) return 4;
       return 5;
-    } else if (sexe == 'Femme') {
+    } else if (sexe == 'femme') {
       if (secondes < 9) return 1;
       if (secondes < 13) return 2;
       if (secondes < 16) return 3;
@@ -465,13 +469,13 @@ int calculerScoreTestFlamand({
       return 5;
     }
   } else if (age >= 50 && age <= 59) {
-    if (sexe == 'Homme') {
+    if (sexe == 'homme') {
       if (secondes < 9) return 1;
       if (secondes < 13) return 2;
       if (secondes < 16) return 3;
       if (secondes < 20) return 4;
       return 5;
-    } else if (sexe == 'Femme') {
+    } else if (sexe == 'femme') {
       if (secondes < 6) return 1;
       if (secondes < 10) return 2;
       if (secondes < 14) return 3;
@@ -479,13 +483,13 @@ int calculerScoreTestFlamand({
       return 5;
     }
   } else if (age >= 60) {
-    if (sexe == 'Homme') {
+    if (sexe == 'homme') {
       if (secondes < 6) return 1;
       if (secondes < 10) return 2;
       if (secondes < 14) return 3;
       if (secondes < 17) return 4;
       return 5;
-    } else if (sexe == 'Femme') {
+    } else if (sexe == 'femme') {
       if (secondes < 6) return 1;
       if (secondes < 9) return 2;
       if (secondes < 12) return 3;
@@ -513,10 +517,10 @@ int calculerScoreTestHandgrip({
   required String sexe,
   required int forcemax,
 }) {
+  final s = sexe.toLowerCase();
   if (forcemax < 45 || forcemax > 125) return 0;
-  final s = sexe.toUpperCase();
 
-  if (s == 'Homme') {
+  if (s == 'homme') {
     if (age >= 15 && age <= 19) {
       if (forcemax <= 83) return 1;
       if (forcemax <= 94) return 2;
@@ -561,7 +565,7 @@ int calculerScoreTestHandgrip({
     }
   }
 
-  if (s == 'Femme') {
+  if (s == 'femme') {
     if (age >= 15 && age <= 19) {
       if (forcemax <= 53) return 1;
       if (forcemax <= 58) return 2;
