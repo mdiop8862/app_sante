@@ -61,3 +61,28 @@ Future<Map<String, dynamic>> getUserTestData(String userId) async {
 
   return result;
 }
+
+
+Future<bool> saveUserProfile({
+  required String userId,
+  required double poids,
+  required double taille,
+  required int age,
+  required String sexe,
+  required String faculte,
+}) async {
+  try {
+    await FirebaseFirestore.instance.collection('users').doc(userId).set({
+      'poids': poids,
+      'taille': taille,
+      'age': age,
+      'sexe': sexe,
+      'faculte': faculte,
+    }, SetOptions(merge: true)); // ✅ NE SUPPRIME PAS les autres champs
+    return true;
+  } catch (e) {
+    print('Erreur lors de la sauvegarde : $e');
+    return false;
+  }
+}
+
