@@ -99,7 +99,7 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
               testResults: widget.testResults,
             ),
             const Spacer(),
-            const Text('Recommendation',
+            const Text('Recommandation',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             const SizedBox(height: 16),
             const Text(

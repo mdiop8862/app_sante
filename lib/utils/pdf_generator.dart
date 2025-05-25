@@ -4,7 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:appli_ap_sante/utils/Score_calculator.dart';
+
 // Score IMC
 int imcScore(double imc) {
   if (imc < 18.5) return 1;
@@ -134,7 +134,7 @@ Future<Uint8List?> generateGlobalTestResultPdf({
               final dataPoints = <PdfPoint>[];
               for (int i = 0; i < count; i++) {
                 final angle = i * angleStep - pi / 2;
-                final valueRatio = values[i] / maxScore;
+                final valueRatio = (values[i] - 1) / (maxScore - 1);
                 final x = center.x + cos(angle) * radius * valueRatio;
                 final y = center.y + sin(angle) * radius * valueRatio;
                 dataPoints.add(PdfPoint(x, y));
@@ -249,7 +249,7 @@ Future<Uint8List?> generateGlobalTestResultPdf({
                           style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: ttfNoto)),
                       pw.SizedBox(height: 4),
                       pw.Row(children: [
-                        pw.Container(width: 18, height: 18, color: getPdfColor(imcScore(imcVal))),
+                        pw.Container(width: 18, height: 18, color: getPdfColor(imcScore(imc).round())),
                         pw.SizedBox(width: 8),
                         pw.Text(imc.toStringAsFixed(1),
                             style: pw.TextStyle(fontSize: 12, font: ttfNoto)),
