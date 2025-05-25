@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:appli_ap_sante/pages/global_test_result_page.dart';
 
-
 class TestResultPage extends StatefulWidget {
   final String userId;
 
@@ -29,13 +28,12 @@ class _TestResultPageState extends State<TestResultPage> {
   void initState() {
     super.initState();
     fetchUserData();
-
   }
 
   double moyenneScore(List<int> scores) {
     if (scores.isEmpty) return 0;
     return scores.reduce((a, b) => a + b) / scores.length;
-    }
+  }
 
   double get imcValue {
     double t = taille / 100; // cm -> m
@@ -56,36 +54,75 @@ class _TestResultPageState extends State<TestResultPage> {
       scoreQuestionnaire = result['scoreQuestionnaire'] ?? 0;
     });
   }
-
-
   Widget _buildTestScore(String label, int score, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(label,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                    color: Color(0xFF8E8E8E))),
-            const SizedBox(width: 10),
-            Expanded(
-              child: ColorsSection(
-                child: const Icon(Icons.check, color: Colors.white),
-                showWhen: (index) => index == (score - 1),
+    final colors = [0xFFE00808, 0xFFFE5200, 0xFFFFD102, 0xFF02952A, 0xFF2249FF];
+    const spaceBetween = 0.1;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 160,
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                color: Color(0xFF8E8E8E),
               ),
             ),
-            const SizedBox(width: 10),
-            Text('$score',
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600, fontSize: 15)),
-          ],
-        ),
-        const SizedBox(height: 25),
-      ],
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // On retire l'espace total entre les 5 cases (4 espaces)
+                final totalSpacing = spaceBetween * 4;
+                final boxSize = (constraints.maxWidth - totalSpacing) / 5;
+                return Row(
+                  children: List.generate(5, (index) {
+                    return Container(
+                      width: boxSize,
+                      height: boxSize,
+                      margin: EdgeInsets.only(
+                        right: index < 4 ? spaceBetween : 0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(colors[index]),
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                      child: index == score - 1
+                          ? Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.black.withOpacity(0.4),
+                        ),
+                        child: Icon(Icons.check, size: boxSize * 0.9, color: Colors.white),
+                      )
+                          : null,
+
+                    );
+                  }),
+                );
+              },
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            '$score',
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
     );
   }
+
+
 
   List<Widget> buildCategoryWidgets(String title, List<Widget> children) {
     if (children.isEmpty) return [];
@@ -119,7 +156,7 @@ class _TestResultPageState extends State<TestResultPage> {
 
       final montee = int.tryParse('${endurance['test_de_la_montée_de_marche']?['Test de la montée de marche']}');
       if (montee != null) {
-        final score = calculScoreMonteeMarche(sexe: sexe, age: age, bpm: montee);// par exemple ici on a le score de test de marche que je veux faire apparaitre sur l'image
+        final score = calculScoreMonteeMarche(sexe: sexe, age: age, bpm: montee);
         enduranceWidgets.add(_buildTestScore("Step Test", score, montee.toString()));
         enduranceScores.add(score);
       }
@@ -139,7 +176,7 @@ class _TestResultPageState extends State<TestResultPage> {
 
       final chaise = int.tryParse('${force['test_de_la_chaise']?['Test de la chaise']}');
       if (chaise != null) {
-        final score = calculerScoreTestChaise(chaise); //par exemple le score de test de la chaise:
+        final score = calculerScoreTestChaise(chaise);
         forceWidgets.add(_buildTestScore("Test de la chaise", score, chaise.toString()));
         forceScores.add(score);
       }
@@ -157,7 +194,6 @@ class _TestResultPageState extends State<TestResultPage> {
       if (flexo != null) {
         final score = calculScore(sexe, age, flexo);
         souplesseWidgets.add(_buildTestScore("Flexomètre", score, flexo.toString()));
-        //print(score);
         souplesseScores.add(score);
       }
 
@@ -322,12 +358,12 @@ class ColorsSection extends StatelessWidget {
           colors.length,
               (index) => Expanded(
             child: Container(
-              padding: const EdgeInsets.all(3),
-              height: 40,
               color: Color(colors[index]),
-              child: (childBuilder != null && showWhen?.call(index) == true)
-                  ? childBuilder!(index)
-                  : (showWhen?.call(index) == true ? child : null),
+              child: Center(
+                child: (childBuilder != null && showWhen?.call(index) == true)
+                    ? childBuilder!(index)
+                    : (showWhen?.call(index) == true ? child : null),
+              ),
             ),
           ),
         ),
@@ -335,7 +371,6 @@ class ColorsSection extends StatelessWidget {
     );
   }
 }
-
 
 Color getColorFromScore(int score) {
   switch (score) {
@@ -348,7 +383,7 @@ Color getColorFromScore(int score) {
     case 4:
       return Colors.green;
     case 5:
-      return Color(0xFF2249FF);
+      return const Color(0xFF2249FF);
     default:
       return Colors.grey;
   }

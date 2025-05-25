@@ -12,6 +12,7 @@ class FormulaireImc extends StatefulWidget {
   final String? initialSexe;
   final String? initialFaculte;
   final String userId;
+  final bool isEditing;
 
   const FormulaireImc({
     Key? key,
@@ -21,6 +22,7 @@ class FormulaireImc extends StatefulWidget {
     this.initialSexe,
     this.initialFaculte,
     required this.userId,
+    this.isEditing = false,
   }) : super(key: key);
 
   @override
@@ -86,9 +88,9 @@ class _FormulaireImcState extends State<FormulaireImc> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Center(
+                Center(
                   child: Text(
-                    "Création de Profil",
+                    widget.isEditing ? "Modification de Profil" : "Création de Profil",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -229,7 +231,11 @@ class _FormulaireImcState extends State<FormulaireImc> {
                         borderRadius: BorderRadius.circular(24),
                       ),
                     ),
-                    child: const Text("Valider", style: TextStyle(color: Colors.white)),
+                    child: Text(
+                      widget.isEditing ? "Mettre à jour" : "Valider",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+
                   ),
                 ),
                 const SizedBox(height: 30),
