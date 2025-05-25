@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:appli_ap_sante/utils/FirebaseManagement.dart'; // fonction saveFormDataToUserDoc
+import 'package:firebase_auth/firebase_auth.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
   final String userId;  // Ajout du userId
@@ -83,6 +84,8 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         'Plus de 60 min'
       ],
     },
+
+
     {
       'text': 'Combien d’étages, en moyenne, montez-vous à pied chaque jour ?',
       'options': ['Moins de 2', '3 à 5', '6 à 10', '11 à 15', 'Plus de 16'],
@@ -127,7 +130,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
             actions: [
               TextButton(
                 child: Text("OK", style: TextStyle(color: primaryColor)),
-                onPressed: ()  {
+                onPressed: () {
                   int total = scores.values.reduce((a, b) => a + b);
                   int scoreGlobal = calculerScoreGlobal(total);
                   print(scoreGlobal);
@@ -135,10 +138,28 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                     userId: widget.userId,
                     scoreQuestionnaire: scoreGlobal,
                   );
+
+                  // D'abord fermer la boîte de dialogue (AlertDialog)
                   Navigator.pop(context);
+
+                  // Puis fermer la page questionnaire (si tu veux)
                   Navigator.pop(context);
-                  },
+
+                  // Ensuite, récupérer le uid et lancer le questionnaire
+                  final uid = FirebaseAuth.instance.currentUser?.uid;
+                  if (uid != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QuestionnaireScreen(userId: uid),
+                      ),
+                    );
+                  } else {
+                    print("Utilisateur non connecté");
+                  }
+                },
               ),
+
             ],
           ),
         );

@@ -2,7 +2,6 @@ import 'package:appli_ap_sante/utils/Score_calculator.dart';
 import 'package:appli_ap_sante/utils/colors.dart';
 import 'package:appli_ap_sante/utils/FirebaseManagement.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:appli_ap_sante/pages/global_test_result_page.dart';
 

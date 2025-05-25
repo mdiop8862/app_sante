@@ -22,8 +22,8 @@ Future<Uint8List?> generateGlobalTestResultPdf({
 }) async {
   final pdf = pw.Document();
   final ttfNoto = pw.Font.ttf(await rootBundle.load('assets/fonts/Inter-VariableFont_opsz,wght.ttf'));
-  final logoImage = pw.MemoryImage(await rootBundle.load('images/logo.png').then((value) => value.buffer.asUint8List()));
-  final tefImage = pw.MemoryImage(await rootBundle.load('images/tef.jpg').then((value) => value.buffer.asUint8List()));
+  final logoImage = pw.MemoryImage(await rootBundle.load('assets/images/logo.png').then((value) => value.buffer.asUint8List()));
+  final tefImage = pw.MemoryImage(await rootBundle.load('assets/images/tef.jpg').then((value) => value.buffer.asUint8List()));
 
   final bluee = PdfColor.fromInt(0xFF3F3FFF);
 
@@ -249,7 +249,7 @@ Future<Uint8List?> generateGlobalTestResultPdf({
                           style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: ttfNoto)),
                       pw.SizedBox(height: 4),
                       pw.Row(children: [
-                        pw.Container(width: 18, height: 18, color: getPdfColor(imcScore(imc).round())),
+                        pw.Container(width: 18, height: 18, color: getPdfColor(2)),
                         pw.SizedBox(width: 8),
                         pw.Text(imc.toStringAsFixed(1),
                             style: pw.TextStyle(fontSize: 12, font: ttfNoto)),

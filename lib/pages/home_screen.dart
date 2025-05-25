@@ -102,6 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         final result = await Navigator.pushNamed(
                           context,
                           '/questionnaire',
+                          arguments: widget.userId,
                         );
                         if (result is Map) {
                           final int? score = result['scoreGlobal'];

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; // Assure-toi que ce fichier a été généré
+import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:appli_ap_sante/providers/user_provider.dart';
 
@@ -33,7 +33,10 @@ class MyApp extends StatelessWidget {
       title: 'Mon App',
       initialRoute: '/',
       routes: {
-        '/questionnaire': (context) => const QuestionnaireScreen(userId: "nGO44bCJyAwoCDjf8V6P"),
+        '/questionnaire': (context) {
+          final userId = ModalRoute.of(context)!.settings.arguments as String;
+          return QuestionnaireScreen(userId: userId);
+        },
         '/login': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(
 
