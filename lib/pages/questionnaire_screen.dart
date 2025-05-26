@@ -182,35 +182,46 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
           },
         ),
         title: Text(
-          "Questionnaire Ricci & Gagnon",
+          "Questionnaire APS",
           style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // moins de padding vertical
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 40),
+            SizedBox(height: 16),
             LinearProgressIndicator(
               value: (selectedOption != null ? currentQuestionIndex + 1 : currentQuestionIndex) / questions.length,
               color: primaryColor,
               backgroundColor: Colors.grey[300],
+              minHeight: 6,  // barre un peu plus fine
             ),
-            SizedBox(height: 20),
-            Text("Question ${currentQuestionIndex + 1} / ${questions.length}", style: TextStyle(fontSize: 15)),
-            SizedBox(height: 40),
-            Text(question['text'], style: TextStyle(fontSize: 18)),
-            SizedBox(height: 20),
+            SizedBox(height: 12),
+            Text("Question ${currentQuestionIndex + 1} / ${questions.length}",
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+            SizedBox(height: 16),
+            Text(question['text'],
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            SizedBox(height: 8),
 
-            // Liste des options dans Expanded, scroll désactivé
-            Expanded(
+            // Liste des options dans un container avec hauteur max adaptée
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: 250,  // limite la hauteur à ~250px (ajuste si besoin)
+              ),
               child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                physics: question['options'].length > 5
+                    ? ScrollPhysics()
+                    : NeverScrollableScrollPhysics(), // scroll seulement si trop d’options
                 itemCount: question['options'].length,
                 itemBuilder: (context, index) {
                   return RadioListTile<int>(
-                    title: Text(question['options'][index], style: TextStyle(color: Colors.grey)),
+                    dense: true,
+                    title: Text(question['options'][index],
+                        style: TextStyle(color: Colors.white, fontSize: 14)),
                     value: index,
                     groupValue: selectedOption,
                     activeColor: primaryColor,
@@ -227,16 +238,20 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(60),
-        child: ElevatedButton(
-          onPressed: selectedOption != null ? nextQuestion : null,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: primaryColor,
-            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24), // espace généreux en bas
+        child: SizedBox(
+          height: 44, // bouton pas trop grand
+          child: ElevatedButton(
+            onPressed: selectedOption != null ? nextQuestion : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: primaryColor,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            child: Text("Continuer", style: TextStyle(fontSize: 16)),
           ),
-          child: Text("Continuer", style: TextStyle(fontSize: 16)),
         ),
       ),
+
     );
   }
 }

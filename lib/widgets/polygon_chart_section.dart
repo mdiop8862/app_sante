@@ -40,69 +40,64 @@ class PolygonChartSection extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final size = constraints.maxWidth;
-        return SizedBox(
-          width: size,
-          height: size,
-          child: RadarChart(
-            RadarChartData(
-              radarShape: RadarShape.polygon,
-              radarBorderData: const BorderSide(color: Colors.white, width: 4),
-              gridBorderData: BorderSide(
-                color: Colors.cyanAccent.withOpacity(0.4),
-                width: 2,
-              ),
-              tickBorderData: BorderSide(
-                color: Colors.deepOrangeAccent.withOpacity(0.8),
-                width: 2,
-              ),
-              ticksTextStyle: const TextStyle(
-                color: Colors.yellowAccent,
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-              ),
-              tickCount: 5,
-              isMinValueAtCenter: true,
-              dataSets: [
-                RadarDataSet(
-                  fillColor: Colors.greenAccent.withOpacity(0.6),
-                  borderColor: Colors.greenAccent,
-                  borderWidth: 3,
-                  entryRadius: 4,
-                  dataEntries: labelsWithScores
-                      .map((entry) => RadarEntry(value: (entry[1] as double)))
-                      .toList(),
+        final size = constraints.maxWidth * 0.6;
+        return Center(
+          child: SizedBox(
+            width: size,
+            height: size,
+            child: RadarChart(
+              RadarChartData(
+                radarShape: RadarShape.polygon,
+                radarBorderData: const BorderSide(color: Colors.white, width: 4),
+                gridBorderData: BorderSide(
+                  color: Colors.cyanAccent.withOpacity(0.4),
+                  width: 2,
                 ),
-              ],
-              getTitle: (index, angle) {
-                final label = labelsWithScores[index][0];
-                final score = (labelsWithScores[index][1] as double).toStringAsFixed(1);
-                final isQuestionnaire = label == 'Questionnaire';
+                tickBorderData: BorderSide(
+                  color: Colors.deepOrangeAccent.withOpacity(0.8),
+                  width: 2,
+                ),
+                ticksTextStyle: const TextStyle(
+                  color: Colors.yellowAccent,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                ),
+                tickCount: 5,
+                isMinValueAtCenter: true,
+                dataSets: [
+                  RadarDataSet(
+                    fillColor: Colors.greenAccent.withOpacity(0.6),
+                    borderColor: Colors.greenAccent,
+                    borderWidth: 3,
+                    entryRadius: 4,
+                    dataEntries: labelsWithScores
+                        .map((entry) => RadarEntry(value: (entry[1] as double)))
+                        .toList(),
+                  ),
+                ],
+                getTitle: (index, angle) {
+                  final label = labelsWithScores[index][0];
+                  final score = (labelsWithScores[index][1] as double).toStringAsFixed(1);
+                  final isQuestionnaire = label == 'Questionnaire';
 
-                return RadarChartTitle(
-                  text: '$label\n($score)',
-                  positionPercentageOffset: isQuestionnaire ? 0.08 : 0.10, // 🟡 Ajustement ici
-                );
-              },
-              titleTextStyle: const TextStyle(
-                color: Colors.white,
-                fontSize: 13, // ✔️ Augmenté mais contrôlé
-                fontWeight: FontWeight.w600,
+                  return RadarChartTitle(
+                    text: '$label\n($score)',
+                    positionPercentageOffset: isQuestionnaire ? 0.08 : 0.10,
+                  );
+                },
+                titleTextStyle: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+                titlePositionPercentageOffset: 0.08,
               ),
-              titlePositionPercentageOffset: 0.08, // même logique que getTitle
+              duration: const Duration(milliseconds: 600),
             ),
-            duration: const Duration(milliseconds: 600),
           ),
         );
       },
     );
-  }
-
-  double _getAverage(Map<String, dynamic>? map) {
-    if (map == null || map.isEmpty) return 0;
-    final values = map.values.whereType<num>().toList();
-    if (values.isEmpty) return 0;
-    return values.reduce((a, b) => a + b) / values.length;
   }
 
   double _imcScore(double imc) {
