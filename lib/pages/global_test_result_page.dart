@@ -79,6 +79,9 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
     }
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,7 +94,7 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
             Text('Score global : ${scoreGlobal.toStringAsFixed(1)} / 5',
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-            const SizedBox(height: 100),
+            const SizedBox(height: 60),
             PolygonChartSection(
               imc: widget.imc,
               scoreQuestionnaire: widget.scoreQuestionnaire,
@@ -102,8 +105,8 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
             const Text('Recommandation',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             const SizedBox(height: 16),
-            const Text(
-              'Votre condition physique ne traduit pas bon état de santé. Nous vous invitons à contacter le SSE qui vous proposera un suivi médical',
+             Text(
+              getRecommendation(scoreGlobal),
               style: TextStyle(fontStyle: FontStyle.italic, fontSize: 11),
             ),
             const SizedBox(height: 30),
@@ -111,46 +114,57 @@ class _GlobalTestResultPageState extends State<GlobalTestResultPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      await generateGlobalTestResultPdf(
-                        imc: widget.imc,
-                        scoreQuestionnaire: widget.scoreQuestionnaire,
-                        scoresMoyens: widget.scoresMoyens,
-                        printDirectly: true,
-                      );
-                    },
-                    icon: const Icon(Icons.download),
-                    label: const Text('Télécharger'),
-                    style: ElevatedButton.styleFrom(
-                      fixedSize:
-                          Size(MediaQuery.sizeOf(context).width * 0.42, 45),
+                  Expanded(
+                    flex: 5,
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        await generateGlobalTestResultPdf(
+                          imc: widget.imc,
+                          scoreQuestionnaire: widget.scoreQuestionnaire,
+                          scoresMoyens: widget.scoresMoyens,
+                          printDirectly: true,
+                        );
+                      },
+                      icon: const Icon(Icons.download),
+                      label: const FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text('Télécharger'),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(0, 45), // hauteur fixe, largeur flexible
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 20), // espace entre les boutons
-                  ElevatedButton.icon(
-                    icon: Icon(Icons.share),
-                    label: Text('Partager'),
-                    style: ElevatedButton.styleFrom(
-                      fixedSize:
-                          Size(MediaQuery.sizeOf(context).width * 0.42, 45),
-                    ),
-                    onPressed: () async {
-                      Uint8List? pdfData = await generateGlobalTestResultPdf(
-                        imc: widget.imc,
-                        scoreQuestionnaire: widget.scoreQuestionnaire,
-                        scoresMoyens: widget.scoresMoyens,
-                        printDirectly: false,
-                      );
+                  const SizedBox(width: 16), // espace entre les boutons
+                  Expanded(
+                    flex: 5,
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        Uint8List? pdfData = await generateGlobalTestResultPdf(
+                          imc: widget.imc,
+                          scoreQuestionnaire: widget.scoreQuestionnaire,
+                          scoresMoyens: widget.scoresMoyens,
+                          printDirectly: false,
+                        );
 
-                      if (pdfData != null) {
-                        await sharePdf(pdfData);
-                      }
-                    },
+                        if (pdfData != null) {
+                          await sharePdf(pdfData);
+                        }
+                      },
+                      icon: const Icon(Icons.share),
+                      label: const FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text('Partager'),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(0, 45), // hauteur fixe, largeur flexible
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
+
             const SizedBox(height: 30),
           ],
         ),

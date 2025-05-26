@@ -84,8 +84,6 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         'Plus de 60 min'
       ],
     },
-
-
     {
       'text': 'Combien d’étages, en moyenne, montez-vous à pied chaque jour ?',
       'options': ['Moins de 2', '3 à 5', '6 à 10', '11 à 15', 'Plus de 16'],
@@ -114,7 +112,8 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
       if (currentQuestionIndex < questions.length - 1) {
         setState(() {
           currentQuestionIndex++;
-          selectedOption = null;
+          // Charger la réponse précédente si elle existe, sinon null
+          selectedOption = scores.containsKey(currentQuestionIndex) ? scores[currentQuestionIndex]! - 1 : null;
         });
       } else {
         int total = scores.values.reduce((a, b) => a + b);
@@ -139,13 +138,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                     scoreQuestionnaire: scoreGlobal,
                   );
 
-                  // D'abord fermer la boîte de dialogue (AlertDialog)
-                  Navigator.pop(context);
+                  Navigator.pop(context); // Ferme la boîte de dialogue
+                  Navigator.pop(context); // Ferme la page questionnaire
 
-                  // Puis fermer la page questionnaire (si tu veux)
-                  Navigator.pop(context);
-
-                  // Ensuite, récupérer le uid et lancer le questionnaire
                   final uid = FirebaseAuth.instance.currentUser?.uid;
                   if (uid != null) {
                     Navigator.push(
@@ -159,7 +154,6 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                   }
                 },
               ),
-
             ],
           ),
         );
@@ -170,6 +164,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   @override
   Widget build(BuildContext context) {
     final question = questions[currentQuestionIndex];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -179,58 +174,62 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
             if (currentQuestionIndex > 0) {
               setState(() {
                 currentQuestionIndex--;
+                selectedOption = scores.containsKey(currentQuestionIndex) ? scores[currentQuestionIndex]! - 1 : null;
               });
             } else {
               Navigator.pop(context);
             }
           },
         ),
-        title:  Text(
-            "Questionnaire Ricci & Gagnon",
-            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-
+        title: Text(
+          "Questionnaire Ricci & Gagnon",
+          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 40),
-              LinearProgressIndicator(
-                value: selectedOption != null
-                    ? (currentQuestionIndex + 1) / questions.length
-                    : currentQuestionIndex / questions.length,
-                color: primaryColor,
-                backgroundColor: Colors.grey[300],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 40),
+            LinearProgressIndicator(
+              value: (selectedOption != null ? currentQuestionIndex + 1 : currentQuestionIndex) / questions.length,
+              color: primaryColor,
+              backgroundColor: Colors.grey[300],
+            ),
+            SizedBox(height: 20),
+            Text("Question ${currentQuestionIndex + 1} / ${questions.length}", style: TextStyle(fontSize: 15)),
+            SizedBox(height: 40),
+            Text(question['text'], style: TextStyle(fontSize: 18)),
+            SizedBox(height: 20),
+
+            // Liste des options dans Expanded, scroll désactivé
+            Expanded(
+              child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: question['options'].length,
+                itemBuilder: (context, index) {
+                  return RadioListTile<int>(
+                    title: Text(question['options'][index], style: TextStyle(color: Colors.grey)),
+                    value: index,
+                    groupValue: selectedOption,
+                    activeColor: primaryColor,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedOption = value!;
+                      });
+                    },
+                  );
+                },
               ),
-              SizedBox(height: 20),
-              Text("Question ${currentQuestionIndex + 1} / ${questions.length}", style: TextStyle(fontSize: 15)),
-              SizedBox(height: 40),
-              Text(question['text'], style: TextStyle(fontSize: 18)),
-              SizedBox(height: 20),
-              ...List.generate(question['options'].length, (index) {
-                return RadioListTile<int>(
-                  title: Text(question['options'][index], style: TextStyle(color: Colors.grey)),
-                  value: index,
-                  groupValue: selectedOption,
-                  activeColor: primaryColor,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedOption = value!;
-                    });
-                  },
-                );
-              }),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(60),
         child: ElevatedButton(
-          onPressed: nextQuestion,
+          onPressed: selectedOption != null ? nextQuestion : null,
           style: ElevatedButton.styleFrom(
             backgroundColor: primaryColor,
             padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),

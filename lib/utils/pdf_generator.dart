@@ -4,6 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:appli_ap_sante/utils/Score_calculator.dart';
 
 // Score IMC
 int imcScore(double imc) {
@@ -303,8 +304,7 @@ Future<Uint8List?> generateGlobalTestResultPdf({
                 style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14, font: ttfNoto)),
             pw.SizedBox(height: 6),
             pw.Text(
-              'Votre condition physique ne traduit pas bon état de santé. '
-                  'Nous vous invitons à contacter le SSE qui vous proposera un suivi médical.',
+                getRecommendation(scoreGlobal),
               style: pw.TextStyle(fontStyle: pw.FontStyle.italic, fontSize: 10, font: ttfNoto),
             ),
           ],

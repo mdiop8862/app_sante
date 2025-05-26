@@ -612,3 +612,30 @@ int calculerScoreTestHandgrip({
 
   return 0;
 }
+
+String getRecommendation(double score) {
+  if (score >= 2.6 && score <= 4) {
+    return 'Félicitation. Vous êtes en bonne forme physique. Continuez à vous entretenir régulièrement. '
+        'Nous vous rappelons que vous avez la possibilité de pratiquer dans le cadre du SUAPS https://www.unilim.fr/suaps/. '
+        'Toutes les activités proposées vous sont ouvertes. Vous pouvez également vous essayer à la pratique compétitive proposée par la FFSU, '
+        'participer à des manifestations ponctuelles et tournois tout au long de l\'année sous réserve de prendre votre licence compétition. '
+        'Contact FFSU : limoges@sport-u.com.';
+  } else if (score >= 1.5 && score <= 2.5) {
+    return 'C’est bien mais vous pouvez sans doute faire mieux, pratiquer une activité physique un peu plus régulièrement et/ou un peu plus longtemps. '
+        'Un professionnel de l’Activité Physique pourrait vous conseiller pour trouver une activité qui vous ferait plaisir. '
+        'Si vous pensez avoir besoin d’une activité adaptée, vous pouvez vous renseigner auprès du SUAPS. '
+        'Des activités Sport Santé (activités douces comme stretching, yoga, renforcement musculaire, etc.) sont organisées. '
+        'Si vous avez un problème de santé qui peut impacter votre pratique, le Service de Santé des Étudiants (SSE : 05 55 43 57 70) peut vous recevoir, '
+        'vous orienter et/ou vous accompagner vers une pratique adaptée à votre situation.';
+  } else if (score >= 0 && score <= 1.4) {
+    return 'Pas de panique même si vous ne semblez pas en très bonne condition physique. '
+        'Si vous êtes inquiet ou que vous éprouvez des difficultés nous vous conseillons de prendre RV avec un professionnel du Service de Santé des Étudiants '
+        '(SSE : 05 55 43 57 70). Vous pourrez selon votre cas, être orienté et/ou accompagné vers une pratique adaptée à votre situation, '
+        'ou bénéficier d’une prise en charge médicale si nécessaire.\n\n'
+        'Le SUAPS propose de nombreuses activités, dont certaines peuvent être adaptées à votre niveau et/ou à votre situation clinique. '
+        'Elles seront identifiées Sport Santé sur la plateforme d\'inscriptions du SUAPS (https://community-suaps.unilim.fr/) et auront pour objectif '
+        'de vous accompagner dans une reprise progressive d\'activité, à votre rythme. Activité douce nécessitant peu de matériel en petit effectif.';
+  } else {
+    return 'Score invalide ou hors plage prévue.';
+  }
+}

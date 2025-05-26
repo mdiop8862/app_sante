@@ -6,13 +6,15 @@ class PolygonChartSection extends StatelessWidget {
   final int scoreQuestionnaire;
   final Map<String, List<int>> scoresMoyens;
   final Map<String, Map<String, dynamic>> testResults;
+
   const PolygonChartSection({
     super.key,
     required this.imc,
     required this.scoreQuestionnaire,
     required this.scoresMoyens,
-  required this.testResults,
+    required this.testResults,
   });
+
   double moyenneScore(List<int> scores) {
     if (scores.isEmpty) return 0;
     return scores.reduce((a, b) => a + b) / scores.length;
@@ -20,15 +22,13 @@ class PolygonChartSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final endurance = moyenneScore(scoresMoyens['endurance'] ?? []);
     final force = moyenneScore(scoresMoyens['force'] ?? []);
     final equilibre = moyenneScore(scoresMoyens['equilibre'] ?? []);
     final souplesse = moyenneScore(scoresMoyens['souplesse'] ?? []);
-
     final questionnaireScore = scoreQuestionnaire.toDouble();
     final imcSc = _imcScore(imc);
-    print(endurance);
+
     final labelsWithScores = [
       ['Endurance', endurance],
       ['Questionnaire', questionnaireScore],
@@ -38,44 +38,66 @@ class PolygonChartSection extends StatelessWidget {
       ['Souplesse', souplesse],
     ];
 
-    return AspectRatio(
-      aspectRatio: 1.9,
-      child: RadarChart(
-        RadarChartData(
-          radarShape: RadarShape.polygon,
-          radarBorderData: const BorderSide(color: Colors.grey, width: 4),
-          gridBorderData: BorderSide(color: Colors.yellow.withOpacity(0.3), width: 1),
-          tickBorderData: const BorderSide(color: Colors.transparent),
-          ticksTextStyle: const TextStyle(color: Colors.yellow, fontSize: 10),
-          tickCount: 3,
-          isMinValueAtCenter: true,
-          dataSets: [
-            RadarDataSet(
-              fillColor: Color(0xFFCCFF00),
-              borderColor: Colors.transparent,
-              entryRadius: 1,
-              dataEntries: labelsWithScores
-                  .map((entry) => RadarEntry(value: (entry[1] as double)))
-                  .toList(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = constraints.maxWidth;
+        return SizedBox(
+          width: size,
+          height: size,
+          child: RadarChart(
+            RadarChartData(
+              radarShape: RadarShape.polygon,
+              radarBorderData: const BorderSide(color: Colors.white, width: 4),
+              gridBorderData: BorderSide(
+                color: Colors.cyanAccent.withOpacity(0.4),
+                width: 2,
+              ),
+              tickBorderData: BorderSide(
+                color: Colors.deepOrangeAccent.withOpacity(0.8),
+                width: 2,
+              ),
+              ticksTextStyle: const TextStyle(
+                color: Colors.yellowAccent,
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+              ),
+              tickCount: 5,
+              isMinValueAtCenter: true,
+              dataSets: [
+                RadarDataSet(
+                  fillColor: Colors.greenAccent.withOpacity(0.6),
+                  borderColor: Colors.greenAccent,
+                  borderWidth: 3,
+                  entryRadius: 4,
+                  dataEntries: labelsWithScores
+                      .map((entry) => RadarEntry(value: (entry[1] as double)))
+                      .toList(),
+                ),
+              ],
+              getTitle: (index, angle) {
+                final label = labelsWithScores[index][0];
+                final score = (labelsWithScores[index][1] as double).toStringAsFixed(1);
+                final isQuestionnaire = label == 'Questionnaire';
+
+                return RadarChartTitle(
+                  text: '$label\n($score)',
+                  positionPercentageOffset: isQuestionnaire ? 0.08 : 0.10, // 🟡 Ajustement ici
+                );
+              },
+              titleTextStyle: const TextStyle(
+                color: Colors.white,
+                fontSize: 13, // ✔️ Augmenté mais contrôlé
+                fontWeight: FontWeight.w600,
+              ),
+              titlePositionPercentageOffset: 0.08, // même logique que getTitle
             ),
-          ],
-          getTitle: (index, angle) {
-            final label = labelsWithScores[index][0];
-            final score = (labelsWithScores[index][1] as double).toStringAsFixed(1);
-            return RadarChartTitle(
-              text: '$label ($score)',
-              positionPercentageOffset: 0.5,
-            );
-          },
-          titleTextStyle: const TextStyle(color: Colors.white, fontSize: 14),
-          titlePositionPercentageOffset: .2,
-        ),
-        duration: const Duration(milliseconds: 500),
-      ),
+            duration: const Duration(milliseconds: 600),
+          ),
+        );
+      },
     );
   }
 
-  /// Calcule la moyenne des sous-tests
   double _getAverage(Map<String, dynamic>? map) {
     if (map == null || map.isEmpty) return 0;
     final values = map.values.whereType<num>().toList();
@@ -83,7 +105,6 @@ class PolygonChartSection extends StatelessWidget {
     return values.reduce((a, b) => a + b) / values.length;
   }
 
-  /// Donne un score IMC sur 5
   double _imcScore(double imc) {
     if (imc < 18.5) return 1;
     if (imc < 25) return 5;
