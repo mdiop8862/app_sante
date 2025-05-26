@@ -190,9 +190,12 @@ class _TestResultPageState extends State<TestResultPage> {
       final flexo = int.tryParse('${souplesse['test_de_flexomètre']?['Test de Flexomètre']}');
       final mainPied = '${souplesse['quelle_est_la_position_de_tes_mains_?']?['reponse']}';
       final epaule = '${souplesse['où_tes_mains_se_touchent-elles_?']?['reponse']}';
-
+      if (flexo == null) {
+        print('Score Flexomètre : NULL');
+      }
       if (flexo != null) {
-        final score = calculScore(sexe, age, flexo);
+        final score = calculScore(sexe:sexe, age: age, valeur:flexo);
+        print('Score Flexomètre : $score');
         souplesseWidgets.add(_buildTestScore("Flexomètre", score, flexo.toString()));
         souplesseScores.add(score);
       }
