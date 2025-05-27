@@ -24,7 +24,7 @@ Future<Uint8List?> generateGlobalTestResultPdf({
   final pdf = pw.Document();
   final ttfNoto = pw.Font.ttf(await rootBundle.load('assets/fonts/Inter-VariableFont_opsz,wght.ttf'));
   final logoImage = pw.MemoryImage(await rootBundle.load('assets/images/logo.png').then((value) => value.buffer.asUint8List()));
-  final tefImage = pw.MemoryImage(await rootBundle.load('assets/images/tef.jpg').then((value) => value.buffer.asUint8List()));
+  final tefImage = pw.MemoryImage(await rootBundle.load('assets/images/tous_en_forme.png').then((value) => value.buffer.asUint8List()));
 
   final bluee = PdfColor.fromInt(0xFF3F3FFF);
 

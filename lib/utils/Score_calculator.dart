@@ -628,7 +628,7 @@ String getRecommendation(double score) {
   if (score >= 2.6) {
     return 'Félicitation. Vous êtes en bonne forme physique. Continuez à vous entretenir régulièrement. '
         'Nous vous rappelons que vous avez la possibilité de pratiquer dans le cadre du SUAPS https://www.unilim.fr/suaps/. '
-        'Toutes les activités proposées vous sont ouvertes. Vous pouvez également vous essayer à la pratique compétitive proposée par la FFSU, '
+        'Toutes les activités proposées vous sont ouvertes. Vous pouvez également vous essayer à la pratique compétitive proposée par la FFSU, (https://www.unilim.fr/suaps/bienvenue-au-sein-de-lespace-suaps/activites/sport-competition/),'
         'participer à des manifestations ponctuelles et tournois tout au long de l\'année sous réserve de prendre votre licence compétition. '
         'Contact FFSU : limoges@sport-u.com.';
   } else if (score >= 1.5 && score <= 2.5) {
