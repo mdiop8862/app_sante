@@ -1,0 +1,50 @@
+workflows:
+  flutter-app-workflow:
+    name: Flutter iOS
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      vars:
+        FLUTTER_BUILD_MODE: release
+    scripts:
+      - name: Install dependencies
+        script: |
+          flutter pub get
+
+      - name: Set iOS deployment target in Xcode project to 13.0
+        script: |
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*/IPHONEOS_DEPLOYMENT_TARGET = 13.0/' ios/Runner.xcodeproj/project.pbxproj || true
+
+      - name: Create Podfile if missing and set platform to 13.0
+        script: |
+          if [ ! -f ios/Podfile ]; then
+            cat > ios/Podfile <<EOF
+platform :ios, '13.0'
+use_frameworks!
+
+target 'Runner' do
+  flutter_install_all_ios_pods(File.dirname(File.realpath(__FILE__)))
+end
+EOF
+          fi
+
+      - name: Install CocoaPods
+        script: |
+          cd ios
+          pod install
+          cd ..
+
+      - name: Build iOS
+        script: |
+          flutter build ios --release --no-codesign
+
+artifacts:
+  - build/app/outputs/flutter-apk/app-release.apk
+  - build/ios/iphoneos/*.app
+
+publishing:
+  email:
+    recipients:
+      - moussa.diop@etu.unilim.fr
