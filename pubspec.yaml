@@ -1,9 +1,6 @@
 name: appli_ap_sante
 description: "A new Flutter project."
-
-# Prevent publishing to pub.dev
 publish_to: "none"
-
 version: 1.0.0+1
 
 environment:
@@ -12,30 +9,27 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^2.30.0
-  cloud_firestore: ^4.15.8
-  pdf: ^3.10.4
-  printing: ^5.12.0
-  path_provider: ^2.1.1
-  share_plus: ^7.2.1
-  provider: ^6.1.1
+
+  firebase_core: ^3.13.1
+  firebase_auth: ^5.5.4
+  cloud_firestore: ^5.6.8
+  pdf: ^3.10.8
+  printing: ^5.14.0
+  path_provider: ^2.1.2
+  share_plus: ^11.0.0
+  provider: ^6.1.2
   openid_client: ^0.4.9
   webview_flutter: ^4.13.0
-  flutter_appauth: ^6.0.2
+  flutter_appauth: ^9.0.1
   flutter_secure_storage: ^9.0.0
-  firebase_auth: ^4.2.5
-
-
-
   flutter_speed_dial: ^7.0.0
   flutter_localizations:
     sdk: flutter
   cupertino_icons: ^1.0.6
-  get: ^4.7.2
+  get: ^4.6.6
   flutter_svg: ^2.1.0
-  fl_chart: ^0.71.0
+  fl_chart: ^1.0.0
   animated_expandable_fab: any
-
 
 
 dev_dependencies:
@@ -57,5 +51,4 @@ flutter:
         - asset: assets/fonts/Inter-VariableFont_opsz,wght.ttf
         - asset: assets/fonts/Inter-Italic-VariableFont_opsz,wght.ttf
           style: italic
-
 
