@@ -1,6 +1,6 @@
 workflows:
   flutter-ios-build:
-    name: Flutter iOS Build (no signing)
+    name: Flutter iOS Build (no code signing)
     max_build_duration: 60
     environment:
       flutter: stable
@@ -8,7 +8,27 @@ workflows:
     scripts:
       - name: Install dependencies
         script: flutter pub get
+
+      - name: Set minimum iOS deployment target to 13.0 in Xcode project
+        script: |
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*/IPHONEOS_DEPLOYMENT_TARGET = 13.0/' ios/Runner.xcodeproj/project.pbxproj || true
+
+      - name: Set minimum iOS deployment target to 13.0 in Podfile
+        script: |
+          if grep -q "platform :ios" ios/Podfile; then
+            sed -i '' "s/platform :ios, '[0-9.]+'/platform :ios, '13.0'/" ios/Podfile
+          else
+            echo "platform :ios, '13.0'" | cat - ios/Podfile > ios/Podfile.tmp && mv ios/Podfile.tmp ios/Podfile
+          fi
+
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios
+          pod install
+          cd ..
+
       - name: Build iOS app (no code signing)
         script: flutter build ios --release --no-codesign
+
     artifacts:
       - build/ios/iphoneos/*.app
